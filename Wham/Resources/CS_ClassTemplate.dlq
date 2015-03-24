@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace {{schema.Title | Namespace}}
+{
+  public partial class {{schema.Title | ClassName}} 
+  	{{ schema | BaseClassFullName | PreppendIfNotEmpty:': '}}
+  {
+  {% for prop in schema.Properties -%}
+    public {{prop.Value | FullClassName}} P_{{prop.Key}} { get; set; }
+  {% endfor -%}
+  }
+}

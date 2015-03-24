@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wham", "Wham\Wham.csproj", "{B46DB777-9BEF-453D-B0D8-1CA95826BECB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhamTests", "WhamTests\WhamTests.csproj", "{EBEFEF68-70C5-4353-8882-3B0E265560AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B46DB777-9BEF-453D-B0D8-1CA95826BECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B46DB777-9BEF-453D-B0D8-1CA95826BECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B46DB777-9BEF-453D-B0D8-1CA95826BECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B46DB777-9BEF-453D-B0D8-1CA95826BECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBEFEF68-70C5-4353-8882-3B0E265560AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBEFEF68-70C5-4353-8882-3B0E265560AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBEFEF68-70C5-4353-8882-3B0E265560AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBEFEF68-70C5-4353-8882-3B0E265560AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
