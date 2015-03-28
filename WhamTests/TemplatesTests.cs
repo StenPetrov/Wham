@@ -83,15 +83,14 @@ namespace WhamTests
             wham.AddSchema(Schemas.ShippingAddressSchema, true);
 
             var cs = wham.Liquidize(BuiltInTemplates.CS_ClassTemplate);
-            Assert.IsNotNull(wham.Context.Strainer);
-            Assert.IsTrue(wham.Context.Strainer.RespondTo("Namespace"));
+            Assert.IsNotNull(wham.Context.Strainer); 
 
             Assert.IsNotNull(cs);
             Assert.IsTrue(cs.IndexOf("Wham.Base") > 0);
             Assert.IsTrue(cs.IndexOf("Liquid error:") < 0);
             Assert.IsEmpty(wham.Context.Errors);
-        }
-
+            Console.WriteLine(cs);
+        } 
 
         [Test]
         public void TestAddressToCS_ClassTemplateProperties()
@@ -105,6 +104,7 @@ namespace WhamTests
             Assert.IsTrue(cs.IndexOf("Wham.Base") > 0);
             Assert.IsTrue(cs.IndexOf("Liquid error:") < 0);
             Assert.IsEmpty(wham.Context.Errors);
+            Console.WriteLine(cs);
         }
     }
 }

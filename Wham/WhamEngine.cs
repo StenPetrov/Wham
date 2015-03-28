@@ -44,7 +44,7 @@ namespace Wham
             if (Context == null)
                 Context = new Context();
 
-            Context["schema"] = CurrentSchema;
+            Context["schema"] = new JSchemaDrop(CurrentSchema);
 
             if (RenderParameters == null)
             {
@@ -56,26 +56,32 @@ namespace Wham
                         typeof(ClassNameFilters),
                     },
                     LocalVariables = Hash.FromAnonymousObject(new {
-                        schema = CurrentSchema,
+                            schema = new JSchemaDrop(CurrentSchema),
                     }),
                     RethrowErrors = true,
                 }; 
-            }
-             
-           
-            DotLiquidExtensions.RegisterSafeType(typeof(JSchema));
+            } 
+
+            InitTemplates();
+
+            var parsedTemplate = Template.Parse(template); 
+
+            return parsedTemplate.Render(RenderParameters); 
+        }
+
+        public static void InitTemplates()
+        {  
+            DotLiquidExtensions.RegisterSafeType(typeof(JSchemaDrop));
             DotLiquidExtensions.RegisterSafeType(typeof(KeyValuePair<string, string>));
-            DotLiquidExtensions.RegisterSafeType(typeof(KeyValuePair<string, JSchema>));
-             
+            DotLiquidExtensions.RegisterSafeType(typeof(KeyValuePair<string, JSchemaDrop>));
+            DotLiquidExtensions.RegisterSafeType(typeof(List<JSchemaDrop>));
+                
             Template.NamingConvention = new DotLiquid.NamingConventions.CSharpNamingConvention();
 
             Template.RegisterFilter(typeof(ClassNameFilters));
-           
-                
-            var parsedTemplate = Template.Parse(template); 
+            Template.RegisterFilter(typeof(CollectionFilters));
 
-            return parsedTemplate.Render(RenderParameters);
-            
+            Template.RegisterTag<ClassEnums>("ClassEnums");
         }
     }
 }

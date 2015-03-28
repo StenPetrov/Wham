@@ -57,5 +57,6 @@
     <Compile Include="FiltersTests.cs" />
     <Compile Include="TemplatesTests.cs" />
     <Compile Include="Schemas.cs" />
+    <Compile Include="JSchemaDropTests.cs" />
   </ItemGroup>
 </Project>

@@ -29,9 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="DotLiquid">
-      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy">
       <HintPath>..\packages\Nancy.1.1\lib\net40\Nancy.dll</HintPath>
     </Reference>
@@ -44,22 +41,28 @@
     <Reference Include="Newtonsoft.Json.Schema">
       <HintPath>..\packages\Newtonsoft.Json.Schema.1.0.8\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
+    <Reference Include="DotLiquid">
+      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JSchemaExtensions.cs" />
-    <Compile Include="dotLiquidAddons\ClassNameFilters.cs" />
-    <Compile Include="dotLiquidAddons\BuiltInTemplates.cs" />
-    <Compile Include="dotLiquidAddons\WhamEngine.cs" />
     <Compile Include="DotLiquidExtensions.cs" />
+    <Compile Include="WhamEngine.cs" />
+    <Compile Include="DotLiquidAddons\ClassNameFilters.cs" />
+    <Compile Include="DotLiquidAddons\BuiltInTemplates.cs" />
+    <Compile Include="DotLiquidAddons\JSchemaDrop.cs" />
+    <Compile Include="DotLiquidAddons\ClassEnums.cs" />
+    <Compile Include="DotLiquidAddons\CollectionFilters.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="dotLiquidAddons\" />
     <Folder Include="Resources\" />
+    <Folder Include="DotLiquidAddons\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\CS_ClassTemplate.dlq" />

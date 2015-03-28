@@ -28,6 +28,29 @@ namespace Wham
             );
         }
 
+        public static Dictionary<string,JSchema> GetIncludedProperties(this JSchema schema, Dictionary<string, JSchema> included = null)
+        {
+            included = included ?? new Dictionary<string, JSchema>();
+
+            if (schema.AllOf != null)
+            {
+                foreach (JSchema oneOfAll in schema.AllOf)
+                { 
+                    GetIncludedProperties(oneOfAll, included); 
+                }
+            }
+
+            if (schema.Properties != null && schema.Properties.Any())
+            {
+                foreach (var propSchema in schema.Properties)
+                {
+                    included[propSchema.Key] = propSchema.Value;
+                }
+            }
+
+            return included;
+        }
+
         public static string GetSchemaClrType(this JSchema schema)
         {
             if (schema.IsAtomicType())

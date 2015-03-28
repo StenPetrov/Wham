@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using DotLiquid;
 using Newtonsoft.Json.Schema;
+using System.Linq;
 
 namespace Wham
 {
@@ -9,11 +10,27 @@ namespace Wham
     {
         public static Regex IsValidTypeName = new Regex("^([a-zA-Z_][a-zA-Z_0-9]*){1}(\\.([a-zA-Z_][a-zA-Z_0-9]*))*$");
 
-        private static JSchema GetSchema(object input)
+        private static JSchema GetSchema(object input, out Context context)
         {
+            context = null;
+
             JSchema schema;
             if (input is IValueTypeConvertible)
-                schema = ((IValueTypeConvertible)input).ConvertToValueType() as JSchema;
+            {
+                var valueObject = ((IValueTypeConvertible)input).ConvertToValueType();
+                 
+                schema = valueObject as JSchema;
+                if (schema == null && valueObject is JSchemaDrop)
+                {
+                    schema = ((JSchemaDrop)valueObject).Schema;
+                    context = ((JSchemaDrop)valueObject).Context;
+                }
+            }
+            else if (input is JSchemaDrop)
+            {
+                context = ((JSchemaDrop)input).Context;
+                return ((JSchemaDrop)input).Schema; 
+            }
             else
                 schema = input as JSchema;
             
@@ -43,33 +60,42 @@ namespace Wham
                 return null;
         }
 
-        public static string FullClassName(object input)
+        public static string FullClassName(object input, string propName, Context context = null)
         {
+
+            propName = StandardFilters.Capitalize(propName);
+
             if (input is string)
                 return Namespace("" + input) + "." + ClassName("" + input);
             else
             {
-                var schema = GetSchema(input);
+                Context ctx;
+                var schema = GetSchema(input, out ctx);
                 if (schema != null)
                 {
-                    if (schema.IsAtomicType())
-                    {
-                        return schema.GetSchemaClrType();
-                    }
-                }
-            } 
+                    context = context ?? ctx;
 
+                    if (schema.IsAtomicType())
+                        return schema.GetSchemaClrType();
+                    else if (schema.Enum != null)
+                        return ClassEnums.AddEnum(context, propName, schema);
+                    else
+                        return "--not a supported type: " + schema;
+                } 
+            } 
+             
             return "--FullClassName(object input), unknown input type: " + input.GetType().Name;
         }
 
         public static string BaseClassFullName(object oSchema)
         {
-            var schema = GetSchema(oSchema);
+            Context context;
+            var schema = GetSchema(oSchema, out context);
             if (schema != null)
             {
                 var baseSchema = schema.GetBaseSchema();
                 if (baseSchema != null)
-                    return  FullClassName(baseSchema.Title);
+                    return FullClassName(baseSchema.Title, "UNEXPECTED", context);
             } 
 
             return "";
