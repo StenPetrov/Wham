@@ -8,6 +8,7 @@ namespace {{schema.Title | Namespace}}
   public partial class {{schema.Title | ClassName}} 
   	{{ schema | BaseClassFullName | PreppendIfNotEmpty:': '}}
   {
+    public static CypherCreate {get; protected set;} = "
   {% ClassEnums -%}
   {% for prop in schema.IncludedProperties -%}
   [JsonProperty("{{prop.Key}}")]

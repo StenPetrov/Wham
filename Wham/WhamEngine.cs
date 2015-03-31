@@ -82,6 +82,8 @@ namespace Wham
             Template.RegisterFilter(typeof(CollectionFilters));
 
             Template.RegisterTag<ClassEnums>("ClassEnums");
+             
+            Template.FileSystem = new TemplateFileSystem(null);
         }
     }
 }

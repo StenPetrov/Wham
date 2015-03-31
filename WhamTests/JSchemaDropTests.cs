@@ -70,9 +70,9 @@ namespace WhamTests
 
             string res; 
 
-            res = Template.Parse("{% for propType in schema.IncludedProperties %}{{propType.Value | FullClassName}}, {% endfor %}").RenderWithErrors(hash);  
+            res = Template.Parse("{% for propType in schema.IncludedProperties %}{{propType.Value | FullClassName : propType.Key}}, {% endfor %}").RenderWithErrors(hash);  
             Assert.IsNotNullOrEmpty(res); 
-            Assert.AreEqual("line1, line2, city, country, type, ", res);  
+            Assert.AreEqual("string, string, string, string, TypesEnum?, ", res);  
         }
     }
-} 
+}  

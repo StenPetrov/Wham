@@ -55,6 +55,7 @@
     <Compile Include="DotLiquidAddons\JSchemaDrop.cs" />
     <Compile Include="DotLiquidAddons\ClassEnums.cs" />
     <Compile Include="DotLiquidAddons\CollectionFilters.cs" />
+    <Compile Include="DotLiquidAddons\TemplateFileSystem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
