@@ -3,6 +3,8 @@ using Newtonsoft.Json.Schema;
 using System.Collections.Generic;
 using DotLiquid;
 using System.Linq;
+using Newtonsoft.Json;
+using System.Collections;
 
 namespace Wham
 {
@@ -78,12 +80,26 @@ namespace Wham
                 
             Template.NamingConvention = new DotLiquid.NamingConventions.CSharpNamingConvention();
 
+            Condition.Operators["is_empty"] = (left, right) =>
+                {
+                    string asString = left as string ?? right as string;
+                    if (!string.IsNullOrEmpty(asString))
+                        return false;
+                    
+                    IEnumerable enu = left as IEnumerable ?? right as IEnumerable;
+                    if (enu != null && enu.OfType<object>().Any())
+                        return false;
+                    
+                    return true;
+                };
+
             Template.RegisterFilter(typeof(ClassNameFilters));
             Template.RegisterFilter(typeof(CollectionFilters));
 
             Template.RegisterTag<ClassEnums>("ClassEnums");
+            Template.RegisterTag<MultilineStringEscape>("MultilineStringEscape");
              
-            Template.FileSystem = new TemplateFileSystem(null);
+            Template.FileSystem = new TemplateFileSystem(); 
         }
     }
 }

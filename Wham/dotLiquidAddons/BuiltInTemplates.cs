@@ -19,7 +19,7 @@ namespace Wham
 
         public static string GetResourceTemplate(string name)
         {
-            var asm = Assembly.GetExecutingAssembly();
+            var asm = Assembly.GetExecutingAssembly(); 
             string fullResName = asm.GetManifestResourceNames().FirstOrDefault(rn => rn.EndsWith(name));
 
             if (fullResName != null)

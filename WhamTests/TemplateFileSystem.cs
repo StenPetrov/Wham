@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Wham;
+using DotLiquid.Exceptions;
 
 namespace WhamTests
 {
@@ -10,15 +11,15 @@ namespace WhamTests
         [Test]
         public void TestCSTemplateExists()
         {
-            TemplateFileSystem tfs = new TemplateFileSystem(null);
+            TemplateFileSystem tfs = new TemplateFileSystem();
             Assert.DoesNotThrow(() => tfs.ReadTemplateFile(new DotLiquid.Context(), "CS_ClassTemplate.dlq"));
         }
 
         [Test]
         public void TestInvalidTemplateThrows()
         {
-            TemplateFileSystem tfs = new TemplateFileSystem(null);
-            Assert.Throws<System.IO.FileNotFoundException>(() => tfs.ReadTemplateFile(new DotLiquid.Context(), "SOME_TEMPLATE_THAT_DOESN'T EXIST"));
+            TemplateFileSystem tfs = new TemplateFileSystem();
+            Assert.Throws<FileSystemException>(() => tfs.ReadTemplateFile(new DotLiquid.Context(), "SOME_TEMPLATE_THAT_DOESN'T EXIST"));
         }
     }
 }

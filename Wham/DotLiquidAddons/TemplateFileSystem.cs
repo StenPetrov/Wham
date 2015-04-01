@@ -1,4 +1,5 @@
 ﻿using System;
+using DotLiquid.Exceptions;
 
 namespace Wham
 {
@@ -6,7 +7,7 @@ namespace Wham
     {
         public string LocalPath { get; protected set; }
 
-        public TemplateFileSystem(string localPath)
+        public TemplateFileSystem(string localPath = null)
         {
             LocalPath = localPath;
         }
@@ -15,6 +16,8 @@ namespace Wham
 
         public string ReadTemplateFile(DotLiquid.Context context, string templateName)
         {
+            templateName = templateName.Trim('\'', '"');
+
             var res = BuiltInTemplates.GetResourceTemplate(templateName);
 
             if (string.IsNullOrEmpty(res) && !string.IsNullOrEmpty(LocalPath))
@@ -26,7 +29,7 @@ namespace Wham
             }
 
             if (string.IsNullOrEmpty(res))
-                throw new System.IO.FileNotFoundException("[FKASIHQJWKTP] Template not found: " + templateName);
+                throw new FileSystemException("[FKASIHQJWKTP] Template not found: " + templateName);
             else
                 return res;
         }

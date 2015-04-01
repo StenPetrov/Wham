@@ -1,0 +1,2 @@
+﻿MERGE (node:{{schema | BaseClassFullName}} %_NODE_DATA_JSON_%)
+SET node :{{schema.Title | ClassName}}

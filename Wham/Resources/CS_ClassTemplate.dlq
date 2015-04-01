@@ -8,7 +8,15 @@ namespace {{schema.Title | Namespace}}
   public partial class {{schema.Title | ClassName}} 
   	{{ schema | BaseClassFullName | PreppendIfNotEmpty:': '}}
   {
-    public static CypherCreate {get; protected set;} = "
+    public static CypherCreate {get; protected set;} = 
+{% MultilineStringEscape -%}
+{% include 'CypherCreate.dlq'-%}{% endMultilineStringEscape -%};
+
+    public static string ToCypher({{schema.Title | ClassName}} instance, string cypherTemplate){
+    	var json = JsonConvert.SerializeObject(instance);
+    	return cypherTemplate.Replace("%_NODE_DATA_JSON_%", json);
+    }
+
   {% ClassEnums -%}
   {% for prop in schema.IncludedProperties -%}
   [JsonProperty("{{prop.Key}}")]
