@@ -1,2 +1,7 @@
-﻿MERGE (node:{{schema | BaseClassFullName}} %_NODE_DATA_JSON_%)
-SET node :{{schema.Title | ClassName}}
+﻿{% assign baseClass = schema | BaseClassFullName -%}
+{% if baseClass is_empty -%}
+  MERGE (node:{{schema.Title | ClassName}} %_NODE_DATA_JSON_%) 
+{% else -%}
+  MERGE (node:{{ baseClass }} %_NODE_DATA_JSON_%)
+  SET node :{{schema.Title | ClassName}}
+{% endif -%}

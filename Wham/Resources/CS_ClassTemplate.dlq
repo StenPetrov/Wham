@@ -9,8 +9,7 @@ namespace {{schema.Title | Namespace}}
   	{{ schema | BaseClassFullName | PreppendIfNotEmpty:': '}}
   {
     public static CypherCreate {get; protected set;} = 
-{% MultilineStringEscape -%}
-{% include 'CypherCreate.dlq'-%}{% endMultilineStringEscape -%};
+{% MultilineStringEscape -%}{% include 'CypherCreate.dlq'-%}{% endMultilineStringEscape -%};
 
     public static string ToCypher({{schema.Title | ClassName}} instance, string cypherTemplate){
     	var json = JsonConvert.SerializeObject(instance);

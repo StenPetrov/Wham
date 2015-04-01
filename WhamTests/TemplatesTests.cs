@@ -53,12 +53,7 @@ namespace WhamTests
             var output = template.Render(Hash.FromAnonymousObject(new { schema = addressSchema })); 
             Assert.AreEqual(addressSchema.Title, output);
         }
-
-        [Test]
-        public void TestTemplateFilters()
-        {
-        }
-
+         
         [Test]
         public void TestAddressToCS_ClassTemplate()
         {

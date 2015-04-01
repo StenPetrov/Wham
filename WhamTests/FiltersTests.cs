@@ -48,7 +48,15 @@ namespace WhamTests
 
             sb = new StringBuilder("First Line\r\nSecond Line");
             MultilineStringEscape.EscapeAndNewlines(sb);
-            Assert.AreEqual("\"First Line\"\r\n + \"Second Line\"", sb.ToString());
+            Assert.AreEqual("\"First Line\"\n + \"Second Line\"", sb.ToString());
+
+            sb = new StringBuilder(" Trim  ");
+            MultilineStringEscape.EscapeAndNewlines(sb);
+            Assert.AreEqual("\"Trim\"", sb.ToString());
+
+            sb = new StringBuilder("   ");
+            MultilineStringEscape.EscapeAndNewlines(sb);
+            Assert.AreEqual("\"\"", sb.ToString());
         }
 
         [Test]
