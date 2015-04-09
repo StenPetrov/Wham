@@ -57,10 +57,12 @@
     <Compile Include="DotLiquidAddons\Filters\ClassNameFilters.cs" />
     <Compile Include="DotLiquidAddons\Filters\CollectionFilters.cs" />
     <Compile Include="DotLiquidAddons\Tags\MultilineStringEscape.cs" />
+    <Compile Include="DotLiquidAddons\Tags\GuidTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\CSProject.dlq" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

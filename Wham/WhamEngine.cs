@@ -97,10 +97,10 @@ namespace Wham
             Template.RegisterFilter(typeof(CollectionFilters));
 
             Template.RegisterTag<ClassEnums>("ClassEnums");
+            Template.RegisterTag<GuidTag>("Guid");
             Template.RegisterTag<MultilineStringEscape>("MultilineStringEscape");
              
             Template.FileSystem = new TemplateFileSystem(); 
         }
     }
 }
-

@@ -8,6 +8,8 @@ namespace Wham
 {
     public static class ClassNameFilters
     {
+        public static WeakReference<Action<string, string, object>> RegisterClassCallback = null;
+
         public static Regex IsValidTypeName = new Regex("^([a-zA-Z_][a-zA-Z_0-9]*){1}(\\.([a-zA-Z_][a-zA-Z_0-9]*))*$");
 
         private static JSchema GetSchema(object input, out Context context)
@@ -35,6 +37,33 @@ namespace Wham
                 schema = input as JSchema;
             
             return schema;
+        }
+
+        // the string constants below come from the .csproj file definition
+        public static string RegisterClass(string input, object schema)
+        {
+            return RegisterProjectItem(input, "Compile", schema);
+        }
+
+        public static string RegisterResource(string input, string name)
+        {
+            return RegisterProjectItem(input, "EmbeddedResource", name);
+        }
+
+        public static string RegisterProjectItem(string input, string inputType, object schema)
+        {
+            Action<string, string, object> callback = null;
+
+            if (RegisterClassCallback != null && RegisterClassCallback.TryGetTarget(out callback))
+            {
+                callback(input, inputType, schema);
+            }
+            else
+            {
+                Console.WriteLine("[FASIDFJHKAJK] Class not registered: " + input);
+            }
+
+            return input;
         }
 
         public static string Namespace(string input)

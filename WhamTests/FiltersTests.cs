@@ -40,26 +40,6 @@ namespace WhamTests
         }
 
         [Test]
-        public void TestMultilineStringEscape()
-        {
-            StringBuilder sb = new StringBuilder("Single Line");
-            MultilineStringEscape.EscapeAndNewlines(sb);
-            Assert.AreEqual("\"Single Line\"", sb.ToString());
-
-            sb = new StringBuilder("First Line\r\nSecond Line");
-            MultilineStringEscape.EscapeAndNewlines(sb);
-            Assert.AreEqual("\"First Line\"\n + \"Second Line\"", sb.ToString());
-
-            sb = new StringBuilder(" Trim  ");
-            MultilineStringEscape.EscapeAndNewlines(sb);
-            Assert.AreEqual("\"Trim\"", sb.ToString());
-
-            sb = new StringBuilder("   ");
-            MultilineStringEscape.EscapeAndNewlines(sb);
-            Assert.AreEqual("\"\"", sb.ToString());
-        }
-
-        [Test]
         public void TestIsEmptyOperator()
         {
             WhamEngine.InitTemplates();
@@ -68,6 +48,26 @@ namespace WhamTests
             Assert.AreEqual("EMPTY", Template.Parse("{% if '' is_empty %}EMPTY{% endif %}").Render());
             Assert.AreEqual("", Template.Parse("{% if 'aaa' is_empty %}EMPTY{% endif %}").Render());
         }
+
+        [Test]
+        public void TestIsRegisterClassFilter()
+        {
+            WhamEngine.InitTemplates();
+             
+            int wasCalled = 0;
+
+            ClassNameFilters.RegisterClassCallback = new WeakReference<Action<string, string, object>>((input, name, data) =>
+                {
+                    wasCalled++;
+                });
+            
+            var rc1 = Template.Parse("{{ 'OK' | RegisterClass :'X' }}").Render();
+
+            Assert.AreEqual("OK", rc1);
+            Assert.AreEqual(1, wasCalled);
+
+            Assert.AreEqual("OK", Template.Parse("{{ 'OK' | RegisterResource :'X' }}").Render());
+            Assert.AreEqual(2, wasCalled);
+        }
     }
 }
-
