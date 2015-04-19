@@ -53,10 +53,12 @@
     <Compile Include="DotLiquidAddons\Tags\MultilineStringEscape.cs" />
     <Compile Include="DotLiquidAddons\Tags\FolderTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\FileTag.cs" />
+    <Compile Include="DotLiquidAddons\Tags\GuidTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\CSProject.dlq" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />

@@ -1,0 +1,54 @@
+﻿<Properties StartupItem="WhamTests/WhamTests.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Wham/Resources/CSProject.dlq">
+    <Files>
+      <File FileName="OutputProject/MyClass.cs" Line="1" Column="1" />
+      <File FileName="OutputProject/Resources/EmptyTextFile.txt" Line="1" Column="1" />
+      <File FileName="Wham/Resources/CSProject.dlq" Line="43" Column="16" />
+      <File FileName="Wham/DotLiquidAddons/Filters/ClassNameFilters.cs" Line="46" Column="10" />
+      <File FileName="Wham/DotLiquidAddons/Tags/ClassEnums.cs" Line="1" Column="1" />
+      <File FileName="Wham/DotLiquidAddons/Tags/MultilineStringEscape.cs" Line="1" Column="1" />
+      <File FileName="Wham/DotLiquidAddons/Tags/GuidTag.cs" Line="1" Column="1" />
+      <File FileName="Wham/WhamEngine.cs" Line="1" Column="1" />
+      <File FileName="WhamTests/FiltersTests.cs" Line="65" Column="13" />
+      <File FileName="WhamTests/TagTests.cs" Line="1" Column="1" />
+      <File FileName="WhamTests/TemplatesTests.cs" Line="1" Column="1" />
+      <File FileName="Wham/Resources/CS_ClassTemplate.dlq" Line="8" Column="51" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="OutputProject" expanded="True" />
+          <Node name="Wham" expanded="True">
+            <Node name="DotLiquidAddons" expanded="True">
+              <Node name="Filters" expanded="True" />
+              <Node name="Tags" expanded="True" />
+            </Node>
+            <Node name="Resources" expanded="True">
+              <Node name="CSProject.dlq" selected="True" />
+            </Node>
+          </Node>
+          <Node name="WhamTests" expanded="True" />
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+      <Pad Id="MonoDevelop.NUnit.TestPad">
+        <State expanded="True" selected="True">
+          <Node name="WhamTests" expanded="True">
+            <Node name="WhamTests" expanded="True">
+              <Node name="FiltersTests" expanded="True" />
+              <Node name="JSchemaDropTests" expanded="True" />
+              <Node name="SchemaContextTests" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

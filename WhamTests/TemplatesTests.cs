@@ -53,7 +53,7 @@ namespace WhamTests
             var output = template.Render(Hash.FromAnonymousObject(new { schema = addressSchema })); 
             Assert.AreEqual(addressSchema.Title, output);
         }
-         
+
         [Test]
         public void TestAddressToCS_ClassTemplate()
         {
@@ -67,6 +67,7 @@ namespace WhamTests
             Assert.IsNotNull(cs);
             Assert.IsTrue(cs.IndexOf("Wham.Base") > 0);
             Assert.IsTrue(cs.IndexOf("Liquid error:") < 0);
+
             Assert.IsEmpty(wham.Context.Errors);
         }
 
@@ -84,8 +85,11 @@ namespace WhamTests
             Assert.IsTrue(cs.IndexOf("Wham.Base") > 0);
             Assert.IsTrue(cs.IndexOf("Liquid error:") < 0);
             Assert.IsEmpty(wham.Context.Errors);
+
+            Assert.IsTrue(cs.IndexOf("public enum TypesEnum {") > 0);
+
             Console.WriteLine(cs);
-        } 
+        }
 
         [Test]
         public void TestAddressToCS_ClassTemplateProperties()

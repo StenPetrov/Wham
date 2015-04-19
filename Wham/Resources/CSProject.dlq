@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EBEFEF68-70C5-4353-8882-3B0E265560AE}</ProjectGuid>
+    <ProjectGuid>{{% Guid | Upcase %}}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>WhamTests</RootNamespace>
-    <AssemblyName>WhamTests</AssemblyName>
+    <RootNamespace>OutputProject</RootNamespace>
+    <AssemblyName>OutputProject</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -29,37 +29,26 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json.Schema">
       <HintPath>..\packages\Newtonsoft.Json.Schema.1.0.8\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
-    <Reference Include="DotLiquid">
-      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
-    </Reference>
   </ItemGroup>
+  {% for class in RegisteredClasses -%}
+  <ItemGroup>
+    <Compile Include="{{ class }}.cs" />
+  </ItemGroup>
+  {% endfor -%}
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\EmptyTextFile.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Wham\Wham.csproj">
-      <Project>{B46DB777-9BEF-453D-B0D8-1CA95826BECB}</Project>
-      <Name>Wham</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="SchemaContextTests.cs" />
-    <Compile Include="FiltersTests.cs" />
-    <Compile Include="TemplatesTests.cs" />
-    <Compile Include="Schemas.cs" />
-    <Compile Include="JSchemaDropTests.cs" />
-    <Compile Include="TemplateFileSystem.cs" /> 
-    <Compile Include="FolderAndFileTests.cs" />
-    <Compile Include="TagTests.cs" />
   </ItemGroup>
 </Project>

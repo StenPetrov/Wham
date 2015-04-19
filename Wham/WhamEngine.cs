@@ -105,6 +105,7 @@ namespace Wham
             Template.RegisterFilter(typeof(CollectionFilters));
 
             Template.RegisterTag<ClassEnums>("ClassEnums");
+            Template.RegisterTag<GuidTag>("Guid");
             Template.RegisterTag<MultilineStringEscape>("MultilineStringEscape");
             Template.RegisterTag<FolderTag>("Folder");
             Template.RegisterTag<FileTag>("File"); 
@@ -113,4 +114,3 @@ namespace Wham
         }
     }
 }
-
