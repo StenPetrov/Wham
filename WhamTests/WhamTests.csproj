@@ -59,5 +59,6 @@
     <Compile Include="Schemas.cs" />
     <Compile Include="JSchemaDropTests.cs" />
     <Compile Include="TemplateFileSystem.cs" />
+    <Compile Include="FolderAndFileTests.cs" />
   </ItemGroup>
 </Project>

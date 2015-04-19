@@ -29,12 +29,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Nancy">
-      <HintPath>..\packages\Nancy.1.1\lib\net40\Nancy.dll</HintPath>
-    </Reference>
-    <Reference Include="Nancy.ViewEngines.DotLiquid">
-      <HintPath>..\packages\Nancy.Viewengines.DotLiquid.1.1\lib\net40\Nancy.ViewEngines.DotLiquid.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -57,6 +51,8 @@
     <Compile Include="DotLiquidAddons\Filters\ClassNameFilters.cs" />
     <Compile Include="DotLiquidAddons\Filters\CollectionFilters.cs" />
     <Compile Include="DotLiquidAddons\Tags\MultilineStringEscape.cs" />
+    <Compile Include="DotLiquidAddons\Tags\FolderTag.cs" />
+    <Compile Include="DotLiquidAddons\Tags\FileTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -71,5 +67,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\CS_ClassTemplate.dlq" />
     <EmbeddedResource Include="Resources\CypherCreate.dlq" />
+    <EmbeddedResource Include="Resources\WhamMasterTemplate.dlq" />
   </ItemGroup>
 </Project>

@@ -14,9 +14,14 @@ namespace Wham
 
         public JSchemaPreloadedResolver Resolver { get; private set; } = new JSchemaPreloadedResolver();
 
-        public Context Context { get; set; }
+        public Context Context { get; set; } = new Context();
 
         public RenderParameters RenderParameters{ get; set; }
+
+        public WhamEngine()
+        { 
+            InitTemplates();
+        }
 
         public Uri AddSchema(string jsonSchema, bool makeCurrent = false)
         {
@@ -32,6 +37,14 @@ namespace Wham
                     var uri = new Uri("http://wham.org/" + jschema.Title); 
                     Resolver.Add(uri, jsonSchema);
 
+                    if (Context != null)
+                    {
+                        Context["currentSchema"] = new JSchemaDrop(CurrentSchema);
+                        var schemas = Context["schemas"] as List<JSchemaDrop> ?? new List<JSchemaDrop>();
+                        schemas.Add(new JSchemaDrop(jschema));
+                        Context["schemas"] = schemas;
+                    }
+
                     return uri;
                 }
                 else
@@ -42,10 +55,7 @@ namespace Wham
         }
 
         public string Liquidize(string template)
-        {
-            if (Context == null)
-                Context = new Context();
-
+        { 
             Context["schema"] = new JSchemaDrop(CurrentSchema);
 
             if (RenderParameters == null)
@@ -62,9 +72,7 @@ namespace Wham
                     }),
                     RethrowErrors = true,
                 }; 
-            } 
-
-            InitTemplates();
+            }  
 
             var parsedTemplate = Template.Parse(template); 
 
@@ -81,23 +89,25 @@ namespace Wham
             Template.NamingConvention = new DotLiquid.NamingConventions.CSharpNamingConvention();
 
             Condition.Operators["is_empty"] = (left, right) =>
-                {
-                    string asString = left as string ?? right as string;
-                    if (!string.IsNullOrEmpty(asString))
-                        return false;
+            {
+                string asString = left as string ?? right as string;
+                if (!string.IsNullOrEmpty(asString))
+                    return false;
                     
-                    IEnumerable enu = left as IEnumerable ?? right as IEnumerable;
-                    if (enu != null && enu.OfType<object>().Any())
-                        return false;
+                IEnumerable enu = left as IEnumerable ?? right as IEnumerable;
+                if (enu != null && enu.OfType<object>().Any())
+                    return false;
                     
-                    return true;
-                };
+                return true;
+            };
 
             Template.RegisterFilter(typeof(ClassNameFilters));
             Template.RegisterFilter(typeof(CollectionFilters));
 
             Template.RegisterTag<ClassEnums>("ClassEnums");
             Template.RegisterTag<MultilineStringEscape>("MultilineStringEscape");
+            Template.RegisterTag<FolderTag>("Folder");
+            Template.RegisterTag<FileTag>("File"); 
              
             Template.FileSystem = new TemplateFileSystem(); 
         }

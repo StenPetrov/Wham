@@ -1,0 +1,10 @@
+﻿{% Folder 'WhAM' -%}
+{% for jSchema in schemas -%}
+  {% assign schema = jSchema -%}
+  {% Folder 'Model' -%}
+    {% assign csFile = schema | ClassName | Append: '.cs' -%}
+    {{ csFile }}
+  	{% File csFile -%}{% include 'CS_ClassTemplate.dlq' -%}{% endFile -%}
+  {% endFolder -%} 
+{% endfor -%}
+{% endFolder -%}

@@ -17,6 +17,16 @@ namespace Wham
             }
         }
 
+        private static string whamMasterTemplate = null;
+
+        public static  string WhamMasterTemplate
+        {
+            get
+            {
+                return whamMasterTemplate = whamMasterTemplate ?? GetResourceTemplate("WhamMasterTemplate.dlq");
+            }
+        }
+
         public static string GetResourceTemplate(string name)
         {
             var asm = Assembly.GetExecutingAssembly(); 

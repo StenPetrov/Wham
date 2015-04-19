@@ -48,21 +48,31 @@ namespace Wham
                 return null;
         }
 
-        public static string ClassName(string input)
+        public static string ClassName(object input, Context context = null)
         {
-            if (IsValidTypeName.IsMatch("" + input))
+            string title = null;
+            if (input is string)
+                title = input as string;
+            else
+            {
+                Context ctx;
+                var schema = GetSchema(input, out ctx);
+                if (schema != null)
+                    title = schema.Title;
+            }
+
+            if (IsValidTypeName.IsMatch("" + title))
             { 
-                return input.IndexOf('.') > 0 ?
-                    input.Substring(input.LastIndexOf('.') + 1)
-                        : input;
+                return title.IndexOf('.') > 0 ?
+                    title.Substring(title.LastIndexOf('.') + 1)
+                        : title;
             }
             else
                 return null;
         }
 
         public static string FullClassName(object input, string propName, Context context = null)
-        {
-
+        { 
             propName = StandardFilters.Capitalize(propName);
 
             if (input is string)
@@ -96,7 +106,9 @@ namespace Wham
                 var baseSchema = schema.GetBaseSchema();
                 if (baseSchema != null)
                     return FullClassName(baseSchema.Title, "UNEXPECTED", context);
-            } 
+            }
+            else
+                return "[FIAUSDHWJET] Unexpected empty schema";
 
             return "";
         }
