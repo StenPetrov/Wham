@@ -49,7 +49,8 @@ namespace Wham
                     if (Template.FileSystem is TemplateFileSystem)
                     {
                         var str = ((TemplateFileSystem)Template.FileSystem).CreateOutputStream(outputFullFileName);
-                        
+
+                        Console.WriteLine("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName);
                         using (var outputTo = new StreamWriter(str))
                         {  
                             RenderAll(NodeList, context, outputTo);  

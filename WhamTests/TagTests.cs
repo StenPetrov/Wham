@@ -8,24 +8,24 @@ namespace WhamTests
 {
     [TestFixture]
     public class TagTests
-    {  
+    {
         [Test]
         public void TestMultilineStringEscape()
         {
             StringBuilder sb = new StringBuilder("Single Line");
-            MultilineStringEscape.EscapeAndNewlines(sb);
+            MultilineStringEscapeTag.EscapeAndNewlines(sb);
             Assert.AreEqual("\"Single Line\"", sb.ToString());
 
             sb = new StringBuilder("First Line\r\nSecond Line");
-            MultilineStringEscape.EscapeAndNewlines(sb);
+            MultilineStringEscapeTag.EscapeAndNewlines(sb);
             Assert.AreEqual("\"First Line\"\n + \"Second Line\"", sb.ToString());
 
             sb = new StringBuilder(" Trim  ");
-            MultilineStringEscape.EscapeAndNewlines(sb);
+            MultilineStringEscapeTag.EscapeAndNewlines(sb);
             Assert.AreEqual("\"Trim\"", sb.ToString());
 
             sb = new StringBuilder("   ");
-            MultilineStringEscape.EscapeAndNewlines(sb);
+            MultilineStringEscapeTag.EscapeAndNewlines(sb);
             Assert.AreEqual("\"\"", sb.ToString());
         }
 
@@ -49,7 +49,20 @@ namespace WhamTests
             Assert.IsNotNullOrEmpty(g1);
             Assert.IsTrue(Guid.TryParseExact(g1, "N", out guid));
 
-            Assert.Throws<Exception>(()=>Template.Parse("{% Guid 'INVALID' %}").Render());  
+            Assert.Throws<Exception>(() => Template.Parse("{% Guid 'INVALID' %}").Render());  
+        }
+
+        [Test]
+        public void TestTrimTag()
+        { 
+            WhamEngine.InitTemplates(); 
+
+            var t = Template.Parse("{% Trim %}   {% endTrim %}").Render(); 
+            Assert.IsNullOrEmpty(t); 
+
+            t = Template.Parse("{% Trim %}  NOT EMPTY {% endTrim %}").Render(); 
+            Assert.IsNotNullOrEmpty(t); 
+            Assert.AreEqual("NOT EMPTY", t);      
         }
     }
 } 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Wham
 {
-    public class MultilineStringEscape : Block
+    public class MultilineStringEscapeTag : Block
     {
         public static StringBuilder EscapeAndNewlines(StringBuilder sb, bool trim = true)
         {

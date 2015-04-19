@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Wham
 {
-    public class ClassEnums : Block
+    public class ClassEnumsTag : Block
     {
         public const string CLASS_ENUMS = "ClassEnums";
 

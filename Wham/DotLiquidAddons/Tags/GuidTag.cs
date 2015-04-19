@@ -26,7 +26,7 @@ namespace Wham
 
         public override void Render(Context context, System.IO.TextWriter result)
         {
-            result.Write(Guid.NewGuid().ToString(GuidFormat));
+            result.Write(Guid.NewGuid().ToString(GuidFormat).ToUpper());
         }
     }
 }

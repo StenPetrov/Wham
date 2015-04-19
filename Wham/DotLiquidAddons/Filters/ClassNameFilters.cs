@@ -117,7 +117,7 @@ namespace Wham
                     if (schema.IsAtomicType())
                         return schema.GetSchemaClrType();
                     else if (schema.Enum != null)
-                        return ClassEnums.AddEnum(context, propName, schema);
+                        return ClassEnumsTag.AddEnum(context, propName, schema);
                     else
                         return "--not a supported type: " + schema;
                 } 

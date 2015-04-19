@@ -104,11 +104,12 @@ namespace Wham
             Template.RegisterFilter(typeof(ClassNameFilters));
             Template.RegisterFilter(typeof(CollectionFilters));
 
-            Template.RegisterTag<ClassEnums>("ClassEnums");
+            Template.RegisterTag<ClassEnumsTag>("ClassEnums");
             Template.RegisterTag<GuidTag>("Guid");
-            Template.RegisterTag<MultilineStringEscape>("MultilineStringEscape");
+            Template.RegisterTag<MultilineStringEscapeTag>("MultilineStringEscape");
             Template.RegisterTag<FolderTag>("Folder");
             Template.RegisterTag<FileTag>("File"); 
+            Template.RegisterTag<TrimTag>("Trim");
              
             Template.FileSystem = new TemplateFileSystem(); 
         }

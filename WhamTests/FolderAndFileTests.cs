@@ -3,6 +3,7 @@ using NUnit.Framework;
 using DotLiquid;
 using Wham;
 using System.IO;
+using System.Linq;
 
 namespace WhamTests
 {
@@ -13,9 +14,16 @@ namespace WhamTests
         {
             public string Name { get; set; }
 
-            public Stream Stream { get; set; }
-
             public string WrittenContents { get; set; }
+        }
+
+        private class NamedStreams
+        {
+            public string Name { get { return Items[0].Name; } }
+
+            public string WrittenContents { get { return Items[0].WrittenContents; } }
+
+            public System.Collections.Generic.List<NamedStream> Items { get; private set; } = new System.Collections.Generic.List<NamedStream>();
         }
 
         [Test]
@@ -31,27 +39,31 @@ namespace WhamTests
             Assert.AreEqual(Path.Combine(parentFolder, "Test"), fullFolder);
         }
 
-        static NamedStream SetupFakeOutput()
+        static NamedStreams SetupFakeOutput()
         {
             Wham.WhamEngine.InitTemplates();
           
-            var namedStream = new NamedStream();
+            var namedStreams = new NamedStreams();
 
             ((TemplateFileSystem)Template.FileSystem).FCreateOutputStream = fn =>
-            {
-                namedStream.Name = fn;
-                return (namedStream.Stream = new MemoryStream());
+            { 
+                return new MemoryStream();
             };
 
             ((TemplateFileSystem)Template.FileSystem).FileEvent += (s, e) =>
             {
-                System.Diagnostics.Debug.WriteLine("[IVAUDJHFGQK] File written: " + e.Name);
+                Console.WriteLine("[IVAUDJHFGQK] File written: " + e.Name);
 
-                namedStream.WrittenContents = 
-                        System.Text.Encoding.UTF8.GetString(((MemoryStream)e.Stream).GetBuffer(), 0, (int)((MemoryStream)e.Stream).Length);
+                var namedStream = new NamedStream()
+                {
+                    Name = e.Name,
+                    WrittenContents = System.Text.Encoding.UTF8.GetString(((MemoryStream)e.Stream).GetBuffer(), 0, (int)((MemoryStream)e.Stream).Length)
+                };
+                    
+                namedStreams.Items.Add(namedStream);
             };
 
-            return namedStream;
+            return namedStreams;
         }
 
         [Test]
@@ -61,7 +73,7 @@ namespace WhamTests
             var fileParsed = Template.Parse("{% Folder Test %} {% File 'outFile.txt' %}{{ output.file }}{% endFile %} {% endFolder %}").Render();
 
             Assert.IsNotNull(namedStream.Name);
-            Assert.IsNotNull(namedStream.Stream); 
+            Assert.IsNotNull(namedStream.WrittenContents); 
             Assert.IsTrue(string.IsNullOrWhiteSpace(fileParsed));
             Assert.AreEqual("outFile.txt", namedStream.WrittenContents);
         }
@@ -72,8 +84,7 @@ namespace WhamTests
             var namedStream = SetupFakeOutput();
             var fileParsed = Template.Parse("{% Folder Test %}{% assign fn='file.txt'%}{% File fn %}{{ output.file }}{% endFile %} {% endFolder %}").Render();
 
-            Assert.IsNotNull(namedStream.Name);
-            Assert.IsNotNull(namedStream.Stream); 
+            Assert.IsNotNull(namedStream.Name);  
             Assert.IsTrue(string.IsNullOrWhiteSpace(fileParsed));
             Assert.AreEqual("file.txt", namedStream.WrittenContents);
         }
@@ -84,8 +95,7 @@ namespace WhamTests
             var namedStream = SetupFakeOutput();
             var fileParsed = Template.Parse("{% Folder Test %}{% assign fn = 'file' | Append: '.txt' %}{% File fn %}{{ output.file }}{% endFile %} {% endFolder %}").Render();
 
-            Assert.IsNotNull(namedStream.Name);
-            Assert.IsNotNull(namedStream.Stream); 
+            Assert.IsNotNull(namedStream.Name);  
             Assert.IsTrue(string.IsNullOrWhiteSpace(fileParsed));
             Assert.AreEqual("file.txt", namedStream.WrittenContents);
         }
@@ -96,21 +106,32 @@ namespace WhamTests
             var namedStream = SetupFakeOutput();
             var fileParsed = Template.Parse("{% Folder Test %} {% assign csFile = schema | BaseClassFullName | Append: '.cs' -%} {% File csFile %}{% include 'CS_ClassTemplate.dlq'-%}{% endFile %}{% endFolder %}").Render();
 
-            Assert.IsNotNull(namedStream.Name);
-            Assert.IsNotNull(namedStream.Stream); 
+            Assert.IsNotNull(namedStream.Name); 
             Assert.IsTrue(string.IsNullOrWhiteSpace(fileParsed));
             Assert.IsTrue(namedStream.WrittenContents.StartsWith("using"));
         }
 
+        private static string MasterTemplate =
+            @"{% Folder 'WhAM' -%}
+{% for jSchema in schemas -%}
+  {% assign schema = jSchema -%}
+  {% Folder 'Model' -%}
+    {% assign csFile = schema | ClassName | Append: '.cs' -%}
+    {{ csFile }}
+    {% File csFile -%}{% include 'CS_ClassTemplate.dlq' -%}{% endFile -%}
+  {% endFolder -%} 
+{% endfor -%}
+{% endFolder -%}";
+
         [Test]
-        public void TestAddressToCS_ClassTemplate()
+        public void TestMasterCSTemplate()
         {
             WhamEngine wham = new WhamEngine();
             wham.AddSchema(Schemas.AddressBaseSchema, true);
 
             var namedStream = SetupFakeOutput();
 
-            var masterResult = wham.Liquidize(BuiltInTemplates.WhamMasterTemplate); 
+            var masterResult = wham.Liquidize(MasterTemplate); 
  
             Assert.IsTrue(wham.Context.Errors == null || wham.Context.Errors.Count == 0);
             Assert.IsNotNullOrEmpty(masterResult);
@@ -118,8 +139,35 @@ namespace WhamTests
             Assert.AreEqual("address.cs", masterResult.ToLower());
             Assert.IsNotNull(namedStream.Name);
             Assert.IsTrue(namedStream.Name.ToLower().EndsWith("address.cs"));
-            Assert.IsNotNull(namedStream.Stream);  
+            Assert.IsNotNull(namedStream.WrittenContents);  
             Assert.IsTrue(namedStream.WrittenContents.StartsWith("using"));
+        }
+
+        [Test]
+        public void TestWhamMasterTemplate()
+        {
+            WhamEngine wham = new WhamEngine();
+            wham.AddSchema(Schemas.AddressBaseSchema, true);
+
+            var namedStream = SetupFakeOutput();
+
+            var masterResult = wham.Liquidize(BuiltInTemplates.WhamMasterTemplate); 
+
+            var errors = ("" + string.Join("\r\n", wham.Context.Errors.Select(e => e.ToString()))).Trim();
+            Assert.AreEqual(string.Empty, errors);
+            Assert.IsNotNullOrEmpty(masterResult);
+            masterResult = masterResult.Trim();
+            Assert.AreEqual(string.Empty, masterResult.ToLower());
+
+            Assert.IsNotNull(namedStream.Items.First().Name);
+            Assert.IsTrue(namedStream.Items.First().Name.ToLower().EndsWith("address.cs"));
+            Assert.IsNotNull(namedStream.Items.First().WrittenContents);  
+            Assert.IsTrue(namedStream.Items.First().WrittenContents.StartsWith("using"));
+
+            Assert.IsNotNull(namedStream.Items.Last().Name);
+            Assert.IsTrue(namedStream.Items.Last().Name.ToLower().EndsWith(".csproj"));
+            Assert.IsNotNull(namedStream.Items.Last().WrittenContents);  
+            Assert.IsTrue(namedStream.Items.Last().WrittenContents.StartsWith("<?xml"));
         }
     }
 }

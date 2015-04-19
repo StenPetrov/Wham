@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{{% Guid | Upcase %}}</ProjectGuid>
+    <ProjectGuid>{% Guid %}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>OutputProject</RootNamespace>
     <AssemblyName>OutputProject</AssemblyName>
@@ -36,11 +36,15 @@
       <HintPath>..\packages\Newtonsoft.Json.Schema.1.0.8\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
   </ItemGroup>
-  {% for class in RegisteredClasses -%}
-  <ItemGroup>
-    <Compile Include="{{ class }}.cs" />
-  </ItemGroup>
-  {% endfor -%}
+{% for schema in schemas -%} 
+  {% Folder 'Model' -%}
+    {% assign csFile = schema | ClassName | Append: '.cs' -%}
+    {% File csFile -%}{% include 'CS_ClassTemplate.dlq' -%}{% endFile -%}
+    <ItemGroup>
+       <Compile Include="Model\{{ csFile }}" />
+    </ItemGroup>
+  {% endFolder -%}
+{% endfor -%}
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\" />

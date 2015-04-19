@@ -47,18 +47,18 @@
     <Compile Include="DotLiquidAddons\BuiltInTemplates.cs" />
     <Compile Include="DotLiquidAddons\JSchemaDrop.cs" />
     <Compile Include="DotLiquidAddons\TemplateFileSystem.cs" />
-    <Compile Include="DotLiquidAddons\Tags\ClassEnums.cs" />
     <Compile Include="DotLiquidAddons\Filters\ClassNameFilters.cs" />
     <Compile Include="DotLiquidAddons\Filters\CollectionFilters.cs" />
-    <Compile Include="DotLiquidAddons\Tags\MultilineStringEscape.cs" />
     <Compile Include="DotLiquidAddons\Tags\FolderTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\FileTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\GuidTag.cs" />
+    <Compile Include="DotLiquidAddons\Tags\TrimTag.cs" />
+    <Compile Include="DotLiquidAddons\Tags\MultilineStringEscapeTag.cs" />
+    <Compile Include="DotLiquidAddons\Tags\ClassEnumsTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\CSProject.dlq" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -70,5 +70,6 @@
     <EmbeddedResource Include="Resources\CS_ClassTemplate.dlq" />
     <EmbeddedResource Include="Resources\CypherCreate.dlq" />
     <EmbeddedResource Include="Resources\WhamMasterTemplate.dlq" />
+    <EmbeddedResource Include="Resources\CSProject.dlq" />
   </ItemGroup>
 </Project>

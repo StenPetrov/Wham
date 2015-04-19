@@ -193,7 +193,7 @@ namespace Wham
                                        + " {get { return Schema." + p.Name + "; }"
                                        + "  set { Schema." + p.Name + "=value; }}"));
                 
-                System.Diagnostics.Debug.WriteLine(wrapCode);
+                Console.WriteLine(wrapCode);
             }
 
             Schema = schema;
