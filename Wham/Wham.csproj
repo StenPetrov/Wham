@@ -71,5 +71,7 @@
     <EmbeddedResource Include="Resources\CypherCreate.dlq" />
     <EmbeddedResource Include="Resources\WhamMasterTemplate.dlq" />
     <EmbeddedResource Include="Resources\CSProject.dlq" />
+    <EmbeddedResource Include="Resources\NancyModule.dlq" />
+    <EmbeddedResource Include="Resources\NancyModuleBase.dlq" />
   </ItemGroup>
 </Project>

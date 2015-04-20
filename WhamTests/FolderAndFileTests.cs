@@ -148,6 +148,8 @@ namespace WhamTests
         {
             WhamEngine wham = new WhamEngine();
             wham.AddSchema(Schemas.AddressBaseSchema, true);
+            wham.AddSchema(Schemas.ShippingAddressSchema, true);
+            wham.AddSchema(Schemas.AddressCollectionSchema, true);
 
             var namedStream = SetupFakeOutput();
 
@@ -155,19 +157,38 @@ namespace WhamTests
 
             var errors = ("" + string.Join("\r\n", wham.Context.Errors.Select(e => e.ToString()))).Trim();
             Assert.AreEqual(string.Empty, errors);
+           
             Assert.IsNotNullOrEmpty(masterResult);
             masterResult = masterResult.Trim();
             Assert.AreEqual(string.Empty, masterResult.ToLower());
+
+            Assert.IsTrue(namedStream.Items.Count >= 4);
+            Console.WriteLine(string.Join("\r\n", namedStream.Items.Select(i => i.Name)));
 
             Assert.IsNotNull(namedStream.Items.First().Name);
             Assert.IsTrue(namedStream.Items.First().Name.ToLower().EndsWith("address.cs"));
             Assert.IsNotNull(namedStream.Items.First().WrittenContents);  
             Assert.IsTrue(namedStream.Items.First().WrittenContents.StartsWith("using"));
+ 
+            Assert.IsNotNull(namedStream.Items.Single(s => s.Name.ToLower().EndsWith(".csproj")));
+            Assert.IsNotNull(namedStream.Items.Single(s => s.Name.ToLower().EndsWith(".config")));
+            Assert.AreEqual(2, namedStream.Items.Count(s => s.WrittenContents.StartsWith("<?xml")));
+        }
 
-            Assert.IsNotNull(namedStream.Items.Last().Name);
-            Assert.IsTrue(namedStream.Items.Last().Name.ToLower().EndsWith(".csproj"));
-            Assert.IsNotNull(namedStream.Items.Last().WrittenContents);  
-            Assert.IsTrue(namedStream.Items.Last().WrittenContents.StartsWith("<?xml"));
+        [Test]
+        public void TestWhamMasterTemplateWithFileOutput()
+        {
+            WhamEngine wham = new WhamEngine();
+            wham.AddSchema(Schemas.AddressBaseSchema, true);
+            wham.AddSchema(Schemas.ShippingAddressSchema, true);
+            wham.AddSchema(Schemas.AddressCollectionSchema, true);
+             
+            var masterResult = wham.Liquidize(BuiltInTemplates.WhamMasterTemplate); 
+            Console.WriteLine(masterResult.Trim());
+
+            var errors = ("" + string.Join("\r\n", wham.Context.Errors.Select(e => e.ToString()))).Trim();
+            Console.WriteLine(errors);
+            Assert.AreEqual(string.Empty, errors);  
         }
     }
 }

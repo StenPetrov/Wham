@@ -56,18 +56,28 @@ namespace Wham
             if (schema.IsAtomicType())
             {
                 if (schema.Type == JSchemaType.Array)
-                {
-                    return "List<object>";
+                { 
+                    if (schema.Items != null && schema.Items.Count == 1 && schema.Items[0] is JSchema)
+                    {
+                        var itemSchema = schema.Items[0] as JSchema;
+
+                        return  "List<" + GetSchemaClrType(itemSchema) + ">";
+                    }
+                    else
+                        return "List<object>";
                 }
                 else
                     return AtomicTypeNames[schema.Type.Value];
             }
             else
             {
-//                if (schema.Type == JSchemaType.Object)
-//                {
-//                }
-//                else
+                if (schema.Type == JSchemaType.Object && !string.IsNullOrEmpty(schema.Title))
+                {
+                    var cn = ClassNameFilters.ClassName(schema);
+                    if (!string.IsNullOrEmpty(cn))
+                        return cn;
+                } 
+
                 return "object";
             }
         }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{% Guid %}</ProjectGuid>
+    <ProjectGuid>{B46DB777-9BEF-453D-B0D8-1CA95826BECB}</ProjectGuid> <!-- {% Guid %} -->
     <OutputType>Library</OutputType>
     <RootNamespace>OutputProject</RootNamespace>
     <AssemblyName>OutputProject</AssemblyName>
@@ -30,13 +30,14 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json.Schema">
-      <HintPath>..\packages\Newtonsoft.Json.Schema.1.0.8\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
-    </Reference>
+    <Reference Include="Nancy">
+      <HintPath>packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
+    </Reference> 
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-{% for schema in schemas -%} 
+{% for schema in schemas -%}  
   {% Folder 'Model' -%}
     {% assign csFile = schema | ClassName | Append: '.cs' -%}
     {% File csFile -%}{% include 'CS_ClassTemplate.dlq' -%}{% endFile -%}
@@ -44,7 +45,18 @@
        <Compile Include="Model\{{ csFile }}" />
     </ItemGroup>
   {% endFolder -%}
+  {% Folder 'Nancy' -%}
+    {% assign csFile = schema | ClassName | Append: 'NancyModule.cs' -%}
+    {% File csFile -%}{% include 'NancyModule.dlq' -%}{% endFile -%}
+    <ItemGroup>
+       <Compile Include="Nancy\{{ csFile }}" />
+    </ItemGroup>
+  {% endFolder -%}
 {% endfor -%}
+{% Folder 'Nancy' %}{% File 'NancyModuleBase.cs' -%}{% include 'NancyModuleBase.dlq' -%}{% endFile -%}{% endFolder -%}
+  <ItemGroup>
+       <Compile Include="Nancy\NancyModuleBase.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Resources\" />

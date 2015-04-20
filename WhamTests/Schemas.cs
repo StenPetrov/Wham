@@ -15,8 +15,7 @@ namespace WhamTests
 
         public static string ShippingAddressSchema = 
             @"{""title"":""Base.ShippingAddress"",""allOf"":[{""$ref"":""http://wham.org/Base.Address""},{""properties"":{""type"":{""enum"":[""residential"",""business"",""null""]}},""required"":[""type""]}]}";
- 
-    
+  
         public static JSchemaDrop ShippingAddressDrop{
             get{
                 JSchema addressBase = JSchema.Parse(Schemas.AddressBaseSchema);
@@ -31,4 +30,3 @@ namespace WhamTests
         }
     }
 }
-
