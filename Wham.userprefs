@@ -1,44 +1,28 @@
 ﻿<Properties StartupItem="WhamTests/WhamTests.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Wham/Resources/WhamMasterTemplate.dlq">
+  <MonoDevelop.Ide.Workbench ActiveDocument="WhamTests/FolderAndFileTests.cs">
     <Files>
-      <File FileName="WhamTests/FolderAndFileTests.cs" Line="147" Column="9" />
+      <File FileName="WhamTests/FolderAndFileTests.cs" Line="174" Column="1" />
       <File FileName="WhamTests/Schemas.cs" Line="1" Column="1" />
-      <File FileName="Wham/Resources/CSProject.dlq" Line="39" Column="30" />
-      <File FileName="Wham/Resources/CS_ClassTemplate.dlq" Line="12" Column="92" />
+      <File FileName="Wham/Resources/CSProject.dlq" Line="26" Column="32" />
+      <File FileName="Wham/Resources/CS_ClassTemplate.dlq" Line="1" Column="1" />
       <File FileName="Wham/DotLiquidAddons/Filters/ClassNameFilters.cs" Line="1" Column="1" />
       <File FileName="Wham/JSchemaExtensions.cs" Line="1" Column="1" />
       <File FileName="Wham/DotLiquidAddons/Tags/ClassEnumsTag.cs" Line="1" Column="1" />
       <File FileName="Wham/Resources/NancyModule.dlq" Line="1" Column="1" />
       <File FileName="Wham/Resources/NancyModuleBase.dlq" Line="1" Column="1" />
-      <File FileName="Wham/Resources/WhamMasterTemplate.dlq" Line="4" Column="1" />
-      <File FileName="Wham/DotLiquidAddons/TemplateFileSystem.cs" Line="49" Column="1" />
+      <File FileName="Wham/Resources/WhamMasterTemplate.dlq" Line="1" Column="1" />
+      <File FileName="Wham/DotLiquidAddons/TemplateFileSystem.cs" Line="1" Column="1" />
       <File FileName="Wham/Resources/CypherCreate.dlq" Line="1" Column="1" />
     </Files>
     <Pads>
-      <Pad Id="ProjectPad">
-        <State name="__root__">
-          <Node name="Wham" expanded="True">
-            <Node name="Wham" expanded="True">
-              <Node name="DotLiquidAddons" expanded="True">
-                <Node name="Filters" expanded="True" />
-                <Node name="Tags" expanded="True" />
-              </Node>
-              <Node name="Resources" expanded="True">
-                <Node name="WhamMasterTemplate.dlq" selected="True" />
-              </Node>
-            </Node>
-            <Node name="WhamTests" expanded="True" />
-          </Node>
-        </State>
-      </Pad>
       <Pad Id="MonoDevelop.NUnit.TestPad">
         <State name="__root__">
           <Node name="Wham" expanded="True">
             <Node name="WhamTests" expanded="True">
               <Node name="WhamTests" expanded="True">
                 <Node name="FolderAndFileTests" expanded="True">
-                  <Node name="TestWhamMasterTemplate" selected="True" />
+                  <Node name="TestWhamMasterTemplateWithFileOutput" selected="True" />
                 </Node>
               </Node>
             </Node>
@@ -53,6 +37,7 @@
       <Breakpoint file="/Users/Sten/Documents/Projects/Wham/Wham/DotLiquidAddons/JSchemaDrop.cs" line="219" column="1" />
       <Breakpoint file="/Users/Sten/Documents/Projects/Wham/WhamTests/JSchemaDropTests.cs" line="80" column="1" />
       <Catchpoint exceptionName="System.ArgumentNullException" includeSubclasses="True" />
+      <Breakpoint file="/Users/Sten/Documents/Projects/Wham/WhamTests/FolderAndFileTests.cs" line="174" column="1" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
