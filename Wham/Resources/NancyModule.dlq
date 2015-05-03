@@ -6,16 +6,20 @@ using System.Text;
 using System.Threading.Tasks; 
 using Nancy;
 using Newtonsoft.Json;
+using WhamBase;
 
 namespace {{schema.Title | Namespace}}.Nancy
 {
     public partial class {{schema.Title | ClassName}}Module 
     	: NancyModuleBase<{{schema.Title | ClassName}}>
     { 
-        public {{schema.Title | ClassName}}Module(IRepository<{{schema.Title | ClassName}}> repo)
-        {
-            Repo = repo;
+        public {{schema.Title | ClassName}}Module(){
             Hookup("/api/{{schema.Title | ClassName | Lower}}"); 
+        }
+
+        public {{schema.Title | ClassName}}Module(IRepository<{{schema.Title | ClassName}}> repo) : this()
+        {
+            Repo = repo; 
         } 
     }
 }

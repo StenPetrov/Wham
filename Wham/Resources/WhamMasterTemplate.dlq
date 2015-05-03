@@ -1,36 +1,5 @@
-﻿{% Folder 'WhAM' -%} 
-{% File 'WhAMProject.csproj' -%}{% include 'CSProject.dlq' -%}{% endFile -%}
+﻿{% Folder 'Wham' -%} 
 
-
-{% Folder 'Resources' -%}
-{% File 'EmptyTextFile.txt' -%}
-{% Trim -%}
-
-{% for schema in schemas -%} 
-{% assign baseClass = schema | BaseClassFullName -%}
-{{schema.Title}}={% MultilineStringEscape -%}
-{% if baseClass is_empty -%}
-  MERGE (node:{{schema.Title | ClassName}} %_NODE_DATA_JSON_%) 
-{% else -%}
-  MERGE (node:{{ baseClass }} %_NODE_DATA_JSON_%)
-  SET node :{{schema.Title | ClassName}}
-{% endif -%}
-{% endMultilineStringEscape -%}
-{% endfor -%}
-
-{% endTrim -%}
-{% endFile -%}
-{% endFolder -%}
-
-
-{% File 'packages.config' -%}
-{% Trim -%}
-<?xml version="1.0" encoding="utf-8"?>
-<packages>
-  <package id="Nancy" version="1.2.0" targetFramework="net45" /> 
-  <package id="Newtonsoft.Json" version="6.0.8" targetFramework="net45" />
-</packages>
-{% endTrim -%}
-{% endFile -%}
+{% File 'WhamSolution.sln' -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
 
 {% endFolder -%}

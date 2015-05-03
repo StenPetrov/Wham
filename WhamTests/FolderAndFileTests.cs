@@ -170,9 +170,9 @@ namespace WhamTests
             Assert.IsNotNull(namedStream.Items.First().WrittenContents);  
             Assert.IsTrue(namedStream.Items.First().WrittenContents.StartsWith("using"));
  
-            Assert.IsNotNull(namedStream.Items.Single(s => s.Name.ToLower().EndsWith(".csproj")));
+            Assert.IsNotNull(namedStream.Items.Any(s => s.Name.ToLower().EndsWith(".csproj")));
             Assert.IsNotNull(namedStream.Items.Single(s => s.Name.ToLower().EndsWith(".config")));
-            Assert.AreEqual(2, namedStream.Items.Count(s => s.WrittenContents.StartsWith("<?xml")));
+            Assert.AreEqual(3, namedStream.Items.Count(s => s.WrittenContents.StartsWith("<?xml")));
         }
 
         [Test]

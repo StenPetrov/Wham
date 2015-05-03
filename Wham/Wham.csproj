@@ -70,8 +70,10 @@
     <EmbeddedResource Include="Resources\CS_ClassTemplate.dlq" />
     <EmbeddedResource Include="Resources\CypherCreate.dlq" />
     <EmbeddedResource Include="Resources\WhamMasterTemplate.dlq" />
-    <EmbeddedResource Include="Resources\CSProject.dlq" />
     <EmbeddedResource Include="Resources\NancyModule.dlq" />
     <EmbeddedResource Include="Resources\NancyModuleBase.dlq" />
+    <EmbeddedResource Include="Resources\CS_SolutionFile.dlq" />
+    <EmbeddedResource Include="Resources\CS_WhamBaseProject.dlq" />
+    <EmbeddedResource Include="Resources\CS_WhamProject.dlq" />
   </ItemGroup>
 </Project>

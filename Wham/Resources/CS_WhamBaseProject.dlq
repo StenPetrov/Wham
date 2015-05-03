@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{67593AB4-1439-4E70-AA06-79FA1FB81AAC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>WhamBase</RootNamespace>
+    <AssemblyName>WhamBase</AssemblyName>
+    <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="IRepository.cs" />
+    <Compile Include="AssemblyInfo.cs" />{% Trim -%} 
+{% File 'AssemblyInfo.cs' -%}
+using System.Reflection;
+using System.Runtime.CompilerServices; 
+[assembly: AssemblyTitle("WhamBase")] 
+[assembly: AssemblyCopyright("Sten Petrov")]  
+[assembly: AssemblyVersion("1.0.*")]
+{% endFile -%}
+
+{% File 'IRepository.cs' -%}
+using System;
+using System.Collections.Generic;
+
+namespace WhamBase
+{ 
+    public interface IRepository<T>
+    { 
+        IEnumerable<T> GetAll();
+        T Get(string id);
+        IEnumerable<T> GetByQuery(Func<T, bool> expression);
+        IEnumerable<T> GetByCommand(string command);
+        bool Delete(string id);
+        bool Save(T item);
+    }
+
+    public interface IObjectWithId
+    {
+        string Id { get; set; }
+    }
+}
+{% endFile -%} 
+
+{% endTrim -%}
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+</Project>

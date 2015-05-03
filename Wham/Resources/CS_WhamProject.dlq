@@ -30,10 +30,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Nancy">
-      <HintPath>packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
+      <HintPath>..\packages\Nancy.1.2.0\lib\net40\Nancy.dll</HintPath>
     </Reference> 
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
@@ -67,4 +67,43 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-</Project>
+  <ItemGroup>
+    <ProjectReference Include="..\WhamBase\WhamBase.csproj">
+      <Project>{67593AB4-1439-4E70-AA06-79FA1FB81AAC}</Project>
+      <Name>WhamBase</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>{% Trim -%}
+
+{% Folder 'Resources' -%}
+
+{% File 'EmptyTextFile.txt' -%} 
+{% Trim -%} 
+
+{% for schema in schemas -%} 
+{% assign baseClass = schema | BaseClassFullName -%}
+{{schema.Title}}={% MultilineStringEscape -%}
+{% if baseClass is_empty -%}
+  MERGE (node:{{schema.Title | ClassName}} %_NODE_DATA_JSON_%) 
+{% else -%}
+  MERGE (node:{{ baseClass }} %_NODE_DATA_JSON_%)
+  SET node :{{schema.Title | ClassName}}
+{% endif -%}
+{% endMultilineStringEscape -%}
+{% endfor -%}
+
+{% endTrim -%} 
+{% endFile -%} 
+{% endFolder -%}
+ 
+{% File 'packages.config' -%}
+{% Trim -%}
+<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="Nancy" version="1.2.0" targetFramework="net45" /> 
+  <package id="Newtonsoft.Json" version="6.0.8" targetFramework="net45" />
+</packages>
+{% endTrim -%}
+{% endFile -%} 
+
+{% endTrim -%}

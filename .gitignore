@@ -187,3 +187,5 @@ FakesAssemblies/
 *.userprefs
 
 .DS_Store
+
+WhamTests/Archive.zip
