@@ -50,7 +50,7 @@ namespace Wham
                     {
                         var str = ((TemplateFileSystem)Template.FileSystem).CreateOutputStream(outputFullFileName);
 
-                        Console.WriteLine("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName);
+                        Console.WriteLine("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName + " req: " + outputFullFileName);
                         using (var outputTo = new StreamWriter(str))
                         {  
                             RenderAll(NodeList, context, outputTo);  

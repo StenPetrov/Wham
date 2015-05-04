@@ -1,0 +1,22 @@
+{
+  "title": "Base.ShippingAddress",
+  "allOf": [
+    {
+      "$ref": "http://wham.org/Base.Address"
+    },
+    {
+      "properties": {
+        "type": {
+          "enum": [
+            "residential",
+            "business",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  ]
+}

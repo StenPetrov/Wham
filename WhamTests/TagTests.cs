@@ -29,7 +29,7 @@ namespace WhamTests
             Assert.AreEqual("\"\"", sb.ToString());
 
             var t = Template.Parse("{% MultilineStringEscape %} \r\n  {% endMultilineStringEscape %}").Render(); 
-            Assert.IsNullOrEmpty(t); 
+            Assert.AreEqual("\"\"", t); 
 
             t = Template.Parse("{% MultilineStringEscape %} XXX  {% endMultilineStringEscape %}").Render(); 
             Assert.IsNotNullOrEmpty(t); 

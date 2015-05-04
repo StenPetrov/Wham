@@ -5,8 +5,11 @@ using Wham;
 
 namespace WhamRun
 {
-    class MainClass
+    class Program
     {
+
+        // $ mono whamrun.exe /Users/Sten/Documents/Projects/Wham/JsonSchemas 
+
         public static void Main(string[] args)
         {
             if (args == null || !args.Any())
@@ -17,6 +20,8 @@ namespace WhamRun
             {
                 if (Directory.Exists(args[0]))
                 {
+                    Directory.SetCurrentDirectory(args[0]);
+
                     var files = Directory.GetFiles(args[0]);
 
                     var schemas = files
@@ -34,10 +39,10 @@ namespace WhamRun
                             .Where(s =>
                             {
                                 try
-                                {
-                                    var uri = engine.AddSchema(s);
-                                    s.Uri = uri;
-                                    return !string.IsNullOrEmpty(uri);
+                                {   
+                                    var uri = engine.AddSchema(s.Content);
+                                    s.Uri = uri.AbsolutePath;
+                                    return !string.IsNullOrEmpty(s.Uri);
                                 }
                                 catch (Exception sx)
                                 {
@@ -64,6 +69,7 @@ namespace WhamRun
                         var outPath = args.Skip(1).FirstOrDefault() ?? Path.Combine(args.First(), "WhAM");
                         if (!Directory.Exists(outPath))
                             Directory.CreateDirectory(outPath);
+                        Directory.SetCurrentDirectory(outPath);
 
                         Console.WriteLine("Wham output to: " + outPath);
                         var result = ("" + engine.Liquidize(BuiltInTemplates.WhamMasterTemplate)).Trim();

@@ -8,6 +8,7 @@
     <RootNamespace>WhamRun</RootNamespace>
     <AssemblyName>WhamRun</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <StartupObject>WhamRun.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -17,7 +18,8 @@
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
+    <Commandlineparameters>/Users/Sten/Documents/Projects/Wham/JsonSchemas</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>full</DebugType>

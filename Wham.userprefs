@@ -1,14 +1,35 @@
 ﻿<Properties StartupItem="WhamTests/WhamTests.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Wham/Resources/CS_ClassTemplate.dlq">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Wham/DotLiquidAddons/Tags/FileTag.cs">
     <Files>
-      <File FileName="Wham/DotLiquidAddons/Tags/MultilineStringEscapeTag.cs" Line="14" Column="29" />
-      <File FileName="WhamRun/Program.cs" Line="1" Column="1" />
+      <File FileName="Wham/DotLiquidAddons/Tags/MultilineStringEscapeTag.cs" Line="1" Column="1" />
+      <File FileName="WhamRun/Program.cs" Line="69" Column="62" />
       <File FileName="Wham/DotLiquidAddons/Tags/ClassEnumsTag.cs" Line="1" Column="1" />
-      <File FileName="Wham/Resources/NancyModuleBase.dlq" Line="14" Column="26" />
-      <File FileName="Wham/Resources/NancyModule.dlq" Line="1" Column="1" />
-      <File FileName="Wham/Resources/CS_ClassTemplate.dlq" Line="20" Column="24" />
+      <File FileName="Wham/Resources/NancyModuleBase.dlq" Line="1" Column="1" />
+      <File FileName="Wham/Resources/NancyModule.dlq" Line="17" Column="62" />
+      <File FileName="Wham/Resources/CS_ClassTemplate.dlq" Line="1" Column="1" />
+      <File FileName="WhamTests/Schemas.cs" Line="19" Column="24" />
+      <File FileName="WhamTests/TagTests.cs" Line="39" Column="34" />
+      <File FileName="Wham/DotLiquidAddons/TemplateFileSystem.cs" Line="38" Column="9" />
+      <File FileName="Wham/DotLiquidAddons/Tags/FileTag.cs" Line="53" Column="128" />
     </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="Wham" expanded="True">
+            <Node name="Wham" expanded="True">
+              <Node name="DotLiquidAddons" expanded="True">
+                <Node name="Tags" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="WhamRun" expanded="True" selected="True">
+              <Node name="Properties" expanded="True" />
+            </Node>
+            <Node name="WhamTests" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>

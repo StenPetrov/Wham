@@ -1,0 +1,15 @@
+{
+  "title": "Base.AddressCollection",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "addresses": {
+      "type": "array",
+      "items": {
+        "$ref": "http://wham.org/Base.Address"
+      }
+    }
+  }
+}
