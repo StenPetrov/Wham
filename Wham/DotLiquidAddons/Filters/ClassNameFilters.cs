@@ -126,7 +126,7 @@ namespace Wham
             return "--FullClassName(object input), unknown input type: " + input.GetType().Name;
         }
 
-        public static string BaseClassFullName(object oSchema)
+        public static string BaseClassFullName(object oSchema, string namespaceSuffix = null)
         {
             Context context;
             var schema = GetSchema(oSchema, out context);
@@ -134,7 +134,17 @@ namespace Wham
             {
                 var baseSchema = schema.GetBaseSchema();
                 if (baseSchema != null)
-                    return FullClassName(baseSchema.Title, "UNEXPECTED", context);
+                {
+                    var res = FullClassName(baseSchema.Title, "UNEXPECTED", context);
+
+                    if (!string.IsNullOrWhiteSpace(namespaceSuffix) && res.IndexOf('.') > 0)
+                    {
+                        var lastDot = res.LastIndexOf('.');
+                        res = res.Insert(lastDot + 1, namespaceSuffix + "."); 
+                    }
+
+                    return res;
+                }
             }
             else
                 return "[FIAUSDHWJET] Unexpected empty schema";

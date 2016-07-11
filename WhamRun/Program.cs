@@ -2,16 +2,27 @@
 using System.Linq;
 using System.IO;
 using Wham;
+using System.Reflection;
 
 namespace WhamRun
 {
     class Program
     {
 
-        // $ mono whamrun.exe /Users/Sten/Documents/Projects/Wham/JsonSchemas 
+        // $ mono whamrun.exe /Users/Sten/Documents/Projects/Wham/JsonSchemas
 
         public static void Main(string[] args)
-        {
+        { 
+            AppDomain.CurrentDomain.FirstChanceException += (sender, e) =>
+            {
+                if (e.Exception is TargetInvocationException)
+                {
+                    Console.WriteLine("[TGIAODIFQWR] Target Invocation Exception: " + e.Exception.Message);
+                }
+                else
+                    Console.WriteLine("[ATIOAEIRJQW] Exception: " + e.Exception);
+            }; 
+
             if (args == null || !args.Any())
             {
                 Console.WriteLine("Usage: WhamRun inputFolder [outputFolder]\r\n inputFolder must contain JSON Schema files");
@@ -75,6 +86,14 @@ namespace WhamRun
                         var result = ("" + engine.Liquidize(BuiltInTemplates.WhamMasterTemplate)).Trim();
 
                         Console.WriteLine(result);
+
+                        if (engine.Context.Errors != null && engine.Context.Errors.Any())
+                        {
+                            Console.WriteLine("dotLIQUID ERRORS:");
+                            Console.WriteLine(string.Join(System.Environment.NewLine,
+                                    engine.Context.Errors.Select(e => " - Error: " + e.Message + "  " + e.InnerException)));
+                        }
+
                         Console.WriteLine("Done.");
                     }
                 }

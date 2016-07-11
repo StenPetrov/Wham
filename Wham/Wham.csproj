@@ -75,5 +75,9 @@
     <EmbeddedResource Include="Resources\CS_SolutionFile.dlq" />
     <EmbeddedResource Include="Resources\CS_WhamBaseProject.dlq" />
     <EmbeddedResource Include="Resources\CS_WhamProject.dlq" />
+    <EmbeddedResource Include="Resources\CS_WhamProjectDoc.dlq" />
+    <EmbeddedResource Include="Resources\NancyModuleDocBase.dlq" />
+    <EmbeddedResource Include="Resources\NancyModuleDoc.dlq" />
+    <EmbeddedResource Include="Resources\HTML_InputForm.dlq" />
   </ItemGroup>
 </Project>

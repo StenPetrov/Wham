@@ -5,6 +5,7 @@ using DotLiquid;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Reflection;
 
 namespace Wham
 {
@@ -70,7 +71,7 @@ namespace Wham
                     LocalVariables = Hash.FromAnonymousObject(new {
                             schema = new JSchemaDrop(CurrentSchema),
                     }),
-                    RethrowErrors = true,
+                    RethrowErrors = true, 
                 }; 
             }  
 

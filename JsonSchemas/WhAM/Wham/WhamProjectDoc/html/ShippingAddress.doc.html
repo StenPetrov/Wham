@@ -1,0 +1,95 @@
+<html class="">
+  <head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet prefetch" href="http://cdn.foundation5.zurb.com/foundation.css"/>
+    <style class="cp-pen-styles"></style>
+    <meta class="foundation-data-attribute-namespace"/>
+    <meta class="foundation-mq-xxlarge"/>
+    <meta class="foundation-mq-xlarge-only"/>
+    <meta class="foundation-mq-xlarge"/>
+    <meta class="foundation-mq-large-only"/>
+    <meta class="foundation-mq-large"/>
+    <meta class="foundation-mq-medium-only"/>
+    <meta class="foundation-mq-medium"/>
+    <meta class="foundation-mq-small-only"/>
+    <meta class="foundation-mq-small"/> 
+    <style></style>
+  </head>
+  <body>
+    <nav class="top-bar foundation-bar" data-topbar="">
+      <ul class="title-area">
+        <li class="name"> 
+           <h1>My APIs</h1> 
+        </li>
+      </ul>
+      <ul class="right"> 
+        <li class="divider"/> 
+        <li class="has-dropdown">
+          List of APIs
+          <ul class="dropdown">
+            <li> <a href="/docs/api1">API 1</a> </li>
+            <li> <a href="/docs/api2">API 2</a> </li>
+            <li> <a href="/docs/api3">API 3</a> </li>
+          </ul>
+        </li>
+        <li class="divider"/>
+      </ul> 
+    </nav>
+ 
+    <div class="row">
+      <div class="small-12 small-centered columns">
+        <form>
+
+          <div class="row">
+            <div class="large-12 columns">
+              <label>
+                Input Label
+                <input type="text" placeholder="Text here"/>
+              </label>
+            </div>
+          </div> 
+
+          <div class="row">
+            <div class="large-12 columns">
+              <label>
+                Select Box
+                <select>
+                  <option value="husker">Husker</option>
+                  <option value="starbuck">Starbuck</option> 
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="large-6 columns">
+              <label>Choose Your Favorite</label>
+              <input type="radio" name="pokemon" value="Red" id="pokemonRed"/>
+              <label for="pokemonRed">Squirtle</label>
+              <input type="radio" name="pokemon" value="Blue" id="pokemonBlue"/>
+              <label for="pokemonBlue">Charmander</label>
+            </div>
+            <div class="large-6 columns">
+              <label>Check these out</label>
+              <input id="checkbox1" type="checkbox"/>
+              <label for="checkbox1">Checkbox 1</label>
+              <input id="checkbox2" type="checkbox"/>
+              <label for="checkbox2">Checkbox 2</label>
+            </div>
+          </div> 
+
+        </form>
+      </div>
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script> 
+    <script src="http://cdn.foundation5.zurb.com/foundation.js"></script>
+
+    <script>
+      $(document).foundation();
+      console.log("started foundation");
+      //@ sourceURL=pen.js
+    </script> 
+  </body>
+</html>

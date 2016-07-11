@@ -13,9 +13,14 @@ namespace Nancy.SelfHost
         {
             Console.WriteLine("Loading...");
 
+            StaticConfiguration.DisableErrorTraces = false;
+            StaticConfiguration.CaseSensitive = false; 
+
+            Wham.Base.Nancy.AddressModule.DefaultRepo = new TempRepo<Wham.Base.Model.Address>();
+
             using (var host = new NancyHost(
                                   new HostConfiguration
-                {
+                { 
                     UrlReservations = new UrlReservations { CreateAutomatically = true }
                 },
                                   new Uri(serverUrl)))

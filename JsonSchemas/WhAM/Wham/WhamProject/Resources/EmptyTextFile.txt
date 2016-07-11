@@ -1,0 +1,5 @@
+
+Base.Address="MERGE (node:Address %_NODE_DATA_JSON_%)"
+Base.AddressCollection="MERGE (node:AddressCollection %_NODE_DATA_JSON_%)"
+Base.ShippingAddress="MERGE (node:Wham.Base.Address %_NODE_DATA_JSON_%)"
+ + "  SET node :ShippingAddress"
