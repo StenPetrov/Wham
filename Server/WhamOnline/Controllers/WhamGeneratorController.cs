@@ -15,7 +15,8 @@ namespace WhamOnline.Controllers
         // GET: api/WhamGenerator
         public IEnumerable<string> Get()
         {
-            return Directory.GetDirectories(GetDataPath());
+            return Directory.GetDirectories(GetDataPath())
+                .Select(dir => Path.GetFileName(dir));
         }
 
         // GET: api/WhamGenerator/5
@@ -29,6 +30,11 @@ namespace WhamOnline.Controllers
                 var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
                 result.Content = new StreamContent(stream);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                result.Content.Headers.ContentDisposition =
+                    new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = Path.GetFileName(path),
+                    };
                 return result;
             }
             else
@@ -72,7 +78,7 @@ namespace WhamOnline.Controllers
 
         private string GetDataPath(string taskFolderName = null, string fileName = null)
         {
-            string tasksFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string tasksFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "WhamOutput");
 
             if (!Directory.Exists(tasksFolderPath))
             {
