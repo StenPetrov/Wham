@@ -44,7 +44,7 @@ namespace Wham
                 return propName;
             }
             else
-                throw new Exception("[IGUHDAJFKQWET] Missing context");
+                throw new WhamException("[IGUHDAJFKQWET] Missing context");
         }
 
         public override void Initialize(string tagName, string markup, System.Collections.Generic.List<string> tokens)

@@ -9,60 +9,53 @@ namespace Wham
 {
     public class FileTag : Block
     {
+
         string OutputFile { get; set; }
 
-        public override void Initialize(string tagName, string markup, System.Collections.Generic.List<string> tokens)
-        { 
-            if (!string.IsNullOrEmpty(markup))
-            {
-                OutputFile = markup.Trim(); 
-            } 
+        public override void Initialize (string tagName, string markup, System.Collections.Generic.List<string> tokens)
+        {
+            if (!string.IsNullOrEmpty (markup)) {
+                OutputFile = markup.Trim ();
+            }
 
-            base.Initialize(tagName, markup, tokens); 
+            base.Initialize (tagName, markup, tokens);
         }
 
-        public override void Render(Context context, TextWriter result)
-        {  
-            var hash = context["output"] as Hash;
+        public override void Render (Context context, TextWriter result)
+        {
+            var hash = context [FolderTag.FileAndFolderOutputHash] as Hash;
+
+            var tracer = context.GetTracer ();
 
             string outFolder = null;
 
-            object parentFolder = null; 
+            object parentFolder = null;
 
-            if (hash != null && hash.TryGetValue("folder", out parentFolder))
+            if (hash != null && hash.TryGetValue (FolderTag.CurrentFolderVariableName, out parentFolder))
                 outFolder = "" + parentFolder;
 
-            var outFile = context[OutputFile] as string ?? OutputFile;
-             
-            string outputFullFileName = string.IsNullOrEmpty(outFolder) ? outFile : Path.Combine(outFolder, outFile);
-                
-            context.Stack(() =>
-                {     
-                    context["output"] = Hash.FromAnonymousObject(new
-                        {
-                            folder = outFolder,
-                            parentFolder = "" + parentFolder, 
-                            file = outFile,
-                            fullFileName = outputFullFileName
-                        });
-                     
-                    if (Template.FileSystem is TemplateFileSystem)
-                    {
-                        var str = ((TemplateFileSystem)Template.FileSystem).CreateOutputStream(outputFullFileName);
+            var outFile = context [OutputFile] as string ?? OutputFile;
 
-                        Console.WriteLine("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName + " req: " + outputFullFileName);
-                        using (var outputTo = new StreamWriter(str))
-                        {  
-                            RenderAll(NodeList, context, outputTo);  
+            string outputFullFileName = string.IsNullOrEmpty (outFolder) ? outFile : Path.Combine (outFolder, outFile);
 
-                            outputTo.Flush();
-                            ((TemplateFileSystem)Template.FileSystem).NotifyFileWritten(outputFullFileName, outputTo);
-                        }
+            context.Stack (() => {
+                context [FolderTag.FileAndFolderOutputHash] = FolderTag.CreateCurrentOutputHash (outFolder, null, null, outputFullFileName);
+
+                if (Template.FileSystem is TemplateFileSystem) {
+                    var str = ((TemplateFileSystem)Template.FileSystem).CreateOutputStream (outputFullFileName);
+
+                    tracer.Info ("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName + " req: " + outputFullFileName);
+                    using (var outputTo = new StreamWriter (str)) {
+                        RenderAll (NodeList, context, outputTo);
+
+                        outputTo.Flush ();
+                        ((TemplateFileSystem)Template.FileSystem).NotifyFileWritten (outputFullFileName, outputTo);
                     }
-                    else
-                        RenderAll(NodeList, context, result); 
-                });
+                } else {
+                    RenderAll (NodeList, context, result);
+                }
+            });
         }
-         
+
     }
 }

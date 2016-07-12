@@ -42,7 +42,7 @@ namespace WhamTests
         [Test]
         public void TestIsEmptyOperator()
         {
-            WhamEngine.InitTemplates();
+            WhamEngine.InitEngine();
             Assert.AreEqual("EMPTY", Template.Parse("{% if NOCOLLECTION is_empty %}EMPTY{% endif %}").Render());
 
             Assert.AreEqual("EMPTY", Template.Parse("{% if '' is_empty %}EMPTY{% endif %}").Render());
@@ -52,7 +52,7 @@ namespace WhamTests
         [Test]
         public void TestIsRegisterClassFilter()
         {
-            WhamEngine.InitTemplates();
+            WhamEngine.InitEngine();
              
             int wasCalled = 0;
 

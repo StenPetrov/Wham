@@ -18,7 +18,7 @@ namespace Wham
                 if (MarkupRegex.IsMatch(markup))
                     GuidFormat = markup;
                 else
-                    throw new Exception("[OFAIJKEWQRPO] Invalid GUID format: " + markup);
+                    throw new WhamException("[OFAIJKEWQRPO] Invalid GUID format: " + markup);
             }
 
             base.Initialize(tagName, markup, tokens);

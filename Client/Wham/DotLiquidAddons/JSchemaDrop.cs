@@ -106,9 +106,9 @@ namespace Wham
 
         public bool UniqueItems { get { return Schema.UniqueItems; } set { Schema.UniqueItems = value; } }
 
-        public int? MinimumLength { get { return Schema.MinimumLength; } set { Schema.MinimumLength = value; } }
+        public long? MinimumLength { get { return Schema.MinimumLength; } set { Schema.MinimumLength = value; } }
 
-        public int? MaximumLength { get { return Schema.MaximumLength; } set { Schema.MaximumLength = value; } }
+        public long? MaximumLength { get { return Schema.MaximumLength; } set { Schema.MaximumLength = value; } }
 
         public double? Minimum { get { return Schema.Minimum; } set { Schema.Minimum = value; } }
 
@@ -118,13 +118,13 @@ namespace Wham
 
         public bool ExclusiveMaximum { get { return Schema.ExclusiveMaximum; } set { Schema.ExclusiveMaximum = value; } }
 
-        public int? MinimumItems { get { return Schema.MinimumItems; } set { Schema.MinimumItems = value; } }
+        public long? MinimumItems { get { return Schema.MinimumItems; } set { Schema.MinimumItems = value; } }
 
-        public int? MaximumItems { get { return Schema.MaximumItems; } set { Schema.MaximumItems = value; } }
+        public long? MaximumItems { get { return Schema.MaximumItems; } set { Schema.MaximumItems = value; } }
 
-        public int? MinimumProperties { get { return Schema.MinimumProperties; } set { Schema.MinimumProperties = value; } }
+        public long? MinimumProperties { get { return Schema.MinimumProperties; } set { Schema.MinimumProperties = value; } }
 
-        public int? MaximumProperties { get { return Schema.MaximumProperties; } set { Schema.MaximumProperties = value; } }
+        public long? MaximumProperties { get { return Schema.MaximumProperties; } set { Schema.MaximumProperties = value; } }
 
         public IDictionary<string, JToken> ExtensionData { get { return Schema.ExtensionData; } }
 

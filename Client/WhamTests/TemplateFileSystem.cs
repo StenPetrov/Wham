@@ -19,7 +19,7 @@ namespace WhamTests
         public void TestInvalidTemplateThrows()
         {
             TemplateFileSystem tfs = new TemplateFileSystem();
-            Assert.Throws<FileSystemException>(() => tfs.ReadTemplateFile(new DotLiquid.Context(), "SOME_TEMPLATE_THAT_DOESN'T EXIST"));
+            Assert.Throws<WhamTemplateException>(() => tfs.ReadTemplateFile(new DotLiquid.Context(), "SOME_TEMPLATE_THAT_DOESN'T EXIST"));
         }
     }
 }

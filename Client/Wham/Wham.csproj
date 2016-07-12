@@ -29,14 +29,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json.Schema">
-      <HintPath>..\packages\Newtonsoft.Json.Schema.1.0.8\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
-    </Reference>
     <Reference Include="DotLiquid">
       <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.2.0.3\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +55,9 @@
     <Compile Include="DotLiquidAddons\Tags\TrimTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\MultilineStringEscapeTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\ClassEnumsTag.cs" />
+    <Compile Include="DotLiquidAddons\WhamException.cs" />
+    <Compile Include="Tracer.cs" />
+    <Compile Include="DotLiquidAddons\Tags\TraceTag.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

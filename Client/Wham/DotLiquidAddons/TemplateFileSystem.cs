@@ -8,71 +8,80 @@ namespace Wham
     {
         public string LocalPath { get; protected set; }
 
-        public Func<string,Stream> FCreateOutputStream { get; set; }
+        public Func<string, Stream> FCreateOutputStream { get; set; }
 
-        public class TemplateFileSystemEventArgs: EventArgs
+        public class TemplateFileSystemEventArgs : EventArgs
         {
             public bool IsWriteEvent { get; set; }
 
-            public string Name{ get; set; }
+            public string Name { get; set; }
 
             public Stream Stream { get; set; }
         }
 
         public event EventHandler<TemplateFileSystemEventArgs> FileEvent;
 
-        public TemplateFileSystem(string localPath = null, Func<string,Stream> createOutputStream = null)
+        public TemplateFileSystem (string localPath = null, Func<string, Stream> createOutputStream = null)
         {
-            LocalPath = localPath; 
+            LocalPath = localPath;
             FCreateOutputStream = createOutputStream;
         }
 
-        public void NotifyFileWritten(string name, StreamWriter stream)
+        public void NotifyFileWritten (string name, StreamWriter stream)
         {
-            if (FileEvent != null)
-            {
-                FileEvent(this, new TemplateFileSystemEventArgs{ Name = name, Stream = stream.BaseStream, IsWriteEvent = true });
+            if (FileEvent != null) {
+                FileEvent (this, new TemplateFileSystemEventArgs { Name = name, Stream = stream.BaseStream, IsWriteEvent = true });
             }
         }
 
-        public Stream CreateOutputStream(string outputName)
+        public Stream CreateOutputStream (string outputName)
         {
             Stream res = null;
 
-            if (FCreateOutputStream == null)
-            {
-                var dir = Path.GetDirectoryName(outputName);
-                if (!Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                
-                res = File.Create(outputName);
+            try {
+                if (FCreateOutputStream == null) {
+                    var dir = Path.GetDirectoryName (outputName);
+                    if (!Directory.Exists (dir))
+                        Directory.CreateDirectory (dir);
+
+                    res = File.Create (outputName);
+                } else
+                    res = FCreateOutputStream (outputName);
+            } catch (Exception x) {
+                throw new WhamException ($"[TFJAKPQOUMN] Error writing to '{outputName}' error: " + x.Message, x);
             }
-            else
-                res = FCreateOutputStream(outputName);
 
             return res;
         }
 
         #region IFileSystem implementation
 
-        public string ReadTemplateFile(DotLiquid.Context context, string templateName)
+        public string ReadTemplateFile (DotLiquid.Context context, string templateName)
         {
-            templateName = templateName.Trim('\'', '"');
+            try {
+                templateName = templateName.Trim ('\'', '"');
 
-            var res = BuiltInTemplates.GetResourceTemplate(templateName);
+                context.GetTracer ().Info ("Loading template: " + templateName);
 
-            if (string.IsNullOrEmpty(res) && !string.IsNullOrEmpty(LocalPath))
-            {
-                templateName = System.IO.Path.Combine(LocalPath, templateName);
+                var res = BuiltInTemplates.GetResourceTemplate (templateName);
 
-                if (System.IO.File.Exists(templateName))
-                    res = System.IO.File.ReadAllText(templateName);
-            }
+                if (string.IsNullOrEmpty (res)) {
+                    if (!string.IsNullOrEmpty (LocalPath)) {
+                        templateName = System.IO.Path.Combine (LocalPath, templateName);
 
-            if (string.IsNullOrEmpty(res))
-                throw new FileSystemException("[FKASIHQJWKTP] Template not found: " + templateName);
-            else
+                        if (System.IO.File.Exists (templateName))
+                            res = System.IO.File.ReadAllText (templateName);
+                        else
+                            throw new WhamTemplateException ("[FKASIHQJWKTP] Template not found: " + templateName);
+                    } else {
+                        throw new WhamTemplateException ($"[FHBAOUTOPQA] Template not loaded: '{templateName}'");
+                    }
+                }
+
                 return res;
+            } catch (Exception x) {
+                throw new WhamTemplateException ($"[FKJJAHQROIZ] Template error accessing '{templateName}': {x.Message}", x);
+            }
         }
 
         #endregion

@@ -32,7 +32,7 @@ namespace WhamTests
             Assert.AreEqual("\"\"", t); 
 
             t = Template.Parse("{% MultilineStringEscape %} XXX  {% endMultilineStringEscape %}").Render(); 
-            Assert.IsNotNullOrEmpty(t); 
+            Assert.IsNotEmpty (t); 
         }
 
         [Test]
@@ -40,34 +40,34 @@ namespace WhamTests
         {
             Guid guid;
 
-            WhamEngine.InitTemplates(); 
+            WhamEngine.InitEngine(); 
 
             var g1 = Template.Parse("{% Guid 'D' %}").Render(); 
-            Assert.IsNotNullOrEmpty(g1);
+            Assert.IsNotEmpty (g1);
             Assert.IsTrue(Guid.TryParseExact(g1, "D", out guid));
 
             var g2 = Template.Parse("{% Guid %}").Render();
-            Assert.IsNotNullOrEmpty(g2);
+            Assert.IsNotEmpty (g2);
 
             Assert.AreNotSame(g1, g2);
 
             g1 = Template.Parse("{% Guid 'N' %}").Render(); 
-            Assert.IsNotNullOrEmpty(g1);
+            Assert.IsNotEmpty (g1);
             Assert.IsTrue(Guid.TryParseExact(g1, "N", out guid));
 
-            Assert.Throws<Exception>(() => Template.Parse("{% Guid 'INVALID' %}").Render());  
+            Assert.Throws<WhamException>(() => Template.Parse("{% Guid 'INVALID' %}").Render());  
         }
 
         [Test]
         public void TestTrimTag()
         { 
-            WhamEngine.InitTemplates(); 
+            WhamEngine.InitEngine(); 
 
             var t = Template.Parse("{% Trim %}   {% endTrim %}").Render(); 
-            Assert.IsNullOrEmpty(t); 
+            Assert.IsEmpty(t); 
 
             t = Template.Parse("{% Trim %}  NOT EMPTY {% endTrim %}").Render(); 
-            Assert.IsNotNullOrEmpty(t); 
+            Assert.IsNotEmpty (t); 
             Assert.AreEqual("NOT EMPTY", t);      
         }
     }

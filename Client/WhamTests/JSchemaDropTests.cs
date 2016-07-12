@@ -32,7 +32,7 @@ namespace WhamTests
         [Test]
         public void TestSchemaProperties()
         { 
-            WhamEngine.InitTemplates(); 
+            WhamEngine.InitEngine(); 
             var schemaDrop = Schemas.ShippingAddressDrop; 
             var hash = Hash.FromAnonymousObject(new { schema = schemaDrop});
 
@@ -42,7 +42,7 @@ namespace WhamTests
             Assert.AreEqual(schemaDrop.Title, res);
 
             res = Template.Parse("{{schema.BaseClassName}}").RenderWithErrors(hash);  
-            Assert.IsNotNullOrEmpty(res);
+            Assert.IsNotEmpty(res);
             Assert.IsFalse(res.Contains("BaseClassName"));
             Assert.AreEqual(schemaDrop.BaseClassName, res); 
         }
@@ -50,28 +50,28 @@ namespace WhamTests
         [Test]
         public void TestIncludedProperties()
         { 
-            WhamEngine.InitTemplates(); 
+            WhamEngine.InitEngine(); 
             var schemaDrop = Schemas.ShippingAddressDrop; 
             var hash = Hash.FromAnonymousObject(new { schema = schemaDrop});
 
             string res; 
 
             res = Template.Parse("{% for propName in schema.IncludedPropertyNames %}{{propName}}, {% endfor %}").RenderWithErrors(hash);  
-            Assert.IsNotNullOrEmpty(res); ;
+            Assert.IsNotEmpty (res); ;
             Assert.AreEqual("line1, line2, city, country, type, ", res);  
         }
 
         [Test]
         public void TestIncludedPropertyTypes()
         { 
-            WhamEngine.InitTemplates(); 
+            WhamEngine.InitEngine(); 
             var schemaDrop = Schemas.ShippingAddressDrop; 
             var hash = Hash.FromAnonymousObject(new { schema = schemaDrop});
 
             string res; 
 
             res = Template.Parse("{% for propType in schema.IncludedProperties %}{{propType.Value | FullClassName : propType.Key}}, {% endfor %}").RenderWithErrors(hash);  
-            Assert.IsNotNullOrEmpty(res); 
+            Assert.IsNotEmpty (res); 
             Assert.AreEqual("string, string, string, string, TypesEnum?, ", res);  
         }
     }
