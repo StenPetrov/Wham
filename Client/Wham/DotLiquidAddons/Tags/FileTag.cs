@@ -41,15 +41,15 @@ namespace Wham
             context.Stack (() => {
                 context [FolderTag.FileAndFolderOutputHash] = FolderTag.CreateCurrentOutputHash (outFolder, null, null, outputFullFileName);
 
-                if (Template.FileSystem is TemplateFileSystem) {
-                    var str = ((TemplateFileSystem)Template.FileSystem).CreateOutputStream (outputFullFileName);
+                if (Template.FileSystem is ITemplateFileSystem) {
+                    var stream = ((ITemplateFileSystem)Template.FileSystem).CreateOutputStream (outputFullFileName);
 
                     tracer.Info ("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName + " req: " + outputFullFileName);
-                    using (var outputTo = new StreamWriter (str)) {
+                    using (var outputTo = new StreamWriter (stream)) {
                         RenderAll (NodeList, context, outputTo);
 
                         outputTo.Flush ();
-                        ((TemplateFileSystem)Template.FileSystem).NotifyFileWritten (outputFullFileName, outputTo);
+                        ((ITemplateFileSystem)Template.FileSystem).NotifyFileWritten (outputFullFileName, outputTo);
                     }
                 } else {
                     RenderAll (NodeList, context, result);

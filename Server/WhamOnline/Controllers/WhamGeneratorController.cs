@@ -56,6 +56,9 @@ namespace WhamOnline.Controllers
             string taskRequestFile = GetDataPath(taskId.ToString(), taskId.ToString() + ".request");
             File.WriteAllText(taskRequestFile, request);
 
+            var engine = new Wham.WhamEngine(taskFolder);
+            engine.Liquidize("");
+
             return new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent(taskId.ToString())

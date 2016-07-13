@@ -1,9 +1,0 @@
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/WhamOnline.dll.mdb
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/WhamOnline.dll
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/obj/Debug/WhamOnline.dll
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/obj/Debug/WhamOnline.dll.mdb
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/System.Net.Http.Formatting.dll
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/System.Web.Http.dll
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/System.Web.Http.WebHost.dll
-/Users/Sten/Documents/Projects/Wham/Server/WhamOnline/bin/Newtonsoft.Json.dll

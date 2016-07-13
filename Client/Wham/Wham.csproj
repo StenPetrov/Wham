@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -44,7 +44,7 @@
     <Compile Include="JSchemaExtensions.cs" />
     <Compile Include="DotLiquidExtensions.cs" />
     <Compile Include="WhamEngine.cs" />
-    <Compile Include="DotLiquidAddons\BuiltInTemplates.cs" />
+    <Compile Include="DotLiquidAddons\TemplateResolver.cs" />
     <Compile Include="DotLiquidAddons\JSchemaDrop.cs" />
     <Compile Include="DotLiquidAddons\TemplateFileSystem.cs" />
     <Compile Include="DotLiquidAddons\Filters\ClassNameFilters.cs" />
@@ -63,12 +63,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="DotLiquidAddons\" />
-    <Folder Include="DotLiquidAddons\Tags\" />
-    <Folder Include="DotLiquidAddons\Filters\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Resources\CS_ClassTemplate.dlq" />
     <EmbeddedResource Include="Resources\CypherCreate.dlq" />

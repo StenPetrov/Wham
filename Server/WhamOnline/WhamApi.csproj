@@ -73,6 +73,12 @@
     <Reference Include="System.Xml.Linq">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DotLiquid">
+      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.2.0.3\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index.html" />
@@ -80,8 +86,11 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Global.asax" />
+    <Content Include="App_Data\Templates\CS\XamarinForms\WhamMasterTemplate.dlq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\ServerFileSystem.cs" />
+    <Compile Include="Controllers\WhamTemplatesController.cs" />
     <Compile Include="Controllers\WhamGeneratorController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -92,8 +101,14 @@
     <Content Include="packages.config">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="WhamOnline - FTP.pubxml" />
     <None Include="WhamOnline - Web Deploy.pubxml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Client\Wham\Wham.csproj">
+      <Project>{B46DB777-9BEF-453D-B0D8-1CA95826BECB}</Project>
+      <Name>Wham</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

@@ -4,6 +4,12 @@ using System.IO;
 
 namespace Wham
 {
+    public interface ITemplateFileSystem : DotLiquid.FileSystems.IFileSystem
+    {
+        Stream CreateOutputStream(string outputFullFileName);
+        void NotifyFileWritten(string outputFullFileName, StreamWriter outputTo);
+    }
+
     public class TemplateFileSystem : DotLiquid.FileSystems.IFileSystem
     {
         public string LocalPath { get; protected set; }
@@ -63,14 +69,14 @@ namespace Wham
 
                 context.GetTracer ().Info ("Loading template: " + templateName);
 
-                var res = BuiltInTemplates.GetResourceTemplate (templateName);
+                var res = TemplateResolver.GetTemplateContents (templateName);
 
                 if (string.IsNullOrEmpty (res)) {
                     if (!string.IsNullOrEmpty (LocalPath)) {
-                        templateName = System.IO.Path.Combine (LocalPath, templateName);
+                        templateName = Path.Combine (LocalPath, templateName);
 
-                        if (System.IO.File.Exists (templateName))
-                            res = System.IO.File.ReadAllText (templateName);
+                        if (File.Exists (templateName))
+                            res = File.ReadAllText (templateName);
                         else
                             throw new WhamTemplateException ("[FKASIHQJWKTP] Template not found: " + templateName);
                     } else {
