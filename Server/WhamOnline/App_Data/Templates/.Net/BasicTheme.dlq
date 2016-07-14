@@ -1,0 +1,17 @@
+﻿{% Folder appGen.AppOptions.AppName -%} 
+
+{% Folder 'Server' -%} 
+	{% File appGen.AppOptions.AppName | Append: 'Server.sln' -%}{% include 'CS_ServerSolutionFile.dlq' -%}{% endFile -%}
+{% endFolder -%}
+
+{% Folder 'Shared' -%} 
+	{% Folder 'Models' -%} 
+		{% include 'CS_ModelClasses.dlq' -%}
+	{% endFolder -%}
+{% endFolder -%}
+
+{% Folder 'Mobile' -%} 
+	{% File appGen.AppOptions.AppName | Append: 'Mobile.sln' -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
+{% endFolder -%}
+
+{% endFolder -%}

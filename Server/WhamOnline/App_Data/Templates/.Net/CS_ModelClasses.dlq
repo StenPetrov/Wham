@@ -1,0 +1,4 @@
+﻿{% for table in appGen.DataModel -%}   
+    {% assign csFile = table.TableName | ClassName | Append: '.cs' -%}
+    {% File csFile -%}{% include 'CS_ClassTemplate.dlq' -%}{% endFile -%} 
+{% endfor -%}

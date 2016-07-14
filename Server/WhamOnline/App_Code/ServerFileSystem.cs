@@ -12,6 +12,10 @@ namespace WhamOnline
     {
         public Stream CreateOutputStream(string outputFullFileName)
         {
+            string folder = Path.GetDirectoryName(outputFullFileName);
+            if (!Directory.Exists(folder))
+                Directory.CreateDirectory(folder);
+
             return File.Create(outputFullFileName, 64000);
         }
 

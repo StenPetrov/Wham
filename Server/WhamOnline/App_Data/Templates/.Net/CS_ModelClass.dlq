@@ -1,0 +1,4 @@
+﻿{% for field in table.Fields-%}   
+    {% assign csFile = table.TableName | ClassName | Append: '.cs' -%}
+    {% File csFile -%}{% include 'CS_ModelClass.dlq' -%}{% endFile -%} 
+{% endfor -%}

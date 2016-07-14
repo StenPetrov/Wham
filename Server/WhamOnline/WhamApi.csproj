@@ -43,8 +43,20 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DotLiquid, Version=1.8.0.0, Culture=neutral, PublicKeyToken=82e46016ecf9f07c, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DotNetZip, Version=1.10.1.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.10.1\lib\net20\DotNetZip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=2.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.2.0.3\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
@@ -73,12 +85,6 @@
     <Reference Include="System.Xml.Linq">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DotLiquid">
-      <HintPath>..\packages\DotLiquid.1.8.0\lib\NET45\DotLiquid.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json.Schema">
-      <HintPath>..\packages\Newtonsoft.Json.Schema.2.0.3\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Index.html" />
@@ -86,9 +92,15 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Global.asax" />
-    <Content Include="App_Data\Templates\CS\XamarinForms\WhamMasterTemplate.dlq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\Models\AppGenConfig.cs" />
+    <Compile Include="App_Code\Models\AppOptions.cs" />
+    <Compile Include="App_Code\Models\Authentication.cs" />
+    <Compile Include="App_Code\Models\Database.cs" />
+    <Compile Include="App_Code\Models\DataModel.cs" />
+    <Compile Include="App_Code\Models\Field.cs" />
+    <Compile Include="App_Code\Models\Owner.cs" />
     <Compile Include="App_Code\ServerFileSystem.cs" />
     <Compile Include="Controllers\WhamTemplatesController.cs" />
     <Compile Include="Controllers\WhamGeneratorController.cs" />
@@ -100,6 +112,15 @@
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="App_Data\Templates\.Net\BasicTheme.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Templates\.Net\CS_ModelClasses.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Templates\.Net\CS_ModelClass.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>

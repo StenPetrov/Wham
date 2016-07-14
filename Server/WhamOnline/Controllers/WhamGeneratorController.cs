@@ -7,6 +7,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Ionic.Zip;
+using Newtonsoft.Json;
+using WhamOnline.Models;
 
 namespace WhamOnline.Controllers
 {
@@ -22,18 +25,19 @@ namespace WhamOnline.Controllers
         // GET: api/WhamGenerator/5
         public HttpResponseMessage Get(Guid id)
         {
-            var path = GetDataPath(id.ToString(), id.ToString() + ".zip");
-            if (File.Exists(path))
+            string taskResult = CreateZipFile(id);
+
+            if (File.Exists(taskResult))
             {
                 HttpResponseMessage result = new HttpResponseMessage(HttpStatusCode.OK);
 
-                var stream = new FileStream(path, FileMode.Open, FileAccess.Read);
+                var stream = new FileStream(taskResult, FileMode.Open, FileAccess.Read);
                 result.Content = new StreamContent(stream);
                 result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 result.Content.Headers.ContentDisposition =
-                    new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
+                    new ContentDispositionHeaderValue("attachment")
                     {
-                        FileName = Path.GetFileName(path),
+                        FileName = Path.GetFileName(taskResult),
                     };
                 return result;
             }
@@ -44,25 +48,50 @@ namespace WhamOnline.Controllers
         }
 
         // POST: api/WhamGenerator
+        // returns { "taskId": "guid-123-guid-123", "errors": "something error or null if no errors"}
         [HttpPost]
-        public async Task<HttpResponseMessage> PostJsonSchema()
+        public async Task<HttpResponseMessage> PostJsonSchema([FromBody] AppGenConfig appGenConfig)
         {
-            string request = await Request.Content.ReadAsStringAsync();
-
             Guid taskId = Guid.NewGuid();
-            string taskFolder = GetDataPath(taskId.ToString());
-            Directory.CreateDirectory(taskFolder);
+            string errors = null;
 
-            string taskRequestFile = GetDataPath(taskId.ToString(), taskId.ToString() + ".request");
-            File.WriteAllText(taskRequestFile, request);
-
-            var engine = new Wham.WhamEngine(taskFolder);
-            engine.Liquidize("");
-
-            return new HttpResponseMessage(HttpStatusCode.OK)
+            try
             {
-                Content = new StringContent(taskId.ToString())
-            };
+                string taskFolder = GetDataPath(taskId.ToString());
+                Directory.CreateDirectory(taskFolder);
+
+                string taskRequestFile = GetDataPath(taskId.ToString(), taskId.ToString() + ".request");
+                File.WriteAllText(taskRequestFile, JsonConvert.SerializeObject(appGenConfig, Formatting.Indented));
+
+                var engine = new Wham.WhamEngine(taskFolder);
+                engine.Context["appGen"] = appGenConfig;
+                errors = engine.Liquidize(appGenConfig.AppOptions.Theme + "Theme.dlq");
+
+                errors = errors?.Replace(taskFolder, string.Empty)?.Trim();
+
+                if (string.IsNullOrEmpty(errors)) // pre-create the zip if there were no errors
+                    CreateZipFile(taskId);
+            }
+            catch (Exception x)
+            {
+                errors = x.ToString();
+            }
+
+            if (!string.IsNullOrEmpty(errors))
+            {
+                string taskErrorFile = GetDataPath(taskId.ToString(), taskId.ToString() + ".error.log");
+                File.WriteAllText(taskErrorFile, errors);
+            }
+
+            var response = Request.CreateResponse(
+                string.IsNullOrEmpty(errors) ? HttpStatusCode.OK : HttpStatusCode.InternalServerError,
+                new
+                {
+                    taskId,
+                    errors,
+                });
+
+            return response;
         }
 
         // DELETE: api/WhamGenerator/5
@@ -97,6 +126,28 @@ namespace WhamOnline.Controllers
             }
 
             return tasksFolderPath;
+        }
+
+        private string CreateZipFile(Guid taskId, bool recreate = false)
+        {
+            string taskFolder = GetDataPath(taskId.ToString());
+            string taskResultFile = GetDataPath(taskId.ToString(), taskId.ToString() + ".zip");
+
+            if (File.Exists(taskResultFile))
+            {
+                if (recreate)
+                    File.Delete(taskResultFile);
+                else
+                    return taskResultFile;
+            }
+
+            using (ZipFile zip = new ZipFile(taskResultFile))
+            {
+                zip.AddDirectory(taskFolder);
+                zip.Save();
+            }
+
+            return taskResultFile;
         }
     }
 }

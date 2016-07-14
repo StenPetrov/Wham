@@ -16,54 +16,68 @@ namespace Wham
 
         string OutputFolder { get; set; }
 
-        public override void Initialize (string tagName, string markup, System.Collections.Generic.List<string> tokens)
+        public override void Initialize(string tagName, string markup, System.Collections.Generic.List<string> tokens)
         {
-            if (!string.IsNullOrEmpty (markup)) {
-                OutputFolder = markup.Trim ();
+            if (!string.IsNullOrEmpty(markup))
+            {
+                OutputFolder = markup.Trim();
             }
 
-            base.Initialize (tagName, markup, tokens);
+            base.Initialize(tagName, markup, tokens);
         }
 
-        public override void Render (Context context, TextWriter result)
+        public override void Render(Context context, TextWriter result)
         {
-            var hash = context [FileAndFolderOutputHash] as Hash;
+            var hash = context[FileAndFolderOutputHash] as Hash;
 
-            var outFolder = context [OutputFolder] as string ?? OutputFolder;
+            var outFolder = context[OutputFolder] as string ?? OutputFolder;
 
             object parentFolder = null;
 
-            if (hash == null || !hash.TryGetValue (FolderTag.CurrentFolderVariableName, out parentFolder))
-                parentFolder = Directory.GetCurrentDirectory ();
+            if (hash == null || !hash.TryGetValue(FolderTag.CurrentFolderVariableName, out parentFolder))
+                parentFolder = Directory.GetCurrentDirectory();
 
-            var outFullFolder = Path.Combine ("" + parentFolder, outFolder);
+            var outFullFolder = Path.Combine("" + parentFolder, outFolder);
 
-            context.Stack (() => {
-                context [FileAndFolderOutputHash] = CreateCurrentOutputHash (outFullFolder, 
+            context.Stack(() =>
+            {
+                context[FileAndFolderOutputHash] = CreateCurrentOutputHash(outFullFolder,
                                                                              outFolder,
-                                                                             parentFolder!=null ? parentFolder.ToString() : null,
-                                                                             null); 
-                RenderAll (NodeList, context, result);
+                                                                             parentFolder?.ToString(),
+                                                                             null);
+                try
+                {
+                    if (!Directory.Exists(outFullFolder))
+                        Directory.CreateDirectory(outFullFolder); 
+                }
+                catch (Exception x)
+                {
+                    throw new WhamException("[FTHAKHNZNBVFR] Folder error: " + outFolder, x); 
+                }
+
+                RenderAll(NodeList, context, result);
             });
         }
 
-        public static Hash CreateCurrentOutputHash (string outFullFolder, string lastFolder, string parentFolder,
+        public static Hash CreateCurrentOutputHash(string outFullFolder, string lastFolder, string parentFolder,
                                                     string outFullFileName = null)
         {
-            var hash = Hash.FromAnonymousObject (new { });
+            var hash = Hash.FromAnonymousObject(new { });
 
-            if (outFullFolder != null) {
-                hash.Add (CurrentFolderVariableName, outFullFolder);
-                hash.Add (ParentFolderVariableName, parentFolder
-                   ?? (outFullFolder != null ? Directory.GetParent (outFullFolder).FullName : null));
+            if (outFullFolder != null)
+            {
+                hash.Add(CurrentFolderVariableName, outFullFolder);
+                hash.Add(ParentFolderVariableName, parentFolder
+                   ?? (outFullFolder != null ? Directory.GetParent(outFullFolder).FullName : null));
             }
 
             if (lastFolder != null)
-                hash.Add (LastFolderVariableName, lastFolder);
+                hash.Add(LastFolderVariableName, lastFolder);
 
-            if (outFullFileName != null) {
-                hash.Add (OutputFullFilePathVariableName, outFullFileName);
-                hash.Add (OutputFileVariableName, Path.GetFileName (outFullFileName));
+            if (outFullFileName != null)
+            {
+                hash.Add(OutputFullFilePathVariableName, outFullFileName);
+                hash.Add(OutputFileVariableName, Path.GetFileName(outFullFileName));
             }
 
             return hash;

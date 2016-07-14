@@ -20,8 +20,7 @@ namespace WhamOnline
             // init Wham to work on the server
             templatesPath = Server.MapPath(@"~/App_Data/Templates");
             InitWhamTemplateResolver();
-            Wham.WhamEngine.InitEngine();
-            DotLiquid.Template.FileSystem = new ServerFileSystem();
+            Wham.WhamEngine.InitEngine(new ServerFileSystem()); 
         }
 
         internal static IEnumerable<string> InitWhamTemplateResolver()

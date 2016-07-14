@@ -1,5 +1,0 @@
-﻿{% Folder 'Wham' -%} 
-
-{% File 'WhamSolution.sln' -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
-
-{% endFolder -%}
