@@ -178,10 +178,12 @@
             <div class="input-field col s12 m6">
               <select onchange="typeChanged()" id="fieldType">
                 <option value="" disabled selected>Choose type of field</option>
-                <option value="String">String</option>
-                <option value="Ref">Reference</option>
-                <option value="DateTime">Date time</option>
-                <option value="Integer">Integer</option>
+                <option value="string">Text</option>
+                <option value="bool">Boolean (true/false)</option>
+                <option value="Ref">Table Reference</option>
+                <option value="DateTime">Date and Time</option>
+                <option value="int">Integer</option>
+                <option value="double">Number</option>
               </select>
               <label>Select Field Type</label>
             </div>
@@ -198,9 +200,10 @@
 
             <div class="input-field col s12" id="div_UI_Type" style="display:none">
               <select id="UI_Type">
-              <option value="" disabled selected>Choose your option</option>
-              <option value="textbox"> Text box </option>
-              <option value="label"> Label </option>
+                <option value="" disabled selected>Choose your option</option>
+                <option value="textbox"> Text box </option>
+                <option value="label"> Label </option>
+                <option value="hidden"> Hidden </option>
               </select>
               <label>UI type</label>
             </div>
@@ -218,7 +221,7 @@
             <div class="input-field col s12" id="div_refConnections" style="display:none">
               <select multiple id="refConnections">
               </select>
-              <label>Ref connections</label>
+              <label>Ref Connections</label>
             </div>
 
           </div>
@@ -242,9 +245,9 @@
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script type="text/javascript" src="preprocessing.js"></script> <!-- Change file location inside js folder later -->
-    <script type="text/javascript" src="jsonBuildAndSubmit.js"></script> <!-- Change file location inside js folder later -->
-    <script type="text/javascript" src="sqltables.js"></script> <!-- Change file location inside js folder later -->
+    <script type="text/javascript" src="js/preprocessing.js"></script> <!-- Change file location inside js folder later -->
+    <script type="text/javascript" src="js/jsonBuildAndSubmit.js"></script> <!-- Change file location inside js folder later -->
+    <script type="text/javascript" src="js/sqltables.js"></script> <!-- Change file location inside js folder later -->
     <script>
       $(document).ready(function(){
       $(".button-collapse").sideNav();

@@ -1,7 +1,9 @@
-﻿{% Folder appGen.AppOptions.AppName -%} 
+﻿{% assign appSolutionFolder = appGen.AppOptions.AppName -%} 
+{% Folder appSolutionFolder -%} 
 
 {% Folder 'Server' -%} 
-	{% File appGen.AppOptions.AppName | Append: 'Server.sln' -%}{% include 'CS_ServerSolutionFile.dlq' -%}{% endFile -%}
+    {% assign serverSlnFileName = appGen.AppOptions.AppName | Append: 'Server.sln' -%}
+	{% File serverSlnFileName -%}{% include 'CS_ServerSolutionFile.dlq' -%}{% endFile -%}
 {% endFolder -%}
 
 {% Folder 'Shared' -%} 
@@ -11,7 +13,8 @@
 {% endFolder -%}
 
 {% Folder 'Mobile' -%} 
-	{% File appGen.AppOptions.AppName | Append: 'Mobile.sln' -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
+   {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' -%} 
+   {% File mobileSlnFileName -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
 {% endFolder -%}
 
 {% endFolder -%}

@@ -1,10 +1,31 @@
 
 // item format: ("string sent in json", "string shown to user", "selected", "disabled")
-var optionList_targetPlatform = [ [".Net", "Xamarin", 1, 0], ["Cordova", "Cordova", 0, 1], ["Android", "Android", 0, 1]  ];
-var optionList_theme = [ ["Basic","Basic Theme", 1, 0], ["Stylish", "Stylish Theme", 0, 1] ];
-var optionList_db = [["SQL","SQL Database", 1, 0]];
-var optionList_auth = [["AzureAD","AzureAD Authentication", 1, 0]];
-var optionList_company = [["Microsoft", "Microsoft", 1, 0], ["Other", "Other", 0, 0]];
+var optionList_targetPlatform = [
+  [".Net", ".NET/Xamarin", 1, 0],
+  ["Cordova", "nodejs/Cordova", 0, 1], 
+  ["Android", "Android", 0, 1]
+];
+
+var optionList_theme = [
+   ["Basic","Basic Theme", 1, 0],
+   ["Stylish", "Stylish Theme", 0, 1]
+];
+
+var optionList_db = [
+  ["","No Database", 1, 0]
+  ["SQL","SQL Database", 1, 0]
+];
+
+var optionList_auth = [
+  ["","No Authentication", 1, 0]
+  ["AzureAD","AzureAD Authentication", 1, 0]
+  ["Social","Social Authentication (Google, FB, Twitter)", 1, 0]
+];
+
+var optionList_company = [
+  ["Microsoft", "Microsoft", 1, 0],
+  ["Other", "Other", 0, 0]
+];
 
 var listOfTables = []
 

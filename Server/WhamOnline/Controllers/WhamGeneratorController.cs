@@ -57,6 +57,8 @@ namespace WhamOnline.Controllers
 
             try
             {
+                ValidateAppConfig(appGenConfig);
+
                 string taskFolder = GetDataPath(taskId.ToString());
                 Directory.CreateDirectory(taskFolder);
 
@@ -106,6 +108,26 @@ namespace WhamOnline.Controllers
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
+        }
+
+        private void ValidateAppConfig(AppGenConfig appGenConfig)
+        {
+            if (appGenConfig == null) ThrowValidationError("App config required");
+            if (string.IsNullOrWhiteSpace(appGenConfig.AppOptions.AppName))
+                ThrowValidationError("App name required");
+            if (appGenConfig.AppOptions.AppName.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
+                ThrowValidationError("App name must be a valid file name");
+        }
+
+        private void ThrowValidationError(string errorContent)
+        {
+            throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(new
+                {
+                    error = errorContent,
+                }))
+            });
         }
 
         private string GetDataPath(string taskFolderName = null, string fileName = null)

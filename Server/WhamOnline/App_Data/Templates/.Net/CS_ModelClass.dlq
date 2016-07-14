@@ -1,4 +1,13 @@
-﻿{% for field in table.Fields-%}   
-    {% assign csFile = table.TableName | ClassName | Append: '.cs' -%}
-    {% File csFile -%}{% include 'CS_ModelClass.dlq' -%}{% endFile -%} 
-{% endfor -%}
+﻿// Generated with Wham
+using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+
+namespace {{ appGen.AppOptions.AppName | ClassName }}.{{ Models }}{}
+	public partial class {{ table.TableName | ClassName }}{
+	{% for field in table.Fields -%}
+		 [JsonProperty("{{ field.Name | }}")]   
+		 public {{ field.Type }} {{ field.Name }} { get;set; }
+	{% endfor -%}
+}
+}
