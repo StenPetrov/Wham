@@ -136,15 +136,24 @@ namespace WhamOnline.Controllers
 
             if (!Directory.Exists(tasksFolderPath))
             {
+                // creating the folder for all tasks
                 Directory.CreateDirectory(tasksFolderPath);
             }
 
             if (taskFolderName != null)
             {
-                if (fileName != null)
-                    return Path.Combine(tasksFolderPath, taskFolderName, fileName);
+                tasksFolderPath = Path.Combine(tasksFolderPath, taskFolderName);
+                if (!Directory.Exists(tasksFolderPath))
+                {
+                    Directory.CreateDirectory(tasksFolderPath);
+                    TaskFolderCreated(tasksFolderPath);
+                }
 
-                return Path.Combine(tasksFolderPath, taskFolderName);
+                if (fileName != null)
+                {
+                    // returning a file name
+                    tasksFolderPath = Path.Combine(tasksFolderPath, fileName);
+                }
             }
 
             return tasksFolderPath;
@@ -169,7 +178,18 @@ namespace WhamOnline.Controllers
                 zip.Save();
             }
 
+            TaskZipFileCreated(taskResultFile);
+
             return taskResultFile;
+        }
+
+        protected virtual void TaskZipFileCreated(string zipFileName)
+        {
+            Console.WriteLine(zipFileName);
+        }
+
+        protected virtual void TaskFolderCreated(string taskFolder)
+        {
         }
     }
 }

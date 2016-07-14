@@ -106,6 +106,7 @@
     <Compile Include="App_Code\Models\AppGenConfig.cs" />
     <Compile Include="App_Code\Models\AppOptions.cs" />
     <Compile Include="App_Code\Models\Authentication.cs" />
+    <Compile Include="App_Code\Models\Constants.cs" />
     <Compile Include="App_Code\Models\Database.cs" />
     <Compile Include="App_Code\Models\DataModel.cs" />
     <Compile Include="App_Code\Models\Field.cs" />

@@ -94,7 +94,7 @@ namespace Wham
             if (template.EndsWith(".dlq") && template.IndexOfAny(Path.GetInvalidPathChars()) < 0)
             {
                 Context.GetTracer().Info("[WHGNJFIUQYU] Loading template contents from: " + template);
-                template = TemplateResolver.GetTemplateContents(template) ?? template;
+                template = TemplateResolver.GetTemplateContents(template) ?? $"[XQLGFTZHTD] Template not found: {template}";
             }
 
             var parsedTemplate = Template.Parse(template);
