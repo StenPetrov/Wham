@@ -1,246 +1,254 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
+    <title>Wham!App Generator</title>
     <!--Import Google Icon Font-->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css" media="screen,projection" />
 
     <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
 
-  <body>
-
+<body>
     <ul id="navbar_drop" class="dropdown-content">
-      <li><a href="https://Azure.Microsoft.com">Azure</a></li>
-      <li class="divider"></li>
-      <li><a href="https://xamarin.com">Xamarin</a></li>
-      <li><a href="https://cordova.apache.org">Cordova</a></li>
-      <li><a href="https://aka.ms/droid">Android</a></li>
-      <li class="divider"></li>
-      <li><a href="https://en.wikipedia.org/wiki/SQL">SQL</a></li>
-      <li><a href="https://www.microsoft.com/en-us/cloud-platform/azure-active-directory">Azure AD</a></li>
+        <li><a href="https://Azure.Microsoft.com">Azure</a></li>
+        <li class="divider"></li>
+        <li><a href="https://xamarin.com">Xamarin</a></li>
+        <li><a href="https://cordova.apache.org">Cordova</a></li>
+        <li><a href="https://aka.ms/droid">Android</a></li>
+        <li class="divider"></li>
+        <li><a href="https://en.wikipedia.org/wiki/SQL">SQL</a></li>
+        <li><a href="https://www.microsoft.com/en-us/cloud-platform/azure-active-directory">Azure AD</a></li>
     </ul>
     <nav>
-      <div class="nav-wrapper teal">
-        <a href="#!" class="brand-logo center">App generator</a>
-        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-med-and-down">
-          <li><a href="#!">Contact Us</a></li>
-          <li>
-            <a class="dropdown-button" href="#!" data-activates="navbar_drop">
-                Other Resources<i class="material-icons right">arrow_drop_down</i>
-            </a>
-          </li>
-        </ul>
-        <ul class="side-nav" id="mobile-demo">
-          <li><a href="#!">Contact Us</a></li>
-        </ul>
-      </div>
+        <div class="nav-wrapper teal">
+            <a href="#" class="brand-logo center">Wham!App Generator</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="#!">Contact Us</a></li>
+                <li>
+                    <a class="dropdown-button" href="#!" data-activates="navbar_drop">
+                        Other Resources<i class="material-icons right">arrow_drop_down</i>
+                    </a>
+                </li>
+            </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a href="#!">Contact Us</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <div class="row"> <!-- App Options -->
-      <div class="col s12">
-
-          <h5>Application Options</h5>
-
-          <div class="input-field col s12 m6">
-            <input placeholder="MyGeneratedApp" id="appName" type="text" class="validate">
-            <label for="appName">Application Name</label>
-          </div>
-          <div class="input-field col s12 m3">
-            <select multiple  id="targetPlatform">
-              <!-- preprocessing.js sets options from __optionList_targetPlatform__ -->
-            </select>
-            <label>Target Platform</label>
-          </div>
-          <div class="input-field col s12 m3">
-            <select  id="theme">
-              <!-- preprocessing.js sets options from __optionList_theme__ -->
-            </select>
-            <label>Theme</label>
-          </div>
-
-      </div>
-    </div>
-
     <div class="row">
-      <div class="col s12">
+        <!-- App Options -->
+        <div class="col s12">
 
-        <h5>Database options</h5>
+            <h5>Application Options</h5>
 
-        <div class="input-field col s12 m3">
-          <select  id="db_type">
-            <!-- preprocessing.js sets options from __optionList_db__ -->
-          </select>
-          <label>Database Type</label>
-        </div>
-
-        <div class="input-field col s12 m9">
-          <input placeholder="http://azure.com/connection_string" id="db_url" type="url" class="validate">
-          <label for="db_url">Database connection string</label>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col s12">
-
-        <h5>Authentication options</h5>
-
-        <div class="input-field col s12 m3">
-          <select  id="auth_type">
-            <!-- preprocessing.js sets options from __optionList_auth__ -->
-          </select>
-          <label>Authentication type</label>
-        </div>
-
-        <div class="input-field col s12 m9">
-          <input placeholder="1234-1234-1234" id="auth_id" type="tel" class="validate" pattern="(\d+-*)*">
-          <label for="auth_id">Client ID</label>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="row"> <!-- User details -->
-      <div class="col s12">
-
-          <h5>User details</h5>
-
-          <div class="input-field col s12 m6">
-            <input id="firstName" type="text" class="validate">
-            <label for="firstName">First Name</label>
-          </div>
-          <div class="input-field col s12 m6">
-            <input id="lastName" type="text" class="validate">
-            <label for="lastName">Last Name</label>
-          </div>
-
-          <div class="input-field col s12 m9">
-            <input placeholder="Your app will be mailed to you here" id="email" type="email" class="validate">
-            <label for="email">E-mail</label>
-          </div>
-          <div class="input-field col s12 m3">
-            <select  id="company">
-            <!-- preprocessing.js sets options from __optionList_company__ -->
-            </select>
-            <label>Company</label>
-          </div>
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col s12">
-
-          <h5>Tables in the database</h5>
-          <ul class="collection" id="tableListing">
-          </ul>
-          <a class="waves-effect waves-light btn modal-trigger" href="#modal_addTable"><i class="material-icons left">add</i>Add A table</a>
-          <!-- FOLLOWING IS MODAL TO GET INFO ON THE NEW TABLE -->
-          <div id="modal_addTable" class="modal bottom-sheet">
-            <div class="modal-content">
-              <h5>Add New Table</h5>
-              <div class="col s12">
-                <div class="switch">
-                  <input type="checkbox" class="filled-in" id="newTableVisibility" checked>
-                  <label for="newTableVisibility">visibility</label>
-                </div>
-              </div>
-              <div class="input-field col s12">
-                <input id="newTableName" type="text" class="validate">
-                <label for="newTableName">Table Name</label>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <a class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="addToTable()">Add</a>
-              <a class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-            </div>
-          </div>
-          <!-- END OF MODAL TO GET INFO ON THE NEW TABLE -->
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col s12">
-        <h5 id="tableInDisplay">Select a table from above</h5>
-        <ul class="collection" id="fieldListing"> <!-- அபிஷேக் -->
-        </ul>
-        <a class="waves-effect waves-light btn modal-trigger disabled" href="#modal_addField" id="addFieldButton"><i class="material-icons left">add</i>Add A field</a>
-        <!-- FOLLOWING IS MODAL TO GET INFO ON THE NEW FIELD -->
-        <div id="modal_addField" class="modal modal-fixed-footer">
-          <div class="modal-content">
-            <h5>Add New Field</h5>
             <div class="input-field col s12 m6">
-              <select onchange="typeChanged()" id="fieldType">
-                <option value="" disabled selected>Choose type of field</option>
-                <option value="string">Text</option>
-                <option value="bool">Boolean (true/false)</option>
-                <option value="Ref">Table Reference</option>
-                <option value="DateTime">Date and Time</option>
-                <option value="int">Integer</option>
-                <option value="double">Number</option>
-              </select>
-              <label>Select Field Type</label>
+                <input placeholder="MyGeneratedApp" id="appName" type="text" class="validate">
+                <label for="appName">Application Name</label>
+            </div>
+            <div class="input-field col s12 m3">
+                <select multiple id="targetPlatform">
+                    <!-- preprocessing.js sets options from __optionList_targetPlatform__ -->
+                </select>
+                <label>Target Platform</label>
+            </div>
+            <div class="input-field col s12 m3">
+                <select id="theme">
+                    <!-- preprocessing.js sets options from __optionList_theme__ -->
+                </select>
+                <label>Theme</label>
             </div>
 
-            <div class="input-field col s12 m6" id="div_isAuth" style="display:none">
-              <input type="checkbox" id="isAuth"/>
-              <label for="isAuth">is auth token</label>
-            </div>
-
-            <div class="input-field col s12" id="div_field_name" style="display:none">
-              <input id="field_name" type="text" class="validate">
-              <label for="field_name">Field Name</label>
-            </div>
-
-            <div class="input-field col s12" id="div_UI_Type" style="display:none">
-              <select id="UI_Type">
-                <option value="" disabled selected>Choose your option</option>
-                <option value="textbox"> Text box </option>
-                <option value="label"> Label </option>
-                <option value="hidden"> Hidden </option>
-              </select>
-              <label>UI type</label>
-            </div>
-
-            <div class="input-field col s12" id="div_defaultValue" style="display:none">
-              <input id="defaultValue" type="text" class="validate">
-              <label class="active" for="defaultValue">Default Value</label>
-            </div>
-
-            <div class="input-field col s12" id="div_regex" style="display:none">
-              <input id="regex" type="text" class="validate">
-              <label class="active" for="regex">Regular expression</label>
-            </div>
-
-            <div class="input-field col s12" id="div_refConnections" style="display:none">
-              <select multiple id="refConnections">
-              </select>
-              <label>Ref Connections</label>
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <a class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="addThisField()">Add</a>
-            <a class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-          </div>
         </div>
-        <!-- END OF MODAL TO GET INFO ON THE NEW FIELD -->
-
-      </div>
     </div>
 
     <div class="row">
-      <div class="col s12 right-align" id="submit_button" onclick="submitClicked()">
-        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
-          <i class="material-icons right">send</i>
-        </button>
-      </div>
+        <div class="col s12">
+
+            <h5>Database options</h5>
+
+            <div class="input-field col s12 m3">
+                <select id="db_type">
+                    <!-- preprocessing.js sets options from __optionList_db__ -->
+                </select>
+                <label>Database Type</label>
+            </div>
+
+            <div class="input-field col s12 m9">
+                <input placeholder="http://azure.com/connection_string" id="db_url" type="url" class="validate">
+                <label for="db_url">Database connection string</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+
+            <h5>Authentication options</h5>
+
+            <div class="input-field col s12 m3">
+                <select id="auth_type">
+                    <!-- preprocessing.js sets options from __optionList_auth__ -->
+                </select>
+                <label>Authentication type</label>
+            </div>
+
+            <div class="input-field col s12 m9">
+                <input placeholder="1234-1234-1234" id="auth_id" type="tel" class="validate" pattern="(\d+-*)*">
+                <label for="auth_id">Client ID</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- User details -->
+        <div class="col s12">
+
+            <h5>User details</h5>
+
+            <div class="input-field col s12 m6">
+                <input id="firstName" type="text" class="validate">
+                <label for="firstName">First Name</label>
+            </div>
+            <div class="input-field col s12 m6">
+                <input id="lastName" type="text" class="validate">
+                <label for="lastName">Last Name</label>
+            </div>
+
+            <div class="input-field col s12 m9">
+                <input placeholder="Your app will be mailed to you here" id="email" type="email" class="validate">
+                <label for="email">E-mail</label>
+            </div>
+            <div class="input-field col s12 m3">
+                <select id="company">
+                    <!-- preprocessing.js sets options from __optionList_company__ -->
+                </select>
+                <label>Company</label>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+
+            <h5>Tables in the database</h5>
+            <ul class="collection" id="tableListing"></ul>
+            <a class="waves-effect waves-light btn modal-trigger" href="#modal_addTable"><i class="material-icons left">add</i>Add A table</a>
+            <!-- FOLLOWING IS MODAL TO GET INFO ON THE NEW TABLE -->
+            <div id="modal_addTable" class="modal bottom-sheet">
+                <div class="modal-content">
+                    <h5>Add New Table</h5>
+                    <div class="col s12">
+                        <div class="switch">
+                            <input type="checkbox" class="filled-in" id="newTableVisibility" checked>
+                            <label for="newTableVisibility">visibility</label>
+                        </div>
+                    </div>
+                    <div class="input-field col s12">
+                        <input id="newTableName" type="text" class="validate">
+                        <label for="newTableName">Table Name</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="addToTable()">Add</a>
+                    <a class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+                </div>
+            </div>
+            <!-- END OF MODAL TO GET INFO ON THE NEW TABLE -->
+
+        </div>
+    </div>
+
+    <div class="row" id="div_selected_table" style="background-color: #FCFCFC">
+        <div class="col s12 push-s1">
+            <h5 id="tableInDisplay">Select a table from above</h5>
+            <ul class="collection" id="fieldListing">
+                <!-- அபிஷேக் -->
+            </ul>
+            <a class="waves-effect waves-light btn modal-trigger disabled" href="#modal_addField" id="addFieldButton"><i class="material-icons left">add</i>Add A field</a>
+            <!-- FOLLOWING IS MODAL TO GET INFO ON THE NEW FIELD -->
+            <div id="modal_addField" class="modal modal-fixed-footer">
+                <div class="modal-content">
+                    <h5>Add New Field</h5>
+                    <div class="input-field col s12 m6">
+                        <select onchange="typeChanged()" id="fieldType">
+                            <option value="" disabled selected>Choose type of field</option>
+                            <option value="string">Text</option>
+                            <option value="bool">Boolean (true/false)</option>
+                            <option value="Ref">Table Reference</option>
+                            <option value="DateTime">Date and Time</option>
+                            <option value="int">Integer</option>
+                            <option value="double">Number</option>
+                        </select>
+                        <label>Select Field Type</label>
+                    </div>
+
+                    <div class="input-field col s12 m6" id="div_isAuth" style="display: none">
+                        <input type="checkbox" id="isAuth" />
+                        <label for="isAuth">is auth token</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_field_name" style="display: none">
+                        <input id="field_name" type="text" class="validate">
+                        <label for="field_name">Field Name</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_field_isCollection" style="display: none">
+                        <input id="field_isCollection" type="checkbox" class="validate">
+                        <label for="field_isCollection">Is Collection</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_UI_Type" style="display: none">
+                        <select id="UI_Type">
+                            <option value="" disabled selected>Choose your option</option>
+                            <option value="textbox"> Text box </option>
+                            <option value="label"> Label </option>
+                            <option value="hidden"> Hidden </option>
+                        </select>
+                        <label>UI type</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_defaultValue" style="display: none">
+                        <input id="defaultValue" type="text" class="validate">
+                        <label class="active" for="defaultValue">Default Value</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_regex" style="display: none">
+                        <input id="regex" type="text" class="validate">
+                        <label class="active" for="regex">Regular expression</label>
+                    </div>
+
+                    <div class="input-field col s12" id="div_refConnection" style="display: none">
+                        <select id="refConnection"></select>
+                        <label>Referenced Table</label>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <a class=" modal-action modal-close waves-effect waves-green btn-flat" onclick="addThisField()">Add</a>
+                    <a class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+                </div>
+            </div>
+            <!-- END OF MODAL TO GET INFO ON THE NEW FIELD -->
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 right-align" id="submit_button" onclick="submitClicked()">
+            <button class="btn waves-effect waves-light" type="submit" name="action">
+                Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
     </div>
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> <!--Import jQuery before materialize.js-->
@@ -248,12 +256,12 @@
     <script type="text/javascript" src="js/preprocessing.js"></script> <!-- Change file location inside js folder later -->
     <script type="text/javascript" src="js/jsonBuildAndSubmit.js"></script> <!-- Change file location inside js folder later -->
     <script type="text/javascript" src="js/sqltables.js"></script> <!-- Change file location inside js folder later -->
-    <script>
-      $(document).ready(function(){
-      $(".button-collapse").sideNav();
-      $('select').material_select(); // For the dropdown forms
-      $('.modal-trigger').leanModal(); // For modal with adding table
-      })
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".button-collapse").sideNav();
+            $('select').material_select(); // For the dropdown forms
+            $('.modal-trigger').leanModal(); // For modal with adding table
+        })
     </script>
-  </body>
+</body>
 </html>

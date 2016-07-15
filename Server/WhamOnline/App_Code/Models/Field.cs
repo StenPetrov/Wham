@@ -18,8 +18,11 @@ namespace WhamOnline.Models
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("refList")]
-        public string[] RefList { get; set; }
+        [JsonProperty("isCollection")]
+        public bool IsCollection { get; set; }
+
+        [JsonProperty("refTable")]
+        public string RefTable { get; set; }
 
         [JsonProperty("uiType")]
         public string UiType { get; set; }

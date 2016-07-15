@@ -1,7 +1,7 @@
 ﻿{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
 {% assign sharedModelProjectFileName = appGen.AppOptions.AppName | Append: 'SharedModels.shproj' %} 
 {% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | Append: 'SharedModels.projitems' %} 
-{% capture sharedModelProjectGuid %}{% Guid 'N' %}{% endcapture %}
+{% capture sharedModelProjectGuid %}{% Guid %}{% endcapture %}
 
 {% Folder appSolutionFolder %}  
 {% Folder 'Server' %} 

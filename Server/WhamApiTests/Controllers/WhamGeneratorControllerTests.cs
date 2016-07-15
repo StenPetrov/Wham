@@ -23,7 +23,7 @@ namespace WhamOnline.Controllers.Tests
 
         [TestInitialize]
         public void TestSetup()
-        { 
+        {
             string templatesPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\WhamOnline\App_Data\Templates");
             templatesPath = Path.Combine(Directory.GetParent(templatesPath).FullName, "Templates"); // this is to remove the ..\ parts of the path
             WhamOnline.Global.InitWham(templatesPath);
@@ -40,7 +40,8 @@ namespace WhamOnline.Controllers.Tests
                     try
                     {
                         Console.WriteLine("[WGCTBNGNHNB] Clean up, removing task folder: " + m_whamGeneratorController.TaskFolder);
-                       // Directory.Delete(m_whamGeneratorController.TaskFolder, true);
+                        Process.Start(m_whamGeneratorController.TaskFolder);
+                        // Directory.Delete(m_whamGeneratorController.TaskFolder, true);
                     }
                     catch (Exception x)
                     {
@@ -64,14 +65,14 @@ namespace WhamOnline.Controllers.Tests
             var appGen = new TestAppGenConfig();
             await AssertOKResponse(appGen);
         }
-         
+
         [TestMethod()]
         public async Task Generator_ValidationError_Test()
         {
-            var appGen = new TestAppGenConfig {AppOptions = {AppName = null}};
+            var appGen = new TestAppGenConfig { AppOptions = { AppName = null } };
 
             await AssertErrorResponse(appGen);
-        } 
+        }
 
         private async Task<string> AssertOKResponse(TestAppGenConfig appGen)
         {
@@ -171,9 +172,16 @@ namespace WhamOnline.Controllers.Tests
                         },
                         new Field
                         {
+                            Name = "CustomerLoginDates",
+                            Type = Constants.DataTypes.TDateTime,
+                            IsCollection = true,
+                            UiType = "Hidden",
+                        },
+                        new Field
+                        {
                             Name = "Address",
                             Type = Constants.DataTypes.TRef,
-                            RefList = new [] {"Addresses"},
+                            RefTable = "Addresses",
                         },
                     }
                 },

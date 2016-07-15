@@ -15,12 +15,11 @@ namespace WhamOnline.Models
             public const string TBool = "bool";
             public const string TDateTime = "DateTime";
 
-            public const string TRef = "Ref";
-            public const string TRefMany = "RefMany";
+            public const string TRef = "Ref"; 
 
             public static readonly string[] All = new[]
             {
-                TString, TInt, TDouble, TBool, TDateTime, TRef, TRefMany
+                TString, TInt, TDouble, TBool, TDateTime, TRef
             };
         }
     }
