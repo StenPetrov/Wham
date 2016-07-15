@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Reflection;
 using System.IO;
+using System.Text.RegularExpressions;
 using DotLiquid.FileSystems;
 
 namespace Wham
@@ -97,6 +98,11 @@ namespace Wham
                 template = TemplateResolver.GetTemplateContents(template) ?? $"[XQLGFTZHTD] Template not found: {template}";
             }
 
+            if (template != null)
+            {
+                // tags that sit alone on a line are moved to the line above to avoid excessive whitespace
+                template = Regex.Replace(template, @"(?m)^\s+({%[^{%]+%})\s*$", "$1");
+            }
             var parsedTemplate = Template.Parse(template);
 
             return parsedTemplate.Render(RenderParameters);

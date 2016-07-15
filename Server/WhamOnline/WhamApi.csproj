@@ -126,7 +126,7 @@
     <Content Include="App_Data\Templates\.Net\BasicTheme.dlq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Templates\.Net\CS_ModelClasses.dlq">
+    <Content Include="App_Data\Templates\.Net\CS_ModelClassesSharedProject.dlq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Templates\.Net\CS_ModelClass.dlq">

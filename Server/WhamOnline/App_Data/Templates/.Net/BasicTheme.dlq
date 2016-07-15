@@ -1,20 +1,27 @@
-﻿{% assign appSolutionFolder = appGen.AppOptions.AppName -%} 
-{% Folder appSolutionFolder -%} 
+﻿{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
+{% assign sharedModelProjectFileName = appGen.AppOptions.AppName | Append: 'SharedModels.shproj' %} 
+{% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | Append: 'SharedModels.projitems' %} 
+{% capture sharedModelProjectGuid %}{% Guid 'N' %}{% endcapture %}
 
-{% Folder 'Server' -%} 
-    {% assign serverSlnFileName = appGen.AppOptions.AppName | Append: 'Server.sln' -%}
-	{% File serverSlnFileName -%}{% include 'CS_ServerSolutionFile.dlq' -%}{% endFile -%}
-{% endFolder -%}
+{% Folder appSolutionFolder %}  
+{% Folder 'Server' %} 
+    {% assign serverSlnFileName = appGen.AppOptions.AppName | Append: 'Server.sln' %}
+    {% File serverSlnFileName %}
+        {% include 'CS_ServerSolutionFile.dlq' %}
+    {% endFile %}
+{% endFolder %}
 
-{% Folder 'Shared' -%} 
-	{% Folder 'Models' -%} 
-		{% include 'CS_ModelClasses.dlq' -%}
-	{% endFolder -%}
-{% endFolder -%}
+{% Folder 'Shared' %} 
+    {% Folder 'Models' %}  
+        {% include 'CS_ModelClassesSharedProject.dlq' %} 
+    {% endFolder %}
+{% endFolder %}
 
-{% Folder 'Mobile' -%} 
-   {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' -%} 
-   {% File mobileSlnFileName -%}{% include 'CS_SolutionFile.dlq' -%}{% endFile -%}
-{% endFolder -%}
+{% Folder 'Mobile' %} 
+    {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' %} 
+    {% File mobileSlnFileName %}
+    {% include 'CS_SolutionFile.dlq' %}
+    {% endFile %}
+{% endFolder %}
 
-{% endFolder -%}
+{% endFolder %}

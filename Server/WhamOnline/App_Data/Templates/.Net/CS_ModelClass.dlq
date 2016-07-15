@@ -3,11 +3,18 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace {{ appGen.AppOptions.AppName | ClassName }}.{{ Models }}{}
-	public partial class {{ table.TableName | ClassName }}{
-	{% for field in table.Fields -%}
-		 [JsonProperty("{{ field.Name | }}")]   
-		 public {{ field.Type }} {{ field.Name }} { get;set; }
-	{% endfor -%}
-}
+namespace {{ appGen.AppOptions.AppName | ClassName }}.{{ Models }}{
+    public partial class {{ table.TableName | CSName }}{
+    {% for field in table.Fields %}
+        [JsonProperty("{{ field.Name | JSName}}")]   
+    {% case field.Type %}
+    {% when 'Ref' %}
+        public {{ RefList[0] | CSName  }} {{ field.Name | CSName }} { get;set; }
+    {% when 'RefMany' %}
+        public List<{{ RefList[0] | CSName  }}> {{ field.Name | CSName }} { get;set; }
+    {% else %} 
+        public {{ field.Type }} {{ field.Name | CSName }} { get;set; }
+    {% endcase %} 
+    {% endfor %}
+    }
 }
