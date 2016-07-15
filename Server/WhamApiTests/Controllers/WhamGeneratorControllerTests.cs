@@ -12,6 +12,7 @@ using System.Web.Http;
 using Newtonsoft.Json;
 using WhamOnline.Controllers;
 using WhamOnline.Models;
+using System.Reflection;
 
 namespace WhamOnline.Controllers.Tests
 {
@@ -22,8 +23,10 @@ namespace WhamOnline.Controllers.Tests
 
         [TestInitialize]
         public void TestSetup()
-        {
-            WhamOnline.Global.InitWham(@"F:\Projects\Wham\Server\WhamOnline\App_Data\Templates");
+        { 
+            string templatesPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\WhamOnline\App_Data\Templates");
+            templatesPath = Path.Combine(Directory.GetParent(templatesPath).FullName, "Templates"); // this is to remove the ..\ parts of the path
+            WhamOnline.Global.InitWham(templatesPath);
             m_whamGeneratorController = new TestWhamGeneratorController();
         }
 
@@ -37,7 +40,7 @@ namespace WhamOnline.Controllers.Tests
                     try
                     {
                         Console.WriteLine("[WGCTBNGNHNB] Clean up, removing task folder: " + m_whamGeneratorController.TaskFolder);
-                        Directory.Delete(m_whamGeneratorController.TaskFolder, true);
+                       // Directory.Delete(m_whamGeneratorController.TaskFolder, true);
                     }
                     catch (Exception x)
                     {
