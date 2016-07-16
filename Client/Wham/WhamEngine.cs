@@ -83,6 +83,8 @@ namespace Wham
                     Filters = new[]
                     {
                         typeof(ClassNameFilters),
+                        typeof(CollectionFilters),
+                        typeof(TextFilters),
                     },
                     LocalVariables = Hash.FromAnonymousObject(new
                     {
@@ -140,6 +142,7 @@ namespace Wham
 
             Template.RegisterFilter(typeof(ClassNameFilters));
             Template.RegisterFilter(typeof(CollectionFilters));
+            Template.RegisterFilter(typeof(TextFilters));
 
             Template.RegisterTag<ClassEnumsTag>("ClassEnums");
             Template.RegisterTag<GuidTag>("Guid");

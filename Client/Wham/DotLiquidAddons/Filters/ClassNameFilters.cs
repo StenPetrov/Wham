@@ -160,41 +160,14 @@ namespace Wham
             else
                 return null;
         }
-
-        private static TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-
-        public static string CamelCase(object input, Context context = null)
-        {
-            string result = null;
-            if (input != null)
-            {
-                result = PascalCase(input, context);
-                if (result != null && result.Length > 0)
-                {
-                    result = "" + char.ToLowerInvariant(result[0]) + (result.Length > 1 ? result.Substring(1) : "");
-                }
-            }
-            return result;
-        }
-
-        public static string PascalCase(object input, Context context = null)
-        {
-            string result = null;
-            if (input != null)
-            {
-                result = textInfo.ToTitleCase("" + input);
-            }
-
-            return result;
-        }
-
+         
         public static string CSName(object input, Context context = null)
         {
-            string result = PascalCase(input, context);
+            string result = TextFilters.PascalCase(input, context);
 
             if (result != null)
             {
-                result = PascalCase(string.Join(" ",
+                result = TextFilters.PascalCase(string.Join(" ",
                     Regex.Matches(result, CSValidIdentifierComponent).OfType<Match>()
                          .Select(m => m.Value)), context);
 

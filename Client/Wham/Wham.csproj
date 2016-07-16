@@ -43,6 +43,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DotLiquidAddons\Filters\TextFilters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JSchemaExtensions.cs" />
     <Compile Include="DotLiquidExtensions.cs" />

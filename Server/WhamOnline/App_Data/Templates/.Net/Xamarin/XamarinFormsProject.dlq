@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}</ProjectGuid>
+    <ProjectGuid>{{ mobileFormsProjectGuid | Braces }}</ProjectGuid>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UseMSBuildEngine>true</UseMSBuildEngine>
     <OutputType>Library</OutputType>
-    <RootNamespace>{{ mobileproject | CSName }}.Forms</RootNamespace>
+    <RootNamespace>{{ mobileproject | CSName }}</RootNamespace>
     <AssemblyName>{{ mobileproject | CSName }}.Forms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
@@ -28,19 +28,109 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
+  </PropertyGroup> 
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="packages.config" />{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
+      <packages>
+        <package id="ExifLib.PCL" version="1.0.1" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Microsoft.Bcl" version="1.1.10" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="portable45-net45+win8+wp8" />
+        <package id="modernhttpclient" version="2.4.2" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="portable45-net45+win8+wp8" />
+        <package id="SQLitePCL" version="3.8.7.2" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+        <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+        <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+        <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+        <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+        <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+        <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+      </packages>{% endFile %}
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />{% File 'AssemblyInfo.cs' %}{% include 'AssemblyInfo.dlq' %}{% endFile %}
+    {% if appGen.Database.Type != '' -%}
     <Compile Include="Services\MobileAppClient.cs" />
+    {% Folder 'Services' -%}
+    {% File 'ApiClient.cs' %}{% include 'XamarinApiClient.dlq' %}{% endFile %}
+    {% endFolder %}{% endif %}
+  </ItemGroup>
+  <ItemGroup>
+      <EmbeddedResource Include="App.xaml">
+        <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      </EmbeddedResource>
+{% File 'App.xaml' %}<?xml version="1.0" encoding="UTF-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="{{ mobileproject | CSName }}.App">
+  <Application.Resources>
+    <ResourceDictionary>
+      <!-- define styles, data templates and other App-wide resources here -->
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>{% endFile %}
+    </ItemGroup>
+    <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FacePage.xaml.cs">
-      <DependentUpon>FacePage.xaml</DependentUpon>
+{% File 'App.xaml.cs' -%}
+  using System;
+  using System.Collections.Generic;
+
+  using Xamarin.Forms;
+  using XLabs.Forms.Mvvm;
+
+  namespace {{ mobileproject | CSName }}
+  {
+  public partial class App : Application
+  {
+    public App ()
+    {
+  {% for table in appGen.DataModel -%}
+        ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}Model>();
+  {% endfor %}
+        MainPage = (Page)ViewFactory.CreatePage (typeof (FaceViewModel));
+    }
+
+    protected override void OnStart ()
+    {
+       // Handle when your app starts up
+    }
+
+    protected override void OnSleep ()
+    {
+        // Handle when your app sleeps
+    }
+
+    protected override void OnResume ()
+    {
+      // Handle when your app resumes
+    }
+  }
+}{% endFile %}
+  </ItemGroup> 
+{% for table in appGen.DataModel -%} 
+{% assign csFileViewModel = table.TableName | ClassName | Append: 'ViewModel.cs' -%}
+{% Folder 'Forms' %}{% include 'XamarinXamlPage.dlq' %}{% endFolder -%}
+{% Folder 'ViewModels' %}{% File csFileViewModel %}{% endFile %}{% endFolder -%}
+  <ItemGroup>
+    <Compile Include="Forms\{{ table.TableName | ClassName }}Page.xaml.cs">
+      <DependentUpon>{{ table.TableName | ClassName }}Page.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\FaceViewModel.cs" />
-    <Compile Include="ViewModels\FaceViewModel.PRIVATE.cs" />
+    <Compile Include="ViewModels\{{ table.TableName | ClassName }}ViewModel.cs" /> 
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\{{ table.TableName | ClassName }}Page.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+{% endfor %}
   <ItemGroup>
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
@@ -116,24 +206,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" /> 
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Forms\" />
     <Folder Include="Services\" />
     <Folder Include="ViewModels\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="App.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FacePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
+  </ItemGroup> 
   <ItemGroup>
     <ProjectReference Include="..\Models\{{ xamarinModelsProjectFile }}">
-      <Project>{{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}</Project>
+      <Project>{{ mobileModelsProjectGuid | Braces }}</Project>
       <Name>{{ mobileproject | CSName }}.Models</Name>
     </ProjectReference>
   </ItemGroup>

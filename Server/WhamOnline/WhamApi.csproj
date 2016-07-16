@@ -181,6 +181,8 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinFormsProject.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.ModelsProject.dlq" />
     <Content Include="App_Data\Templates\.Net\AssemblyInfo.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinApiClient.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinXamlPage.dlq" />
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

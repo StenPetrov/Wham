@@ -1,7 +1,4 @@
-﻿{% assign openBrace = '{' %}
-{% assign closeBrace = '}' %}
-
-{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
+﻿{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
 {% assign sharedModelProjectFileName = appGen.AppOptions.AppName | Append: 'SharedModels.shproj' %} 
 {% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | Append: 'SharedModels.projitems' %} 
 
