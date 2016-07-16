@@ -7,7 +7,7 @@ namespace {{ appGen.AppOptions.AppName | ClassName }}.Models{
     public partial class {{ table.TableName | CSName }}{
     {% for field in table.Fields %}
         [JsonProperty("{{ field.Name | JSName}}")]   
-		public {% Trim %}{% case field.Type -%} {% when 'Ref' %}{{ refTable | CSName  }}{% else %} {{ field.Type }}{% endcase -%}
+		public {% Trim %}{% case field.Type -%} {% when 'Ref' %}{{ field.RefTable | CSName  }}{% else %} {{ field.Type }}{% endcase -%}
 {% if field.IsCollection == 'true' %}[]{% endif %} {{ field.Name | CSName }} { get;set; }
 {% endTrim %}
     {% endfor %}
