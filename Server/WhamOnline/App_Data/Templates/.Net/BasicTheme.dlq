@@ -1,6 +1,10 @@
-﻿{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
+﻿{% assign openBrace = '{' %}
+{% assign closeBrace = '}' %}
+
+{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
 {% assign sharedModelProjectFileName = appGen.AppOptions.AppName | Append: 'SharedModels.shproj' %} 
 {% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | Append: 'SharedModels.projitems' %} 
+
 {% capture sharedModelProjectGuid %}{% Guid %}{% endcapture %}
 
 {% Folder appSolutionFolder %}  
@@ -20,7 +24,7 @@
 {% Folder 'Mobile' %} 
     {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' %} 
     {% File mobileSlnFileName %}
-    {% include 'CS_SolutionFile.dlq' %}
+		{% include 'XamarinMobileSln.dlq' %}
     {% endFile %}
 {% endFolder %}
 

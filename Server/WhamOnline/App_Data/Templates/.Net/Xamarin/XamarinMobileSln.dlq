@@ -1,0 +1,118 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Wham!App Generator
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+{% capture mobileFormsProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileiOSProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileDroidProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileUITestsProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileModelsProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileUWPProjectGuid %}{% Guid %}{% endcapture %}
+{% assign mobileproject = appGen.AppOptions.AppName | CSName %} 
+#
+{% assign xamarinFormsProjectFile = mobileproject | Append: '.Forms.csproj' %} 
+{% assign xamariniOSProjectFile = mobileproject | Append: '.iOS.csproj' %} 
+{% assign xamarinModelsProjectFile = mobileproject | Append: '.Models.csproj' %}
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Forms", "Forms\{{ xamarinFormsProjectFile }}", "{{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}"
+EndProject
+{% Folder 'Forms' %}
+{% File xamarinFormsProjectFile -%}
+{% include 'XamarinFormsProject.dlq' %}
+{% endFile %}
+{% endFolder -%}
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.iOS", "iOS\{{ xamariniOSProjectFile }}", "{{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}"
+EndProject
+{% Folder 'iOS' %}
+{% File xamariniOSProjectFile -%}
+{% include 'Xamarin.iOSProject.dlq' %}
+{% endFile %}
+{% endFolder -%}
+#
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Droid", "Droid\DDDD{{ xamarinDroidProjectFile }}", "{{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}"
+#EndProject
+#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.UITests", "UITests\UUUU{{ xamarinUITestProjectFile }}", "{{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}"
+#EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Models", "Models\{{ xamarinModelsProjectFile  }}", "{{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}"
+EndProject
+{% Folder 'Models' %}
+{% File xamarinModelsProjectFile -%}
+{% include 'Xamarin.ModelsProject.dlq' %}
+{% endFile %}
+{% endFolder -%}
+#
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Models", "..\Shared\Models\{{ sharedModelProjectFileName }}", "{{ openBrace }}{{ sharedModelProjectGuid }}{{ closeBrace }}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhone = Release|iPhone
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|Any CPU.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|iPhone.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|iPhone.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileFormsProjectGuid }}{{ closeBrace }}.Debug|iPhone.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|Any CPU.ActiveCfg = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|Any CPU.Build.0 = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|iPhone.ActiveCfg = Release|iPhone
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|iPhone.Build.0 = Release|iPhone
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|iPhone.ActiveCfg = Debug|iPhone
+        {{ openBrace }}{{ mobileiOSProjectGuid }}{{ closeBrace }}.Debug|iPhone.Build.0 = Debug|iPhone
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|Any CPU.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|iPhone.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|iPhone.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileDroidProjectGuid }}{{ closeBrace }}.Debug|iPhone.Build.0 = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|Any CPU.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|iPhone.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|iPhone.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+#        {{ openBrace }}{{ mobileUITestsProjectGuid }}{{ closeBrace }}.Debug|iPhone.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|Any CPU.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|iPhone.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|iPhone.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+        {{ openBrace }}{{ mobileModelsProjectGuid }}{{ closeBrace }}.Debug|iPhone.Build.0 = Debug|Any CPU
+	EndGlobalSection
+EndGlobal
