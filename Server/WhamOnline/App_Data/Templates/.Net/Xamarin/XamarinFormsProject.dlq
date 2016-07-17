@@ -93,7 +93,7 @@
     public App ()
     {
   {% for table in appGen.DataModel -%}
-        ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}Model>();
+        ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
   {% endfor %}
         MainPage = (Page)ViewFactory.CreatePage (typeof (FaceViewModel));
     }

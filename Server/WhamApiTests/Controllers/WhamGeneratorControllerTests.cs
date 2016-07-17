@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using WhamOnline.Controllers;
 using WhamOnline.Models;
 using System.Reflection;
+using WhamApiTests;
 
 namespace WhamOnline.Controllers.Tests
 {
@@ -64,8 +65,10 @@ namespace WhamOnline.Controllers.Tests
         {
             var appGen = new TestAppGenConfig();
             await AssertOKResponse(appGen);
-        }
 
+            RoslynHelper.ValidateCSFolder(m_whamGeneratorController.TaskFolder);
+        }
+         
         [TestMethod()]
         public async Task Generator_ValidationError_Test()
         {
