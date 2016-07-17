@@ -31,31 +31,31 @@
   </PropertyGroup> 
   <ItemGroup>
     <None Include="packages.config" />{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
-      <packages>
-        <package id="ExifLib.PCL" version="1.0.1" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Microsoft.Bcl" version="1.1.10" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="portable45-net45+win8+wp8" />
-        <package id="modernhttpclient" version="2.4.2" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="portable45-net45+win8+wp8" />
-        <package id="SQLitePCL" version="3.8.7.2" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
-        <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
-        <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
-        <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
-        <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
-        <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
-        <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
-      </packages>{% endFile %}
+ <packages>
+    <package id="ExifLib.PCL" version="1.0.1" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Microsoft.Bcl" version="1.1.10" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="portable45-net45+win8+wp8" />
+    <package id="modernhttpclient" version="2.4.2" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="portable45-net45+win8+wp8" />
+    <package id="SQLitePCL" version="3.8.7.2" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+    <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="portable45-net45+win8+wp8" />
+    <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+    <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+    <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+    <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+    <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="portable45-net45+win8+wp8" />
+</packages>{% endFile %}
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />{% File 'AssemblyInfo.cs' %}{% include 'AssemblyInfo.dlq' %}{% endFile %}
     {% if appGen.Database.Type != '' -%}
-    <Compile Include="Services\MobileAppClient.cs" />
+    <Compile Include="Services\ApiClient.cs" />
     {% Folder 'Services' -%}
     {% File 'ApiClient.cs' %}{% include 'XamarinApiClient.dlq' %}{% endFile %}
     {% endFolder %}{% endif %}
@@ -82,9 +82,12 @@
 {% File 'App.xaml.cs' -%}
   using System;
   using System.Collections.Generic;
-
   using Xamarin.Forms;
   using XLabs.Forms.Mvvm;
+  using {{ mobileproject | CSName }}.Forms;
+  using {{ mobileproject | CSName }}.ViewModels;
+  using {{ mobileproject | CSName }}.Services;
+  
 
   namespace {{ mobileproject | CSName }}
   {
@@ -95,7 +98,7 @@
   {% for table in appGen.DataModel -%}
         ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
   {% endfor %}
-        MainPage = (Page)ViewFactory.CreatePage (typeof (FaceViewModel));
+        MainPage = (Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel));
     }
 
     protected override void OnStart ()
@@ -114,11 +117,23 @@
     }
   }
 }{% endFile %}
-  </ItemGroup> 
-{% for table in appGen.DataModel -%} 
-{% assign csFileViewModel = table.TableName | ClassName | Append: 'ViewModel.cs' -%}
-{% Folder 'Forms' %}{% include 'XamarinXamlPage.dlq' %}{% endFolder -%}
-{% Folder 'ViewModels' %}{% File csFileViewModel %}{% endFile %}{% endFolder -%}
+  </ItemGroup>
+  {% for table in appGen.DataModel -%}
+  {% assign csFileViewModel = table.TableName | ClassName | Append: 'ViewModel.cs' -%}
+  {% Folder 'Forms' %}{% include 'XamarinXamlPage.dlq' %}{% endFolder -%}
+  {% Folder 'ViewModels' %}{% File csFileViewModel -%}
+using System;
+using System.Threading.Tasks; 
+using Xamarin.Forms;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic;
+using XLabs.Forms.Mvvm;
+using System.Windows.Input;
+namespace {{ mobileproject | CSName }}.ViewModels{
+    public class {{ table.TableName | ClassName }}ViewModel : ViewModel{
+    }
+}{% endFile %}{% endFolder -%}
   <ItemGroup>
     <Compile Include="Forms\{{ table.TableName | ClassName }}Page.xaml.cs">
       <DependentUpon>{{ table.TableName | ClassName }}Page.xaml</DependentUpon>
@@ -179,16 +194,7 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Pages.Azure">
       <HintPath>..\packages\Xamarin.Forms.Pages.Azure.2.3.0.46-pre3\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Pages.Azure.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ProjectOxford.Common2">
-      <HintPath>..\..\Lib\Microsoft.ProjectOxford.Common2.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ProjectOxford.Emotion">
-      <HintPath>..\..\Lib\Microsoft.ProjectOxford.Emotion.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.ProjectOxford.Face">
-      <HintPath>..\..\Lib\Microsoft.ProjectOxford.Face.dll</HintPath>
-    </Reference>
+    </Reference> 
     <Reference Include="XLabs.IOC">
       <HintPath>..\packages\XLabs.IoC.2.2.0-pre04\lib\portable-net45+netcore45+wpa81+wp8+monoandroid+monotouch+xamarinios10+xamarinmac\XLabs.IOC.dll</HintPath>
     </Reference>

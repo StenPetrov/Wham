@@ -1,7 +1,7 @@
-﻿{% assign csFilePage = table.TableName | ClassName | Append: 'Page.cs' -%}
-{% assign csFileXaml = table.TableName | ClassName | Append: 'Page.cs.xaml' -%}
+﻿{% assign csFileCodeBehind = table.TableName | ClassName | Append: 'Page.xaml.cs' -%}
+{% assign csFileXaml = table.TableName | ClassName | Append: 'Page.xaml' -%}
 <!-- XamarinXamlPage -->
-{% File csFilePage -%}using System;
+{% File csFileCodeBehind -%}using System;
 using System.Collections.Generic; 
 using Xamarin.Forms;
 

@@ -1,6 +1,9 @@
 ﻿using System;
 
-public partial class ApiClient {
+namespace {{ mobileproject | CSName }}.Services {
+  // Database is {{ appGen.Database.Type }}
+  public partial class ApiClient {
     public void Connect(){
 	}
+  }
 }
