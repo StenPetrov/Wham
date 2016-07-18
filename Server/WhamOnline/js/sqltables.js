@@ -41,8 +41,9 @@ function addToTable() {
 
         listOfTables.push(table);
 
-        var listString = "<li class=\"collection-item\" id=\"" + tableName + "\""
-            + "_tableID onclick=\"tableSelected('" + tableName + "')\">";
+        var listString = "<li class=\"collection-item\"" +
+            "id=\"" + tableName + "_tableID\" " +
+            "onclick=\"tableSelected('" + tableName + "')\">";
         listString += tableName;
         listString += "</li>";
         $(listString).appendTo("#tableListing");
@@ -106,11 +107,11 @@ function populateWithNewTable(fields) // fields is an array of objects
 {
     for (var i = 0; i < fields.length; i += 1) {
         var field = fields[i];
-        appendToList(field);
+        appendFieldToList(field);
     }
 }
 
-function appendToList(field) // field is an object
+function appendFieldToList(field) // field is an object
 {
     var listString = "";
     listString += "<li class='collection-item'>";
@@ -176,18 +177,27 @@ function appendToList(field) // field is an object
 
 
 function typeChanged() {
-    console.log("type changed");
     var type = document.getElementById("fieldType").value;
-    console.log(type);
-    var formsToShow = "";
+    console.log("Field type changed: " + type);
+
+    document.getElementById("div_isAuth").style.display = "none";
+    document.getElementById("div_field_name").style.display = "none";
+    document.getElementById("div_defaultValue").style.display = "none";
+    document.getElementById("div_regex").style.display = "none";
+    document.getElementById("div_UI_Type").style.display = "none";
+    document.getElementById("div_refConnection").style.display = "none";
+    document.getElementById("div_field_isCollection").style.display = "none";
+
+    if (type && type !== "") {
+        document.getElementById("div_field_name").style.display = "block";
+        document.getElementById("div_defaultValue").style.display = "block";
+        document.getElementById("div_regex").style.display = "block";
+        document.getElementById("div_UI_Type").style.display = "block";
+        document.getElementById("div_field_isCollection").style.display = "block";
+    }
+
     switch (type) {
-        case "String":
-            document.getElementById("div_isAuth").style.display = "block";
-            document.getElementById("div_field_name").style.display = "block";
-            document.getElementById("div_defaultValue").style.display = "block";
-            document.getElementById("div_regex").style.display = "block";
-            document.getElementById("div_UI_Type").style.display = "block";
-            document.getElementById("div_refConnection").style.display = "none";
+        case "string":
             break;
         case "Ref":
             document.getElementById("div_isAuth").style.display = "none";
@@ -198,20 +208,16 @@ function typeChanged() {
             document.getElementById("div_refConnection").style.display = "block";
             break;
         case "DateTime":
-            document.getElementById("div_isAuth").style.display = "block";
-            document.getElementById("div_field_name").style.display = "block";
-            document.getElementById("div_defaultValue").style.display = "none";
-            document.getElementById("div_regex").style.display = "none"; // அபிஷேக்
-            document.getElementById("div_UI_Type").style.display = "block";
-            document.getElementById("div_refConnection").style.display = "none";
-            break;
-        case "Integer":
-            document.getElementById("div_isAuth").style.display = "block";
-            document.getElementById("div_field_name").style.display = "block";
-            document.getElementById("div_defaultValue").style.display = "block";
             document.getElementById("div_regex").style.display = "none";
-            document.getElementById("div_UI_Type").style.display = "block";
-            document.getElementById("div_refConnection").style.display = "none";
+            break;
+        case "int":
+            document.getElementById("div_regex").style.display = "none";
+            break;
+        case "double":
+            document.getElementById("div_regex").style.display = "none";
+            break;
+        case "bool":
+            document.getElementById("div_regex").style.display = "none";
             break;
     }
     $(formsToShow).appendTo("#inputForms");
@@ -235,7 +241,7 @@ function addThisField() {
     var defaultValue = document.getElementById("defaultValue").value;
     var isCollection = document.getElementById("field_isCollection").value;
     var regex = document.getElementById("regex").value;
-    var refC = document.getElementById("refConnections");
+    var refC = document.getElementById("refConnection");
     var refConnection = "";
     for (var i = 0; i < refC.options.length; i++) {
         if (refC.options[i].selected == true) {
