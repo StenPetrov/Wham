@@ -1,10 +1,38 @@
-﻿{% File 'Entitlements.plist' %}<?xml version="1.0" encoding="UTF-8" ?>
+﻿{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="ExifLib.PCL" version="1.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Bcl" version="1.1.10" targetFramework="xamarinios10" />
+  <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="xamarinios10" />
+  <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="xamarinios10" />
+  <package id="modernhttpclient" version="2.4.2" targetFramework="xamarinios10" />
+  <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="xamarinios10" />
+  <package id="SQLitePCL" version="3.8.7.2" targetFramework="xamarinios10" />
+  <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.TestCloud.Agent" version="0.19.0" targetFramework="xamarinios10" />
+  <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="xamarinios10" />
+</packages>
+{% endFile -%}
+
+{% File 'Entitlements.plist' %}
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 </dict>
-</plist>{% endFile -%}
-{% File 'LaunchScreen.storyboard' %}<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+</plist>
+{% endFile -%}
+
+{% File 'LaunchScreen.storyboard' %}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
     <dependencies>
         <deployment identifier="iOS" />
@@ -30,14 +58,71 @@
             <point key="canvasLocation" x="53" y="375" />
         </scene>
     </scenes>
-</document>{% endFile -%}
-{% Folder 'Assets.xcassets' %}{% File 'Contents.json' %}{
+</document>
+{% endFile -%}
+
+{% File 'Info.plist' %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>{{ mobileproject | CSName }}</string>
+	<key>CFBundleName</key>
+	<string>{{ mobileproject | CSName }}</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.{{ appGen.Owner.Company | CSName | lowercase }}.{{ mobileproject | CSName | lowercase }}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>MinimumOSVersion</key>
+	<string>8.0</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcons.appiconset</string>
+</dict>
+</plist>
+{% endFile %}
+
+{% Folder 'Assets.xcassets' %}
+	{% File 'Contents.json' %}
+{
   "info" : {
     "version" : 1,
     "author" : "xcode"
   }
-}{% endFile -%}
-{% Folder 'AppIcons.appiconset' %}{% File 'Contents.json' %}{
+}
+	{% endFile -%}
+
+	{% Folder 'AppIcons.appiconset' %}
+		{% File 'Contents.json' %}
+			{
   "images": [
     {
       "idiom": "iphone",
@@ -193,27 +278,7 @@
     "version": 1,
     "author": "xcode"
   }
-}{% endFolder %}
-{% endFolder -%}
-{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
-<packages>
-  <package id="ExifLib.PCL" version="1.0.1" targetFramework="xamarinios10" />
-  <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="xamarinios10" />
-  <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="xamarinios10" />
-  <package id="Microsoft.Bcl" version="1.1.10" targetFramework="xamarinios10" />
-  <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="xamarinios10" />
-  <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="xamarinios10" />
-  <package id="modernhttpclient" version="2.4.2" targetFramework="xamarinios10" />
-  <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="xamarinios10" />
-  <package id="SQLitePCL" version="3.8.7.2" targetFramework="xamarinios10" />
-  <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="xamarinios10" />
-  <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
-  <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
-  <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
-  <package id="Xamarin.TestCloud.Agent" version="0.19.0" targetFramework="xamarinios10" />
-  <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="xamarinios10" />
-  <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="xamarinios10" />
-  <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="xamarinios10" />
-  <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="xamarinios10" />
-  <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="xamarinios10" />
-</packages>{% endFile -%}
+}
+		{% endFile %}
+	{% endFolder -%}
+{% endFolder %}

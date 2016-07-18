@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -17,18 +18,30 @@ namespace WhamApiTests
         {
             try
             {
-                Directory.GetFiles(directoryPath, "*.cs", SearchOption.AllDirectories).ToList()
-                    .ForEach(ValidateCSFile);
-                Directory.GetFiles(directoryPath, "package.config", SearchOption.AllDirectories).ToList()
-                   .ForEach(ValidatePackageFile);
-                Directory.GetFiles(directoryPath, "*.csproj", SearchOption.AllDirectories).ToList()
-                   .ForEach(ValidateCSProjFile);
-                Directory.GetFiles(directoryPath, "*.shproj", SearchOption.AllDirectories).ToList()
-                   .ForEach(ValidateCSProjFile);
+                foreach (string file in Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
+                {
+                    string ext = Path.GetExtension(file).ToLower();
+
+                    if (ext != ".zip" && ext != ".request" && ext != ".error")
+                    {
+                        var fileContents = File.ReadAllText(file);
+                        Assert.IsTrue(fileContents.IndexOf("Liquid error") < 0, "Template error in file: " + file);
+                        Assert.IsTrue(fileContents.IndexOf("Liquid syntax error") < 0, "Template error in file: " + file);
+                    }
+
+                    switch (ext)
+                    {
+                        case ".cs": ValidateCSFile(file); break;
+                        case ".config": ValidatePackageFile(file); break;
+                        case ".csproj": ValidateCSProjFile(file, true); break;
+                        case ".shproj": ValidateCSProjFile(file, false); break;
+                    }
+                }
             }
-            catch (AssertFailedException)
+            catch (AssertFailedException ax)
             {
-                throw;
+                var _exInfo = ExceptionDispatchInfo.Capture(ax);
+                _exInfo.Throw();
             }
             catch (Exception x)
             {
@@ -50,13 +63,22 @@ namespace WhamApiTests
             }
         }
 
-        public static void ValidateCSProjFile(string csProjFilePath)
+        public static void ValidateCSProjFile(string csProjFilePath, bool expectItemGroups)
         {
             try
             {
                 var project = XDocument.Parse(File.ReadAllText(csProjFilePath));
                 Assert.IsNotNull(project.Root, "Invalid xaml file: " + csProjFilePath);
                 Assert.AreEqual("Project", project.Root.Name.LocalName, "Invalid CS project file: " + csProjFilePath);
+
+                if (expectItemGroups)
+                {
+                    var itemGroups = project.Descendants(project.Root.GetDefaultNamespace() + "ItemGroup").ToList();
+                    Assert.IsTrue(itemGroups.Any(), "Project " + csProjFilePath + " has no <ItemGroup> elements");
+
+                    var itemGroupWithText = itemGroups.FirstOrDefault(ig => ig.Nodes().OfType<XText>().Any());
+                    Assert.IsNull(itemGroupWithText, "Project " + csProjFilePath + " has <ItemGroup> element wit text: " + itemGroupWithText);
+                }
             }
             catch (Exception x)
             {

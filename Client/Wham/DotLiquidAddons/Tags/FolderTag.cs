@@ -1,6 +1,7 @@
 ﻿using System;
 using DotLiquid;
 using System.IO;
+using System.Text;
 
 namespace Wham
 {
@@ -48,14 +49,19 @@ namespace Wham
                 try
                 {
                     if (!Directory.Exists(outFullFolder))
-                        Directory.CreateDirectory(outFullFolder); 
+                        Directory.CreateDirectory(outFullFolder);
                 }
                 catch (Exception x)
                 {
-                    throw new WhamException("[FTHAKHNZNBVFR] Folder error: " + outFolder, x); 
+                    throw new WhamException("[FTHAKHNZNBVFR] Folder error: " + outFolder, x);
                 }
 
-                RenderAll(NodeList, context, result);
+                StringBuilder sb = new StringBuilder();
+                using (StringWriter swt = new StringWriter(sb))
+                {
+                    RenderAll(NodeList, context, swt);
+                    result.Write(sb.ToString().Trim());
+                }
             });
         }
 

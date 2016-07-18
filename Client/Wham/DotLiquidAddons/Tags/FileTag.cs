@@ -4,12 +4,12 @@ using System.IO;
 using System.Collections.Generic;
 using DotLiquid.Exceptions;
 using System.Reflection;
+using System.Text;
 
 namespace Wham
 {
     public class FileTag : Block
     {
-
         string OutputFile { get; set; }
 
         public override void Initialize(string tagName, string markup, System.Collections.Generic.List<string> tokens)
@@ -48,15 +48,22 @@ namespace Wham
                     var stream = ((ITemplateFileSystem)Template.FileSystem).CreateOutputStream(outputFullFileName);
 
                     tracer.Info("[FSIOAUHSJFQ] Outputting to: " + outputFullFileName + " req: " + outputFullFileName);
-                    using (var outputTo = new StreamWriter(stream))
-                    {
-                        RenderAll(NodeList, context, outputTo);
 
+                    StringBuilder sb = new StringBuilder();
+                    using (StringWriter swt = new StringWriter(sb))
+                    {
+                        RenderAll(NodeList, context, swt);
+                    }
+
+                    using (var outputTo = new StreamWriter(stream))
+                    { 
+                        outputTo.Write(sb.ToString().Trim());
                         outputTo.Flush();
                         ((ITemplateFileSystem)Template.FileSystem).NotifyFileWritten(outputFullFileName, outputTo);
                     }
                 }
-                else {
+                else
+                {
                     throw new WhamException("[FTHJAOUQZZMQ] File tag requires ITemplateFileSystem");
                 }
             });

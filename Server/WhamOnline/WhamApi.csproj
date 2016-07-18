@@ -183,6 +183,8 @@
     <Content Include="App_Data\Templates\.Net\AssemblyInfo.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinApiClient.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinXamlPage.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.iOSAssets.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.Readmes.dlq" />
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

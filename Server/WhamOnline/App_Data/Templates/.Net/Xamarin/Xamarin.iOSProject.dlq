@@ -6,7 +6,7 @@
     <ProjectGuid>{{ mobileiOSProjectGuid | Braces }}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>{{ mobileproject }}.iOS</RootNamespace>
+    <RootNamespace>{{ mobileproject | CSName }}.iOS</RootNamespace>
     <AssemblyName>{{ mobileproject }}.iOS</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
   </PropertyGroup>
@@ -164,10 +164,10 @@
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Contents.json" />{% include 'Xamarin.iOSAssets.dlq' -%}
+    <ImageAsset Include="Assets.xcassets\Contents.json" />{% include 'Xamarin.iOSAssets.dlq' %}
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />{% Folder 'Resources' %}{% endFolder -%}
+    <Folder Include="Resources\" />{% Folder 'Resources' %}{% endFolder %}
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -234,13 +234,13 @@ namespace {{ mobileproject | CSName }}.iOS
 }{% endFile %}
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HelloForms\Hello.Forms.csproj">
-      <Project>{EF771887-6810-43EB-8501-97CAA56FFB27}</Project>
-      <Name>Hello.Forms</Name>
+     <ProjectReference Include="..\Forms\{{ xamarinFormsProjectFile }}">
+      <Project>{{ mobileFormsProjectGuid | Braces }}</Project>
+      <Name>{{ mobileproject | CSName }}.Forms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HelloModels\Hello.Models.csproj">
-      <Project>{2407AF4E-6C60-4E11-A5AD-9315637F9993}</Project>
-      <Name>Hello.Models</Name>
+    <ProjectReference Include="..\Models\{{ xamarinModelsProjectFile }}">
+      <Project>{{ mobileModelsProjectGuid | Braces }}</Project>
+      <Name>{{ mobileproject | CSName }}.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
