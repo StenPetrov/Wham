@@ -32,7 +32,7 @@ namespace WhamApiTests
                     switch (ext)
                     {
                         case ".cs": ValidateCSFile(file); break;
-                        case ".config": ValidatePackageFile(file); break;
+                        case ".config": ValidateConfigFile(file); break;
                         case ".csproj": ValidateCSProjFile(file, true); break;
                         case ".shproj": ValidateCSProjFile(file, false); break;
                     }
@@ -49,17 +49,27 @@ namespace WhamApiTests
             }
         }
 
-        public static void ValidatePackageFile(string packageFilePath)
+        public static void ValidateConfigFile(string configFilePath)
         {
             try
             {
-                var packageDoc = XDocument.Parse(File.ReadAllText(packageFilePath));
-                Assert.IsNotNull(packageDoc.Root, "Invalid xaml file: " + packageFilePath);
-                Assert.AreEqual("packages", packageDoc.Root.Name.LocalName, "Invalid packages.config file: " + packageFilePath);
+                var configText = File.ReadAllText(configFilePath);
+                Assert.IsTrue(!string.IsNullOrWhiteSpace(configText), "Empty packages.config file: " + configFilePath);
+                var configDoc = XDocument.Parse(configText);
+                Assert.IsNotNull(configDoc.Root, "Invalid xaml file: " + configFilePath);
+
+                if (Path.GetFileNameWithoutExtension(configFilePath) == "app")
+                {
+                    Assert.AreEqual("configuration", configDoc.Root.Name.LocalName, "Invalid app.config file: " + configFilePath);
+                }
+                else if (Path.GetFileNameWithoutExtension(configFilePath) == "packages")
+                {
+                    Assert.AreEqual("packages", configDoc.Root.Name.LocalName, "Invalid packages.config file: " + configFilePath);
+                }
             }
             catch (Exception x)
             {
-                Assert.Fail("Failed to validate packages.config file: " + packageFilePath + " Error: " + x);
+                Assert.Fail("Failed to validate packages.config file: " + configFilePath + " Error: " + x);
             }
         }
 
@@ -103,7 +113,9 @@ namespace WhamApiTests
         {
             try
             {
-                var syntaxTree = CSharpSyntaxTree.ParseText(File.ReadAllText(filePath));
+                var csText = File.ReadAllText(filePath);
+                Assert.IsTrue(!string.IsNullOrWhiteSpace(csText), "Empty C# file: " + filePath);
+                var syntaxTree = CSharpSyntaxTree.ParseText(csText);
 
                 SyntaxNode root;
                 Assert.IsTrue(syntaxTree.TryGetRoot(out root), "Can't get C# root: " + filePath);

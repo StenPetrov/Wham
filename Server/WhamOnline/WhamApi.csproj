@@ -185,6 +185,16 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinXamlPage.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.iOSAssets.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.Readmes.dlq" />
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\WebApiServerSln.dlq" />
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ModelsProject.dlq" />
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ApiProject.dlq" />
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ControllerCS.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ApiTestsProject.dlq" />
+    <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ControllerTestCS.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

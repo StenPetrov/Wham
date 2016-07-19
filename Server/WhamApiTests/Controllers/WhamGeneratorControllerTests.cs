@@ -113,6 +113,7 @@ namespace WhamOnline.Controllers.Tests
     internal class TestWhamGeneratorController : WhamGeneratorController
     {
         public string TaskFolder { get; protected set; }
+
         public string TaskZip { get; protected set; }
 
         public TestWhamGeneratorController() : base()

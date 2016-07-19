@@ -1,0 +1,60 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Wham!App Generator
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+#{% SingleLine %}
+{% capture serverApiProjectGuid %}{% Guid %}{% endcapture %} 
+{% capture serverModelsProjectGuid %}{% Guid %}{% endcapture %}  
+{% capture serverApiTestProjectGuid %}{% Guid %}{% endcapture %}  
+
+{% assign serverproject = appGen.AppOptions.AppName | CSName %}  
+{% assign serverAPIProjectFile = serverproject | Append: '.Api.csproj' %}  
+{% assign serverModelsProjectFile = serverproject | Append: '.Models.csproj' %}
+{% assign serverAPITestProjectFile = serverproject | Append: 'ApiTests.csproj' %}
+{% endSingleLine %}
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ serverproject }}.Api", "Api\{{ serverAPIProjectFile }}", "{{ serverApiProjectGuid | Braces }}"
+EndProject
+{% Folder 'Api' %}
+{% File serverAPIProjectFile -%}
+{% include 'server.ApiProject.dlq' %}
+{% endFile -%}{% endFolder -%}
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ serverproject }}.ApiTests", "ApiTests\{{ serverAPITestProjectFile }}", "{{ serverApiTestProjectGuid | Braces }}"
+EndProject 
+{% Folder 'ApiTests' %}
+{% File serverAPITestProjectFile -%}
+{% include 'server.ApiTestsProject.dlq' %}
+{% endFile -%}{% endFolder -%}
+#
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ serverproject }}.Models", "Models\{{ serverModelsProjectFile  }}", "{{ serverModelsProjectGuid | Braces }}"
+EndProject
+{% Folder 'Models' %}
+{% File serverModelsProjectFile -%}
+{% include 'server.ModelsProject.dlq' %}
+{% endFile -%}{% endFolder -%}
+#
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedModels", "..\Shared\Models\{{ sharedModelProjectFileName }}", "{{ sharedModelProjectGuid | Braces }}"
+EndProject
+#
+Global 
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {{ serverApiProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ serverApiProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ serverApiProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ serverApiProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU  
+#        
+        {{ serverApiTestProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ serverApiTestProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ serverApiTestProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ serverApiTestProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU  
+#        
+        {{ serverModelsProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ serverModelsProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ serverModelsProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ serverModelsProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
