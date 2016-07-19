@@ -190,34 +190,29 @@ function typeChanged() {
 
     if (type && type !== "") {
         document.getElementById("div_field_name").style.display = "block";
-        document.getElementById("div_defaultValue").style.display = "block";
-        document.getElementById("div_regex").style.display = "block";
+        document.getElementById("div_defaultValue").style.display = "block"; 
         document.getElementById("div_UI_Type").style.display = "block";
         document.getElementById("div_field_isCollection").style.display = "block";
     }
 
     switch (type) {
-        case "string":
+        case "string": 
+            document.getElementById("div_isAuth").style.display = "block"; 
+            document.getElementById("div_regex").style.display = "block";
             break;
         case "Ref":
-            document.getElementById("div_isAuth").style.display = "none";
             document.getElementById("div_field_name").style.display = "block";
             document.getElementById("div_defaultValue").style.display = "none";
-            document.getElementById("div_regex").style.display = "none";
             document.getElementById("div_UI_Type").style.display = "none";
             document.getElementById("div_refConnection").style.display = "block";
             break;
-        case "DateTime":
-            document.getElementById("div_regex").style.display = "none";
+        case "DateTime": 
             break;
-        case "int":
-            document.getElementById("div_regex").style.display = "none";
+        case "int": 
             break;
-        case "double":
-            document.getElementById("div_regex").style.display = "none";
+        case "double": 
             break;
-        case "bool":
-            document.getElementById("div_regex").style.display = "none";
+        case "bool": 
             break;
     }
     $(formsToShow).appendTo("#inputForms");
