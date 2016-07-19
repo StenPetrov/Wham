@@ -22,17 +22,17 @@ function addToTable() {
         table.fields[0].defaultValue = "default string"
         table.fields[0].regex = "\\s+"
         table.fields[0].isAuth = "true"
-    
+
         table.fields[1] = {}
         table.fields[1].type = "Ref"
         table.fields[1].name = "Name of single ref"
         table.fields[1].refTable = "singleTable"
-         
+
         table.fields[3] = {}
         table.fields[3].type = "DateTime"
         table.fields[3].name = "Name of Date Time Entry"
         table.fields[3].uiType = "label"
-    
+
         table.fields[4] = {}
         table.fields[4].type = "Integer"
         table.fields[4].name = "Name of Integer Entry"
@@ -243,6 +243,7 @@ function addThisField() {
     var regex = document.getElementById("regex").value;
     var refC = document.getElementById("refConnection");
     var refConnection = "";
+
     for (var i = 0; i < refC.options.length; i++) {
         if (refC.options[i].selected == true) {
             refConnection = refC.options[i].value;
@@ -262,25 +263,25 @@ function addThisField() {
     // this switch is over Constants.DataTypes in the API Models folder
     switch (type) {
         case "bool":
-            // TODO validation 
+            // TODO validation
             break;
         case "string":
-            // TODO validation 
+            // TODO validation
             rowData.regex = regex;
             rowData.isAuth = isAuth;
             break;
         case "Ref":
-            // TODO validation 
+            // TODO validation
             rowData.refTable = refConnection;
             break;
         case "DateTime":
-            // TODO validation 
+            // TODO validation
             break;
         case "int":
-            // TODO validation 
+            // TODO validation
             break;
         case "double":
-            // TODO validation 
+            // TODO validation
             break;
         default:
             Materialize.toast("No field was added", 4000);

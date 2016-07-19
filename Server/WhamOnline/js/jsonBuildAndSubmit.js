@@ -17,7 +17,7 @@ function submitClicked() {
         data: appJsonStr,
         dataType: "json",
         success: function (genResult) {
-            console.log(genResult); 
+            console.log(genResult);
 
             if (!genResult.errors || genResult.errors.length == 0) {
                 top.location.href = "api/WhamGenerator/" + genResult.taskId;
@@ -27,6 +27,9 @@ function submitClicked() {
             console.log(xhr.statusText);
             console.log(textStatus);
             console.log(error);
+            document.getElementById('modal_error_title').innerHTML = xhr.statusText
+            document.getElementById('modal_error_body').innerHTML = error
+            $('#modal_error').openModal()
         }
     });
 }

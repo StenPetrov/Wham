@@ -178,7 +178,8 @@
             <div id="modal_addField" class="modal modal-fixed-footer">
                 <div class="modal-content">
                     <h5>Add New Field</h5>
-                    <div class="input-field col s12 m6">
+
+                    <div class="input-field col s12 m9">
                         <select onchange="typeChanged()" id="fieldType">
                             <option value="" disabled selected>Choose type of field</option>
                             <option value="string">Text</option>
@@ -186,22 +187,22 @@
                             <option value="Ref">Table Reference</option>
                             <option value="DateTime">Date and Time</option>
                             <option value="int">Integer</option>
-                            <option value="double">Number</option>
+                            <option value="double">Number (Double)</option>
                         </select>
                         <label>Select Field Type</label>
                     </div>
 
-                    <div class="input-field col s12 m6" id="div_isAuth" style="display: none">
+                    <div class="input-field col s12 m3" id="div_isAuth" style="display: none">
                         <input type="checkbox" id="isAuth" />
                         <label for="isAuth">is auth token</label>
                     </div>
 
-                    <div class="input-field col s12" id="div_field_name" style="display: none">
+                    <div class="input-field col s12 m9" id="div_field_name" style="display: none">
                         <input id="field_name" type="text" class="validate">
                         <label for="field_name">Field Name</label>
                     </div>
 
-                    <div class="input-field col s12" id="div_field_isCollection" style="display: none">
+                    <div class="input-field col s12 m3" id="div_field_isCollection" style="display: none">
                         <input id="field_isCollection" type="checkbox" class="validate">
                         <label for="field_isCollection">Is Collection</label>
                     </div>
@@ -238,9 +239,20 @@
                 </div>
             </div>
             <!-- END OF MODAL TO GET INFO ON THE NEW FIELD -->
-
         </div>
     </div>
+
+    <!-- Start of Modal For Error -->
+    <div id="modal_error" class="modal">
+        <div class="modal-content">
+            <h4 id="modal_error_title">Modal Header</h4>
+            <p id="modal_error_body">A bunch of text</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+        </div>
+    </div>
+    <!-- End of Modal For Error -->
 
     <div class="row">
         <div class="col s12 right-align" id="submit_button" onclick="submitClicked()">
