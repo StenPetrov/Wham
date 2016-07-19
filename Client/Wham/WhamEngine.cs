@@ -150,6 +150,7 @@ namespace Wham
             Template.RegisterTag<FolderTag>("Folder");
             Template.RegisterTag<FileTag>("File");
             Template.RegisterTag<TrimTag>("Trim");
+            Template.RegisterTag<SingleLineTag>("SingleLine");
             Template.RegisterTag<TraceTag>("Trace");
 
             Template.FileSystem = fileSystem ?? (IFileSystem)(new TemplateFileSystem());

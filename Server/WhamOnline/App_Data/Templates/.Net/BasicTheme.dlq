@@ -8,7 +8,7 @@
 {% Folder 'Server' %} 
     {% assign serverSlnFileName = appGen.AppOptions.AppName | Append: 'Server.sln' %}
     {% File serverSlnFileName %}
-        {% include 'CS_ServerSolutionFile.dlq' %}
+        {% include 'WebApiServerSln.dlq' %}
     {% endFile %}
 {% endFolder %}
 

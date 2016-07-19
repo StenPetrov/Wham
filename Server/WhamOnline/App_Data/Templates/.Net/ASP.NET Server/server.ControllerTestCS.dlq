@@ -1,0 +1,123 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics; 
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using System.Web.Http;
+using Newtonsoft.Json; 
+
+using {{ serverproject }}.Models;  
+using {{ serverproject }}.Api.Controllers;
+
+namespace {{ serverproject }}.ApiTests
+{
+    [TestClass]
+    public class {{ controllerModel.TableName | ClassName }}ControllerTests
+    { 
+        private Test{{ controllerModel.TableName | ClassName }}Controller m_controller;
+
+        [TestInitialize]
+        public void TestSetup()
+        {
+            m_controller = new Test{{ controllerModel.TableName | ClassName }}Controller();
+        }
+        
+        [TestCleanup]
+        public void TestCleanup()
+        {
+            if (m_controller != null)
+            {
+                // any cleanup or log output
+            }
+        }
+         
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_GetNotExisting_Test()
+        {  
+            try{
+                await m_controller.Get(123456); // Id that doesn't exist
+                Assert.Fail();
+            } catch (HttpResponseException x){  
+                Assert.AreEqual(HttpStatusCode.NotFound, x.Response.StatusCode);
+            }
+        }
+        
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_Post_Test()
+        {
+            var testObject = GetTestInputObject();
+            var returnObject = await m_controller.Post(testObject);
+            Assert.IsTrue(returnObject.Id>0);
+        } 
+        
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_PostBadData_Test()
+        {
+            var testObject = GetTestInputObject();
+            testObject.Id = 1;
+            try{
+                await m_controller.Post(testObject);
+                Assert.Fail();
+            } catch (HttpResponseException x){  
+                Assert.AreEqual(HttpStatusCode.BadRequest, x.Response.StatusCode);
+            }
+        } 
+        
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_PostGet_Test()
+        {
+            var testObject = GetTestInputObject();
+            var returnObject = await m_controller.Post(testObject);
+            var getObject = await m_controller.Get(returnObject.Id);
+            Assert.AreEqual(returnObject.Id, getObject.Id);
+        } 
+        
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_DeleteNotExisting_Test()
+        {  
+            try{
+                await m_controller.Delete(123456); // Id that doesn't exist
+                Assert.Fail();
+            } catch (HttpResponseException x){  
+                Assert.AreEqual(HttpStatusCode.NotFound, x.Response.StatusCode);
+            }
+        }
+        
+        [TestMethod]
+        public async Task {{ controllerModel.TableName | ClassName }}_Delete_Test()
+        {
+            var testObject = GetTestInputObject();
+            var returnObject = await m_controller.Post(testObject);
+            var objectId = returnObject.Id;
+            
+            await m_controller.Delete(objectId); 
+            
+            try{
+                var getObject = await m_controller.Get(objectId);
+                Assert.IsNull(getObject);
+                Assert.Fail();
+            } catch (HttpResponseException x){  
+                Assert.AreEqual(HttpStatusCode.NotFound, x.Response.StatusCode);
+            }
+        }
+        
+        private  {{ controllerModel.TableName | ClassName }} GetTestInputObject(){
+            return new {{ controllerModel.TableName | ClassName }}();
+        }
+    }
+    
+    
+    // this class wraps the prod controller so it can be called from within test
+    internal class Test{{ controllerModel.TableName | ClassName }}Controller : {{ controllerModel.TableName | ClassName }}Controller
+    { 
+        public Test{{ controllerModel.TableName | ClassName }}Controller() : base()
+        {
+            Request = new HttpRequestMessage();
+            Request.SetConfiguration(new HttpConfiguration());
+        }
+    }
+}

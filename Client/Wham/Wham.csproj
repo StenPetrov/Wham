@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DotLiquidAddons\Filters\TextFilters.cs" />
+    <Compile Include="DotLiquidAddons\Tags\SingleLineTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JSchemaExtensions.cs" />
     <Compile Include="DotLiquidExtensions.cs" />
