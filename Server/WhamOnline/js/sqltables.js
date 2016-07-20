@@ -116,11 +116,13 @@ function appendFieldToList(field) // field is an object
     var listString = "";
     listString += "<li class='collection-item'>";
     listString += "<div class='row'>";
+
+    listString += "<div class='col s12'>";
+    listString += "<h5>" + field.name + "</h5>";
+    listString += "</div>";
+
     switch (field.type) {
         case "string":
-            listString += "<div class='col s12 m6 l3'>";
-            listString += "Name: " + field.name;
-            listString += "</div>";
             listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
             listString += "</div>";
@@ -137,17 +139,11 @@ function appendFieldToList(field) // field is an object
 
         case "Ref":
             listString += "<div class='col s12 m6 l3'>";
-            listString += "Name: " + field.name;
-            listString += "</div>";
-            listString += "<div class='col s12 m6 l3'>";
             listString += "ref table: " + field.refTable;
             listString += "</div>";
             break;
 
         case "DateTime":
-            listString += "<div class='col s12 m6 l3'>";
-            listString += "Name: " + field.name;
-            listString += "</div>";
             listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
             listString += "</div>";
@@ -155,18 +151,21 @@ function appendFieldToList(field) // field is an object
 
         case "int":
             listString += "<div class='col s12 m6 l3'>";
-            listString += "Name: " + field.name;
-            listString += "</div>";
-            listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
             listString += "</div>";
 
         case "double":
             listString += "<div class='col s12 m6 l3'>";
-            listString += "Name: " + field.name;
+            listString += "UI Type: " + field.uiType;
             listString += "</div>";
+            break;
+
+        case "bool":
             listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
+            listString += "</div>";
+            listString += "<div class='col s12 m6 l3'>";
+            listString += "Default Value: " + field.defaultValue;
             listString += "</div>";
             break;
     }
