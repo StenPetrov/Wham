@@ -1,0 +1,284 @@
+﻿{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="ExifLib.PCL" version="1.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Azure.Mobile.Client.SQLiteStore" version="2.0.1" targetFramework="xamarinios10" />
+  <package id="Microsoft.Bcl" version="1.1.10" targetFramework="xamarinios10" />
+  <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="xamarinios10" />
+  <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="xamarinios10" />
+  <package id="modernhttpclient" version="2.4.2" targetFramework="xamarinios10" />
+  <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="xamarinios10" />
+  <package id="SQLitePCL" version="3.8.7.2" targetFramework="xamarinios10" />
+  <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms.Pages" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.Forms.Pages.Azure" version="2.3.0.46-pre3" targetFramework="xamarinios10" />
+  <package id="Xamarin.TestCloud.Agent" version="0.19.0" targetFramework="xamarinios10" />
+  <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Forms" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="xamarinios10" />
+  <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="xamarinios10" />
+</packages>
+{% endFile -%}
+
+{% File 'Entitlements.plist' %}
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+</dict>
+</plist>
+{% endFile -%}
+
+{% File 'LaunchScreen.storyboard' %}
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+    <dependencies>
+        <deployment identifier="iOS" />
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530" />
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Llm-lL-Icb" />
+                        <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok" />
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600" />
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" />
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite" />
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder" />
+            </objects>
+            <point key="canvasLocation" x="53" y="375" />
+        </scene>
+    </scenes>
+</document>
+{% endFile -%}
+
+{% File 'Info.plist' %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>{{ mobileproject | CSName }}</string>
+	<key>CFBundleName</key>
+	<string>{{ mobileproject | CSName }}</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.{{ appGen.Owner.Company | CSName | lowercase }}.{{ mobileproject | CSName | lowercase }}</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>MinimumOSVersion</key>
+	<string>8.0</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/AppIcons.appiconset</string>
+</dict>
+</plist>
+{% endFile %}
+
+{% Folder 'Assets.xcassets' %}
+	{% File 'Contents.json' %}
+{
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}
+	{% endFile -%}
+
+	{% Folder 'AppIcons.appiconset' %}
+		{% File 'Contents.json' %}
+			{
+  "images": [
+    {
+      "idiom": "iphone",
+      "size": "29x29",
+      "scale": "1x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "29x29",
+      "scale": "2x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "29x29",
+      "scale": "3x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "40x40",
+      "scale": "2x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "40x40",
+      "scale": "3x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "57x57",
+      "scale": "1x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "57x57",
+      "scale": "2x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "60x60",
+      "scale": "2x"
+    },
+    {
+      "idiom": "iphone",
+      "size": "60x60",
+      "scale": "3x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "29x29",
+      "scale": "1x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "29x29",
+      "scale": "2x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "40x40",
+      "scale": "1x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "40x40",
+      "scale": "2x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "50x50",
+      "scale": "1x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "50x50",
+      "scale": "2x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "72x72",
+      "scale": "1x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "72x72",
+      "scale": "2x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "76x76",
+      "scale": "1x"
+    },
+    {
+      "idiom": "ipad",
+      "size": "76x76",
+      "scale": "2x"
+    },
+    {
+      "size": "24x24",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "notificationCenter",
+      "subtype": "38mm"
+    },
+    {
+      "size": "27.5x27.5",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "notificationCenter",
+      "subtype": "42mm"
+    },
+    {
+      "size": "29x29",
+      "idiom": "watch",
+      "role": "companionSettings",
+      "scale": "2x"
+    },
+    {
+      "size": "29x29",
+      "idiom": "watch",
+      "role": "companionSettings",
+      "scale": "3x"
+    },
+    {
+      "size": "40x40",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "appLauncher",
+      "subtype": "38mm"
+    },
+    {
+      "size": "44x44",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "longLook",
+      "subtype": "42mm"
+    },
+    {
+      "size": "86x86",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "quickLook",
+      "subtype": "38mm"
+    },
+    {
+      "size": "98x98",
+      "idiom": "watch",
+      "scale": "2x",
+      "role": "quickLook",
+      "subtype": "42mm"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "xcode"
+  }
+}
+		{% endFile %}
+	{% endFolder -%}
+{% endFolder %}

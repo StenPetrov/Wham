@@ -6,7 +6,7 @@ namespace Wham
 {
     public interface ITemplateFileSystem : DotLiquid.FileSystems.IFileSystem
     {
-        Stream CreateOutputStream(string outputFullFileName);
+        Stream CreateOutputStream(string outputFullFileName); 
         void NotifyFileWritten(string outputFullFileName, StreamWriter outputTo);
     }
 

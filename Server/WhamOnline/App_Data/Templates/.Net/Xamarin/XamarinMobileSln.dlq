@@ -11,7 +11,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 {% assign mobileproject = appGen.AppOptions.AppName | CSName %} 
 #
 {% assign xamarinFormsProjectFile = mobileproject | Append: '.Forms.csproj' %} 
-{% assign xamariniOSProjectFile = mobileproject | Append: '.iOS.csproj' %} 
+{% assign xamariniOSProjectFile = mobileproject | Append: '.iOS.csproj' %}  
+{% assign xamarinDroidProjectFile = mobileproject | Append: '.Droid.csproj' %} 
 {% assign xamarinModelsProjectFile = mobileproject | Append: '.Models.csproj' %}
 #
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Forms", "Forms\{{ xamarinFormsProjectFile }}", "{{ mobileFormsProjectGuid | Braces }}"
@@ -30,8 +31,14 @@ EndProject
 {% endFile %}
 {% endFolder -%}
 #
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Droid", "Droid\DDDD{{ xamarinDroidProjectFile }}", "{{ mobileDroidProjectGuid | Braces }}"
-#EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Droid", "Droid\{{ xamarinDroidProjectFile }}", "{{ mobileDroidProjectGuid | Braces }}"
+EndProject
+{% Folder 'Droid' %}
+{% File xamarinDroidProjectFile -%}
+{% include 'Xamarin.DroidProject.dlq' %}
+{% endFile %}
+{% endFolder -%}
+# 
 #Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.UITests", "UITests\UUUU{{ xamarinUITestProjectFile }}", "{{ mobileUITestsProjectGuid | Braces }}"
 #EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Models", "Models\{{ xamarinModelsProjectFile  }}", "{{ mobileModelsProjectGuid | Braces }}"
@@ -78,18 +85,18 @@ Global
         {{ mobileiOSProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
         {{ mobileiOSProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|iPhone
         {{ mobileiOSProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|iPhone
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|iPhone.ActiveCfg = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|iPhone.Build.0 = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-#        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|iPhone.ActiveCfg = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|iPhone.Build.0 = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+        {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|Any CPU
 #        {{ mobileUITestsProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 #        {{ mobileUITestsProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
 #        {{ mobileUITestsProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU

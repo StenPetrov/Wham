@@ -149,6 +149,7 @@ namespace Wham
             Template.RegisterTag<MultilineStringEscapeTag>("MultilineStringEscape");
             Template.RegisterTag<FolderTag>("Folder");
             Template.RegisterTag<FileTag>("File");
+            Template.RegisterTag<UnzipTag>("Unzip");
             Template.RegisterTag<TrimTag>("Trim");
             Template.RegisterTag<SingleLineTag>("SingleLine");
             Template.RegisterTag<TraceTag>("Trace");

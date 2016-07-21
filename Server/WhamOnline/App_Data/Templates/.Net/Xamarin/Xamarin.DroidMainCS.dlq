@@ -1,0 +1,134 @@
+﻿{% File 'packages.config' %}<?xml version="1.0" encoding="utf-8"?>
+<packages>
+  <package id="ExifLib.PCL" version="1.0.1" targetFramework="monoandroid6.0.99" />
+  <package id="Microsoft.Azure.Mobile.Client" version="2.0.1" targetFramework="monoandroid6.0.99" />
+  <package id="Microsoft.Bcl" version="1.1.10" targetFramework="monoandroid6.0.99" />
+  <package id="Microsoft.Bcl.Build" version="1.0.21" targetFramework="monoandroid6.0.99" />
+  <package id="Microsoft.Net.Http" version="2.2.29" targetFramework="monoandroid6.0.99" />
+  <package id="Newtonsoft.Json" version="8.0.4-beta1" targetFramework="monoandroid6.0.99" />
+  <package id="Plugin.CurrentActivity" version="1.0.1" targetFramework="monoandroid6.0.99" />
+  <package id="Plugin.Permissions" version="1.1.7" targetFramework="monoandroid6.0.99" />
+  <package id="Xam.Plugin.Media" version="2.4.0-beta3" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.Animated.Vector.Drawable" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.Design" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.v4" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.v7.AppCompat" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.v7.CardView" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.v7.MediaRouter" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.v7.RecyclerView" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Android.Support.Vector.Drawable" version="23.3.0" targetFramework="MonoAndroid60" />
+  <package id="Xamarin.Forms" version="2.3.0.46-pre3" targetFramework="monoandroid6.0.99" />
+  <package id="XLabs.Core" version="2.2.0-pre04" targetFramework="monoandroid6.0.99" />
+  <package id="XLabs.IoC" version="2.2.0-pre04" targetFramework="monoandroid6.0.99" />
+  <package id="XLabs.Platform" version="2.2.0-pre04" targetFramework="monoandroid6.0.99" />
+  <package id="XLabs.Serialization" version="2.2.0-pre04" targetFramework="monoandroid6.0.99" />
+</packages>{% endFile %}
+
+{% File 'MainActivity.cs' %}
+using System;
+
+using Android.App;
+using Android.Content;
+using Android.Content.PM;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using Android.OS;
+using {{ mobileproject | CSName }}.Forms;
+
+namespace {{ mobileproject | CSName }}.Droid
+{
+    [Activity (Label = "{{ mobileproject | CSName }}.Droid", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    {
+        protected override void OnCreate (Bundle bundle)
+        {
+            TabLayoutResource = Resource.Layout.Tabbar;
+            ToolbarResource = Resource.Layout.Toolbar;
+
+            base.OnCreate (bundle);
+
+            // Microsoft.WindowsAzure.MobileServices.CurrentPlatform.Init ();
+
+            global::Xamarin.Forms.Forms.Init (this, bundle);
+
+			// Resolver initialized here, you can add your own services too
+            XLabs.Ioc.Resolver.SetResolver (
+                new XLabs.Ioc.SimpleContainer ()
+                .Register<XLabs.Platform.Services.Media.IMediaPicker, XLabs.Platform.Services.Media.MediaPicker> ()
+                .GetResolver ());
+
+			// App constructor must set App.Main
+            LoadApplication (new App ());
+        }
+    }
+}
+
+
+{% endFile -%}
+
+{% File 'MainApplication.cs' %}
+using System;
+
+using Android.App;
+using Android.OS;
+using Android.Runtime;
+using Plugin.CurrentActivity;
+
+namespace {{ mobileproject | CSName }}.Droid
+{
+	//You can specify additional application information in this attribute
+    [Application]
+    public class MainApplication : Application, Application.IActivityLifecycleCallbacks
+    {
+        public MainApplication(IntPtr handle, JniHandleOwnership transer)
+          :base(handle, transer)
+        {
+        }
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+            RegisterActivityLifecycleCallbacks(this);
+            //A great place to initialize Xamarin.Insights and Dependency Services!
+        }
+
+        public override void OnTerminate()
+        {
+            base.OnTerminate();
+            UnregisterActivityLifecycleCallbacks(this);
+        }
+
+        public void OnActivityCreated(Activity activity, Bundle savedInstanceState)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivityDestroyed(Activity activity)
+        {
+        }
+
+        public void OnActivityPaused(Activity activity)
+        {
+        }
+
+        public void OnActivityResumed(Activity activity)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivitySaveInstanceState(Activity activity, Bundle outState)
+        {
+        }
+
+        public void OnActivityStarted(Activity activity)
+        {
+            CrossCurrentActivity.Current.Activity = activity;
+        }
+
+        public void OnActivityStopped(Activity activity)
+        {
+        }
+    }
+}
+{% endFile -%}

@@ -12,31 +12,33 @@ namespace Wham
 
         private static string cs_ClassTemplate = null;
 
-        public static string CS_ClassTemplate {
-            get {
-                return cs_ClassTemplate = cs_ClassTemplate ?? GetTemplateContents ("CS_ClassTemplate.dlq");
+        public static string CS_ClassTemplate
+        {
+            get
+            {
+                return cs_ClassTemplate = cs_ClassTemplate ?? GetTemplateContents("CS_ClassTemplate.dlq");
             }
         }
 
         private static string whamMasterTemplate = null;
 
-        public static string WhamMasterTemplate {
-            get {
-                return whamMasterTemplate = whamMasterTemplate ?? GetTemplateContents ("WhamMasterTemplate.dlq");
+        public static string WhamMasterTemplate
+        {
+            get
+            {
+                return whamMasterTemplate = whamMasterTemplate ?? GetTemplateContents("WhamMasterTemplate.dlq");
             }
         }
 
-        private static readonly Dictionary<string, Func<string, string>> RegisteredTemplates =
-            new Dictionary<string, Func<string, string>> () {
+        private static readonly Dictionary<string, Func<string, Stream>> RegisteredTemplates =
+            new Dictionary<string, Func<string, Stream>>() {
             // the default resolver by default uses built-in templates
             {DefaultTemplateResolverKey, (templateName)=>{
                     var asm = Assembly.GetExecutingAssembly ();
                     string fullResName = asm.GetManifestResourceNames ().FirstOrDefault (rn => rn.EndsWith (templateName));
 
                     if (fullResName != null) {
-                        using (var sr = new StreamReader (asm.GetManifestResourceStream (fullResName))) {
-                            return sr.ReadToEnd ();
-                        }
+                        return  asm.GetManifestResourceStream (fullResName);
                     }
 
                     return null;
@@ -49,31 +51,47 @@ namespace Wham
         /// </summary>
         /// <param name="name">Template name. "*" for default template resolver. Can't be null.</param>
         /// <param name="getTemplateContentsByName">Returns template contents by name or null if not found.</param>
-        public static void RegisterTemplate (string name, Func<string, string> getTemplateContentsByName)
+        public static void RegisterTemplate(string name, Func<string, Stream> getTemplateContentsByName)
         {
-            RegisteredTemplates [name.ToLowerInvariant ()] = getTemplateContentsByName;
+            RegisteredTemplates[name.ToLowerInvariant()] = getTemplateContentsByName;
         }
 
         public static string GetTemplateContents(string name)
         {
-            if (name != null) {
-                Func<string, string> getTemplateContentsByName = null;
-                if (RegisteredTemplates.ContainsKey (name.ToLowerInvariant ()))
-                    getTemplateContentsByName = RegisteredTemplates [name.ToLowerInvariant ()];
+            Stream contentsStream = GetTemplateStream(name);
 
-                string contents = getTemplateContentsByName?.Invoke (name);
-
-                if (contents == null) {
-                    if (RegisteredTemplates.ContainsKey (DefaultTemplateResolverKey))
-                        getTemplateContentsByName = RegisteredTemplates [DefaultTemplateResolverKey];
-
-                    contents = getTemplateContentsByName?.Invoke (name);
-                }
-
+            if (contentsStream != null)
+            {
+                var reader = new StreamReader(contentsStream);
+                var contents = reader.ReadToEnd();
                 return contents;
             }
 
-            throw new WhamTemplateException ("[BHAIQHHARNS] Template name is required to resolve a template");
+            throw new WhamTemplateException("[BHAIQHHARNS] Template name is required to resolve a template");
+        }
+
+        public static Stream GetTemplateStream(string name)
+        {
+            Stream contentsStream = null;
+
+            if (name != null)
+            {
+                Func<string, Stream> getTemplateContentsByName = null;
+                if (RegisteredTemplates.ContainsKey(name.ToLowerInvariant()))
+                    getTemplateContentsByName = RegisteredTemplates[name.ToLowerInvariant()];
+
+                contentsStream = getTemplateContentsByName?.Invoke(name);
+
+                if (contentsStream == null)
+                {
+                    if (RegisteredTemplates.ContainsKey(DefaultTemplateResolverKey))
+                        getTemplateContentsByName = RegisteredTemplates[DefaultTemplateResolverKey];
+
+                    contentsStream = getTemplateContentsByName?.Invoke(name);
+                }
+            }
+
+            return contentsStream;
         }
     }
 }

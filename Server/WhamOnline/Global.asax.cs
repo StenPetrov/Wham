@@ -43,7 +43,7 @@ namespace WhamOnline
                     if (templateFiles.ContainsKey(templateName.ToLowerInvariant()))
                     {
                         string templateFile = templateFiles[templateName.ToLowerInvariant()];
-                        return System.IO.File.ReadAllText(templateFile);
+                        return System.IO.File.OpenRead(templateFile);
                     }
                     return null;
                 });

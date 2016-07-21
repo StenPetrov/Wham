@@ -185,6 +185,7 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinXamlPage.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.iOSAssets.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.Readmes.dlq" />
+<<<<<<< Updated upstream
     <Content Include="App_Data\Templates\.Net\ASP.NET Server\WebApiServerSln.dlq" />
     <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ModelsProject.dlq" />
     <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ApiProject.dlq" />
@@ -195,6 +196,12 @@
     <Content Include="App_Data\Templates\.Net\ASP.NET Server\server.ControllerTestCS.dlq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+=======
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidProject.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidResources.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidMainCS.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\DroidResources.zip" />
+>>>>>>> Stashed changes
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

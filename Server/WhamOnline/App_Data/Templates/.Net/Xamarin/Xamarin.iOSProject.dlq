@@ -164,18 +164,13 @@
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcons.appiconset\Contents.json" />
-    <ImageAsset Include="Assets.xcassets\Contents.json" />{% include 'Xamarin.iOSAssets.dlq' %}
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />{% Folder 'Resources' %}{% endFolder %}
-  </ItemGroup>
-  <ItemGroup>
-    <InterfaceDefinition Include="LaunchScreen.storyboard" />
-  </ItemGroup>
-  <ItemGroup>
+    <ImageAsset Include="Assets.xcassets\Contents.json" /> 
+    <Folder Include="Resources\" />{% Folder 'Resources' %}{% endFolder %} 
+    <InterfaceDefinition Include="LaunchScreen.storyboard" /> 
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <None Include="packages.config" /> 
+    <None Include="packages.config" />
+	{% include 'Xamarin.iOSAssets.dlq' %}
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />{% File 'Main.cs' -%}
@@ -198,9 +193,9 @@ namespace {{ mobileproject | CSName }}.iOS
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Foundation;
 using UIKit;
+using {{ mobileproject | CSName }}.Forms;
 
 namespace {{ mobileproject | CSName }}.iOS
 {
