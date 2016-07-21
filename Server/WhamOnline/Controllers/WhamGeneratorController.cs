@@ -111,11 +111,11 @@ namespace WhamOnline.Controllers
 
         private void ValidateAppConfig(AppGenConfig appGenConfig)
         {
-            if (appGenConfig == null) ThrowValidationError("App config required");
+            if (appGenConfig == null) ThrowValidationError("Validation error: App config required");
             if (string.IsNullOrWhiteSpace(appGenConfig.AppOptions.AppName))
-                ThrowValidationError("App name required");
+                ThrowValidationError("Validation error: App name required");
             if (appGenConfig.AppOptions.AppName.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                ThrowValidationError("App name must be a valid file name");
+                ThrowValidationError("Validation error: App name must be a valid file name");
         }
 
         private void ThrowValidationError(string errorContent)
