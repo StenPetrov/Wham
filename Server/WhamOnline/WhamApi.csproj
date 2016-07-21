@@ -199,6 +199,7 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidResources.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidMainCS.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\DroidResources.zip" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidResourceCS.dlq" />
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />
