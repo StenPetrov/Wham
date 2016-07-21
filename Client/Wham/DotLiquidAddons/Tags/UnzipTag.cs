@@ -22,7 +22,7 @@ namespace Wham
         {
             if (!string.IsNullOrEmpty(markup))
             {
-                ZipFileName = markup.Trim();
+                ZipFileName = markup.Trim().Trim('\'');
             }
 
             base.Initialize(tagName, markup, tokens);

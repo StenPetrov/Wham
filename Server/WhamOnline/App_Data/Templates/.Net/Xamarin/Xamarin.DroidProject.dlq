@@ -157,7 +157,10 @@ Typeface tf = Typeface.CreateFromAsset (Context.Assets, "fonts/samplefont.ttf");
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
-{% Folder 'Resources' %}{% File 'DroidResources.zip' %}{% endFile %}{% endFolder %}
+{% Folder 'Resources' %}
+{% Unzip 'DroidResources.zip' %}{% endUnzip %} 
+{% include 'Xamarin.DroidResourceCS.dlq' %}
+{% endFolder -%}
   </ItemGroup>  
   <ItemGroup>
      <ProjectReference Include="..\Forms\{{ xamarinFormsProjectFile }}">

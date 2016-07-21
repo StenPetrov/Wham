@@ -47,12 +47,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DotLiquidAddons\Filters\TextFilters.cs" />
-<<<<<<< Updated upstream
-    <Compile Include="DotLiquidAddons\Tags\SingleLineTag.cs" />
-=======
-    <Compile Include="DotLiquidAddons\Tags\UnzipTag.cs" />
->>>>>>> Stashed changes
+    <Compile Include="DotLiquidAddons\Filters\TextFilters.cs" /> 
+    <Compile Include="DotLiquidAddons\Tags\SingleLineTag.cs" /> 
+    <Compile Include="DotLiquidAddons\Tags\UnzipTag.cs" /> 
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JSchemaExtensions.cs" />
     <Compile Include="DotLiquidExtensions.cs" />
