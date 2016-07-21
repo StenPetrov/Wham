@@ -1,4 +1,4 @@
-var appJson = {}
+var appJson = {};
 
 function submitClicked() {
     appJson.AppOptions = getAppOptions();
@@ -25,18 +25,32 @@ function submitClicked() {
         },
         error: function (xhr, textStatus, error) {
             console.log(xhr.statusText);
+            console.log(xhr.responseText);
             console.log(textStatus);
             console.log(error);
-            document.getElementById('modal_error_title').innerHTML = xhr.statusText
-            document.getElementById('modal_error_body').innerHTML = error
-            $('#modal_error').openModal()
+
+            document.getElementById("modal_error_title").innerHTML = xhr.statusText;
+            document.getElementById("modal_error_body").innerHTML = error;
+
+            try {
+                // see if we can get an error message from the server
+                var jsonResponse = JSON.parse(xhr.responseText);
+                console.log(jsonResponse.errorDetails);
+
+                if (jsonResponse.errors) {
+                    document.getElementById("modal_error_body").innerHTML = jsonResponse.errors;
+                }
+            } catch (x) {
+                console.log("Couldn't get server-side error: " + x);
+            }
+
+            $("#modal_error").openModal();
         }
     });
 }
 
 function getAppOptions() {
-    var AppOptions = {}
-
+    var AppOptions = {};
     var AppName = document.getElementById("appName").value;
     AppOptions.AppName = AppName;
 

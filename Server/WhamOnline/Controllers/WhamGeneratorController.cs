@@ -55,10 +55,9 @@ namespace WhamOnline.Controllers
             Guid taskId = Guid.NewGuid();
             string errors = null;
 
+            ValidateAppConfig(appGenConfig);
             try
-            {
-                ValidateAppConfig(appGenConfig);
-
+            { 
                 string taskFolder = GetDataPath(taskId.ToString());
                 Directory.CreateDirectory(taskFolder);
 
@@ -125,7 +124,7 @@ namespace WhamOnline.Controllers
             {
                 Content = new StringContent(JsonConvert.SerializeObject(new
                 {
-                    error = errorContent,
+                    errors = errorContent,
                 }))
             });
         }
