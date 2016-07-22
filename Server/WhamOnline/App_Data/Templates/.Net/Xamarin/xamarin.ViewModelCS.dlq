@@ -9,7 +9,8 @@ using System.ComponentModel;
 using XLabs.Forms.Mvvm;
 using System.Windows.Input;
 using {{ mobileproject | CSName }}.Models; 
-using {{ mobileproject | CSName }}.Forms.Services;
+using {{ mobileproject | CSName }}.Forms.Services; 
+using {{ mobileproject | CSName }}.Forms.UI;
 
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{
     public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
@@ -56,13 +57,17 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
               get{
                     _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
                         ?? new Command (async (studentId) => {
+                            {% if field.Type == 'Ref' %}
                             await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (({{ field.RefTable | ClassName }}ViewModel viewModel, {{ field.RefTable | ClassName }}Page page) => {
                                 viewModel.Load(Model.{{ field.Name | CSName }});
                             });
+                            {% else %}
+                            // TODO: navigate to a page for a list of items
+                            {% endif %}
                         });
               }
               set {
-                    SetProperty (ref this._selectStudentCommand, value);
+                    SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value);
               }
           }
         {% endif %}
@@ -86,16 +91,17 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
         
         public async Task Save(bool saveToServer = false){
-            {% for field in table.Fields %}
-            {% SingleLine %} 
+            {% for field in table.Fields %} 
+            {% Trim %}
+            {% if field.Type != 'Ref' %}
                 {% if field.IsCollection == 'true' %}
             Model.{{ field.Name | CSName }}.Clear();
             Model.{{ field.Name | CSName }}.AddRange({{ field.Name | CSName }});
                 {% else %} 
             Model.{{ field.Name | CSName }} = {{ field.Name | CSName }}; 
-                {% endif %}
-            {% endSingleLine %}
-            {% endfor %}
+                {% endif %} 
+            {% endif %}
+            {% endTrim %}{% endfor %}
         }
     }
 }{% endFile %}
