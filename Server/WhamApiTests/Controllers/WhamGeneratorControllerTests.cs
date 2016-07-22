@@ -70,11 +70,37 @@ namespace WhamOnline.Controllers.Tests
         }
          
         [TestMethod()]
+        public async Task Generator_FlyWheelGen_Test()
+        {
+            var appGen = GetResourceConfig("FlyWheelGen.json");
+            await AssertOKResponse(appGen);
+
+            RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
+        }
+
+        [TestMethod()]
         public async Task Generator_ValidationError_Test()
         {
             var appGen = new TestAppGenConfig { AppOptions = { AppName = null } };
 
             await AssertErrorResponse(appGen);
+        }
+
+        private TestAppGenConfig GetResourceConfig(string templateName)
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            string fullResName = asm.GetManifestResourceNames().FirstOrDefault(rn => rn.EndsWith(templateName));
+
+            if (fullResName != null)
+            {
+                using (var resourceJsonStream = asm.GetManifestResourceStream(fullResName))
+                {
+                    var reader = new StreamReader(resourceJsonStream);
+                    return JsonConvert.DeserializeObject<TestAppGenConfig>(reader.ReadToEnd());
+                }
+            }
+
+            return null;
         }
 
         private async Task<string> AssertOKResponse(TestAppGenConfig appGen)

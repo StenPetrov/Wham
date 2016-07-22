@@ -21,7 +21,7 @@
 {% Folder 'Mobile' %} 
     {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' %} 
     {% File mobileSlnFileName %}
-		{% include 'XamarinMobileSln.dlq' %}
+        {% include 'XamarinMobileSln.dlq' %}
     {% endFile %}
 {% endFolder %}
 

@@ -1,0 +1,121 @@
+﻿{
+  "AppOptions": {
+    "AppName": "FlyWheelGenerated",
+    "Platform": ".Net",
+    "Theme": "Basic"
+  },
+  "Owner": {
+    "Name": "Sten Petrov",
+    "Company": "Microsoft",
+    "email": "sten.petrov@gmail.com"
+  },
+  "Database": {
+    "Type": "SQL",
+    "ConnectionString": "DB://CONN_STR"
+  },
+  "Authentication": {
+    "Type": "AzureAD",
+    "ClientId": "AZUREAD_AUTH"
+  },
+  "DataModel": [
+    {
+      "TableName": "Customer",
+      "isVisible": true,
+      "fields": [
+        {
+          "type": "string",
+          "name": "Name",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false"
+        },
+        {
+          "type": "bool",
+          "name": "IsDisabled",
+          "uiType": "hidden",
+          "defaultValue": "false",
+          "isCollection": "false"
+        },
+        {
+          "type": "DateTime",
+          "name": "Birthday",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false"
+        },
+        {
+          "type": "int",
+          "name": "Score",
+          "uiType": "textbox",
+          "defaultValue": "100",
+          "isCollection": "false"
+        },
+        {
+          "type": "string",
+          "name": "CapturedPokemons",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "true",
+          "regex": "",
+          "isAuth": "false"
+        },
+        {
+          "type": "Ref",
+          "name": "HomeAddress",
+          "refTable": "Address",
+          "isCollection": "false"
+        },
+        {
+          "type": "Ref",
+          "name": "OtherAddresses",
+          "refTable": "Address",
+          "isCollection": "true"
+        }
+      ]
+    },
+    {
+      "TableName": "Address",
+      "isVisible": true,
+      "fields": [
+        {
+          "type": "string",
+          "name": "Street",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false"
+        },
+        {
+          "type": "string",
+          "name": "City",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false"
+        },
+        {
+          "type": "string",
+          "name": "State",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false"
+        },
+        {
+          "type": "string",
+          "name": "Zip",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false"
+        }
+      ]
+    }
+  ]
+}

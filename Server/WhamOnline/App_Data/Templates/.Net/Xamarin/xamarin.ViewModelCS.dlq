@@ -1,0 +1,80 @@
+﻿{% File csFileViewModel -%}
+using System;
+using System.Threading.Tasks; 
+using Xamarin.Forms;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic;
+using XLabs.Forms.Mvvm;
+using System.Windows.Input;
+using {{ mobileproject | CSName }}.Models;
+
+namespace {{ mobileproject | CSName }}.Forms.ViewModels{
+    public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
+    
+        protected {{ table.TableName | ClassName }} Model { get; private set; } 
+    {% for field in table.Fields %}
+		{% if field.Type != 'Ref' -%}
+        // Field name: {{ field.Name }} Type: {{ field.Type }}
+        {% capture fieldType %}{% SingleLine NoSpace %}
+			{% if field.IsCollection == 'true' %}ObservableCollection<{% endif %}
+			{% case field.Type %}
+				{% when 'Ref' %}
+                    {{ field.RefTable | CSName  }}
+				{% else %}
+                    {{ field.Type }}
+			{% endcase %}
+			{% if field.IsCollection == 'true' %}>{% endif %}
+		 {% endSingleLine %}{% endcapture -%} 
+        {% SingleLine SingleSpace -%}
+        private {{ fieldType }} _{{ field.Name | CSName }} = 
+        	{% if field.IsCollection == 'true' %}
+                new {{ fieldType }}();
+            {% else %} 
+                default ({{ fieldType }});
+            {% endif %}
+        {% endSingleLine -%} 
+        public {{ fieldType }} {{ field.Name | CSName }}  
+        { 
+            get{
+                return _{{ field.Name | CSName }}; 
+            } 
+            {% if field.IsCollection != 'true' %}set{
+                 SetProperty(ref  _{{ field.Name | CSName }}, value);
+            }{% endif %}
+        }
+        {% endif -%}
+    {% endfor -%}
+         
+    {% for field in table.Fields %}
+		{% if field.Type == 'Ref' or field.IsCollection == 'true' %}
+          // Field name: {{ field.Name }} Type: {{ field.Type }}
+          private Command _NavigateTo{{ field.Name | CSName }}Command = null;
+          public Command NavigateTo{{ field.Name | CSName }}Command {
+              get{
+                    _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
+                        ?? new Command (async (studentId) => {
+                            await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (({{ field.RefTable | ClassName }}ViewModel viewModel, {{ field.RefTable | ClassName }}Page page) => {
+                                viewModel.Load(Model.{{ field.Name | CSName }});
+                            });
+                        });
+              }
+              set {
+                    SetProperty (ref this._selectStudentCommand, value);
+              }
+          }
+        {% endif %}
+    {% endfor %}
+    
+        public void Load({{ table.TableName | ClassName }} model){
+            Model = model;
+            {% for field in table.Fields %}
+            {% SingleLine %}
+                {% if field.Type != 'Ref' %}
+                OnPropertyChanged("{{ field.Name | CSName }}");
+                {% endif %}
+            {% endSingleLine %}
+            {% endfor %}
+        }
+    }
+}{% endFile %}

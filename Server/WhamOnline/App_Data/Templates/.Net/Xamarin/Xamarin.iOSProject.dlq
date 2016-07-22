@@ -170,7 +170,7 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <None Include="packages.config" />
-	{% include 'Xamarin.iOSAssets.dlq' %}
+    {% include 'Xamarin.iOSAssets.dlq' %}
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />{% File 'Main.cs' -%}
@@ -218,7 +218,7 @@ namespace {{ mobileproject | CSName }}.iOS
             XLabs.Ioc.Resolver.SetResolver (
                 new XLabs.Ioc.SimpleContainer ()
                 .Register<XLabs.Platform.Services.Media.IMediaPicker,XLabs.Platform.Services.Media.MediaPicker>()
-				// .Register<IServiceInterface, ImplementationClass>()
+                // .Register<IServiceInterface, ImplementationClass>()
                 .GetResolver ());
 
             LoadApplication (new App ()); // this depends on App.MainPage to be set

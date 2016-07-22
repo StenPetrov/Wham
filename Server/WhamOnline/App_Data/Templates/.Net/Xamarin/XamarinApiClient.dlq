@@ -1,9 +1,13 @@
 ﻿using System;
 
-namespace {{ mobileproject | CSName }}.Services {
+namespace {{ mobileproject | CSName }}.Forms.Services {
   // Database is {{ appGen.Database.Type }}
   public partial class ApiClient {
-    public void Connect(){
+  
+  
+    public async Task Connect(string endpoing){
 	}
+    
+    
   }
 }

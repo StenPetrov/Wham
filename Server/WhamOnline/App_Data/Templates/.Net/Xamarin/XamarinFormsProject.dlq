@@ -7,7 +7,7 @@
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UseMSBuildEngine>true</UseMSBuildEngine>
     <OutputType>Library</OutputType>
-    <RootNamespace>{{ mobileproject | CSName }}</RootNamespace>
+    <RootNamespace>{{ mobileproject | CSName }}.Forms</RootNamespace>
     <AssemblyName>{{ mobileproject | CSName }}.Forms</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile78</TargetFrameworkProfile>
@@ -85,8 +85,9 @@
   using Xamarin.Forms;
   using XLabs.Forms.Mvvm;
   using {{ mobileproject | CSName }}.Forms;
-  using {{ mobileproject | CSName }}.ViewModels;
-  using {{ mobileproject | CSName }}.Services;
+  using {{ mobileproject | CSName }}.Forms.UI;
+  using {{ mobileproject | CSName }}.Forms.ViewModels;
+  using {{ mobileproject | CSName }}.Forms.Services;
   
 
   namespace {{ mobileproject | CSName }}
@@ -120,28 +121,16 @@
   </ItemGroup>
   {% for table in appGen.DataModel -%}
   {% assign csFileViewModel = table.TableName | ClassName | Append: 'ViewModel.cs' -%}
-  {% Folder 'Forms' %}{% include 'XamarinXamlPage.dlq' %}{% endFolder -%}
-  {% Folder 'ViewModels' %}{% File csFileViewModel -%}
-using System;
-using System.Threading.Tasks; 
-using Xamarin.Forms;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Collections.Generic;
-using XLabs.Forms.Mvvm;
-using System.Windows.Input;
-namespace {{ mobileproject | CSName }}.ViewModels{
-    public class {{ table.TableName | ClassName }}ViewModel : ViewModel{
-    }
-}{% endFile %}{% endFolder -%}
+  {% Folder 'UI' %}{% include 'XamarinXamlPage.dlq' %}{% endFolder -%}
+  {% Folder 'ViewModels' %}{% include 'xamarin.ViewModelCS.dlq' %}{% endFolder -%}
   <ItemGroup>
-    <Compile Include="Forms\{{ table.TableName | ClassName }}Page.xaml.cs">
+    <Compile Include="UI\{{ table.TableName | ClassName }}Page.xaml.cs">
       <DependentUpon>{{ table.TableName | ClassName }}Page.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\{{ table.TableName | ClassName }}ViewModel.cs" /> 
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Forms\{{ table.TableName | ClassName }}Page.xaml">
+    <EmbeddedResource Include="UI\{{ table.TableName | ClassName }}Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -213,7 +202,7 @@ namespace {{ mobileproject | CSName }}.ViewModels{
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forms\" />
+    <Folder Include="UI\" />
     <Folder Include="Services\" />
     <Folder Include="ViewModels\" />
   </ItemGroup> 

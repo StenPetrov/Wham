@@ -142,7 +142,7 @@
 Any raw assets you want to be deployed with your application can be placed in
 this directory (and child directories) and given a Build Action of "AndroidAsset". 
 The assets can be read like this: 
-		InputStream input = Assets.Open ("my_asset.txt");
+        InputStream input = Assets.Open ("my_asset.txt");
 and  some Android functions will automatically load asset files: 
 Typeface tf = Typeface.CreateFromAsset (Context.Assets, "fonts/samplefont.ttf");{% endFile %}{% endFolder -%}
     <None Include="packages.config" /> 

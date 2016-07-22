@@ -209,6 +209,9 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidMainCS.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\DroidResources.zip" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.DroidResourceCS.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\xamarin.ViewModelCS.dlq">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

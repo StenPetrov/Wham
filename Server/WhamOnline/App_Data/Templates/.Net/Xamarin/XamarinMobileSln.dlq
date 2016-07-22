@@ -52,15 +52,15 @@ EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedModels", "..\Shared\Models\{{ sharedModelProjectFileName }}", "{{ sharedModelProjectGuid | Braces }}"
 EndProject
 Global
-	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
-		Debug|iPhoneSimulator = Debug|iPhoneSimulator
-		Release|iPhone = Release|iPhone
-		Release|iPhoneSimulator = Release|iPhoneSimulator
-		Debug|iPhone = Debug|iPhone
-	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+        Debug|iPhoneSimulator = Debug|iPhoneSimulator
+        Release|iPhone = Release|iPhone
+        Release|iPhoneSimulator = Release|iPhoneSimulator
+        Debug|iPhone = Debug|iPhone
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
         {{ mobileFormsProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {{ mobileFormsProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {{ mobileFormsProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -121,5 +121,5 @@ Global
         {{ mobileModelsProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
         {{ mobileModelsProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
         {{ mobileModelsProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|Any CPU
-	EndGlobalSection
+    EndGlobalSection
 EndGlobal

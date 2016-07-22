@@ -52,13 +52,13 @@ namespace {{ mobileproject | CSName }}.Droid
 
             global::Xamarin.Forms.Forms.Init (this, bundle);
 
-			// Resolver initialized here, you can add your own services too
+            // Resolver initialized here, you can add your own services too
             XLabs.Ioc.Resolver.SetResolver (
                 new XLabs.Ioc.SimpleContainer ()
                 .Register<XLabs.Platform.Services.Media.IMediaPicker, XLabs.Platform.Services.Media.MediaPicker> ()
                 .GetResolver ());
 
-			// App constructor must set App.Main
+            // App constructor must set App.Main
             LoadApplication (new App ());
         }
     }
@@ -77,7 +77,7 @@ using Plugin.CurrentActivity;
 
 namespace {{ mobileproject | CSName }}.Droid
 {
-	//You can specify additional application information in this attribute
+    //You can specify additional application information in this attribute
     [Application]
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {

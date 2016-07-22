@@ -5,7 +5,7 @@
 using System.Collections.Generic; 
 using Xamarin.Forms;
 
-namespace {{ mobileproject | CSName }}.Forms
+namespace {{ mobileproject | CSName }}.Forms.UI
 {
     // there shouldn't be anything else in this class with proper MVVM implementation
     public partial class {{ table.TableName | ClassName }}Page : ContentPage
@@ -19,7 +19,7 @@ namespace {{ mobileproject | CSName }}.Forms
 {% File csFileXaml -%}<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    x:Class="{{ mobileproject | CSName }}.Forms.{{ table.TableName | ClassName }}Page">
+    x:Class="{{ mobileproject | CSName }}.Forms.UI.{{ table.TableName | ClassName }}Page">
     <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
             <OnPlatform.iOS>0, 20, 0, 0</OnPlatform.iOS>
@@ -28,10 +28,12 @@ namespace {{ mobileproject | CSName }}.Forms
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                {% for field in table.Fields -%}<RowDefinition Height="*" />{% endfor %}
+                {% for field in table.Fields -%}
+                <RowDefinition Height="*" />
+{% endfor %}
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            
+            {% Trim %}
             {% assign gridRow = 0 %}
             {% for field in table.Fields %}
             <!-- Field: {{ field.Name }} Type:{{ field.Type }} Collection:{{ field.IsCollection }} UI: {{ field.UIType }} -->
@@ -46,18 +48,21 @@ namespace {{ mobileproject | CSName }}.Forms
                     {% else %} << Unknown field type >>                     
                 {% endcase %}
             {% endif %}
-            {% assign gridRow = gridRow | plus:1 %}
-            {% endSingleLine -%}
-            {% endfor -%}
+            {% assign gridRow = gridRow | plus:'1' %}
+            {% endSingleLine %}
+            {% endfor %}
+            {% endTrim -%}
             
+            {% Trim %}
             {% for field in table.Fields %}
             {% SingleLine %}
             {% if field.UIType != 'Hidden' and field.Type == 'Ref' %}
                  <Button Grid.Row="{{ gridRow }}" Text="{{ field.Name | CSName }} >" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
             {% endif %}
-            {% assign gridRow = gridRow | plus:1 %}
+            {% assign gridRow = gridRow | plus:'1' %}
             {% endSingleLine %}
             {% endfor %}
+            {% endTrim %}
         </Grid>
     </ContentPage.Content>
 </ContentPage>{% endFile -%}

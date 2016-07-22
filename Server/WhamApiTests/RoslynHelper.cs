@@ -55,7 +55,7 @@ namespace WhamApiTests
             var xamlText = File.ReadAllText(file);
             Assert.IsTrue(!string.IsNullOrWhiteSpace(xamlText), "Empty xaml file: " + file);
             var xamlDoc = XDocument.Parse(xamlText);
-            Assert.IsNotNull(xamlDoc.Root, "Invalid xaml file: " + file); 
+            Assert.IsNotNull(xamlDoc.Root, "Invalid xaml file: " + file);
         }
 
         public static void ValidateConfigFile(string configFilePath)
@@ -92,11 +92,29 @@ namespace WhamApiTests
 
                 if (expectItemGroups)
                 {
-                    var itemGroups = project.Descendants(project.Root.GetDefaultNamespace() + "ItemGroup").ToList();
+                    var ns = project.Root.GetDefaultNamespace();
+                    var itemGroups = project.Descendants(ns + "ItemGroup").ToList();
                     Assert.IsTrue(itemGroups.Any(), "Project " + csProjFilePath + " has no <ItemGroup> elements");
 
                     var itemGroupWithText = itemGroups.FirstOrDefault(ig => ig.Nodes().OfType<XText>().Any());
                     Assert.IsNull(itemGroupWithText, "Project " + csProjFilePath + " has <ItemGroup> element wit text: " + itemGroupWithText);
+
+                    var compileIncludes = itemGroups.SelectMany(ig => ig.Elements(ns + "Compile"))
+                        .Union(itemGroups.SelectMany(ig => ig.Elements(ns + "EmbeddedResource")))                        
+                        .Where(ci => ci.Attribute("Include") != null)
+                        .ToList();
+
+                    if (compileIncludes.Any())
+                    {
+                        var csProjPath = Path.GetDirectoryName(csProjFilePath);
+
+                        var notFoundItems = compileIncludes
+                            .Where(ci => !File.Exists(Path.Combine(csProjPath, ci.Attribute("Include").Value)))
+                            .Select(ci => ci.Attribute("Include").Value)
+                            .ToList();
+
+                        Assert.IsFalse(notFoundItems.Any(), $"Project {csProjFilePath} is missing file(s): " + string.Join("\r\n", notFoundItems));
+                    } 
                 }
             }
             catch (Exception x)

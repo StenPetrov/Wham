@@ -16,9 +16,9 @@ namespace Wham
             {
                 if (string.IsNullOrWhiteSpace(markup))
                     singleSpace = false;
-                else if (markup.ToLower() == "singlespace")
+                else if (markup.Trim().Trim('\'').ToLower() == "singlespace")
                     singleSpace = true;
-                else if (markup.ToLower() == "nospace")
+                else if (markup.Trim().Trim('\'').ToLower() == "nospace")
                     noSpace = true;
                 else
                     throw new WhamException("[AIIQJWRNKRAL] Invalid SingleLine markup: " + markup + ". It must be empty or 'SingleSpace' or 'NoSpace'");

@@ -8,18 +8,18 @@ namespace {{ appGen.AppOptions.AppName | ClassName }}.Models{
     {% for field in table.Fields %}
         [JsonProperty("{{ field.Name | JSName}}")]
         {% SingleLine SingleSpace%}
-		public 
-		{% if field.Type == 'Ref' %}virtual {% endif %}
-		{% SingleLine NoSpace%}
-			{% if field.IsCollection == 'true' %}List<{% endif -%}
-			{% case field.Type -%}
-				{% when 'Ref' %}{{ field.RefTable | CSName  }}
-				{% else %}{{ field.Type }}
-			{% endcase -%}
-			{% if field.IsCollection == 'true' %}>{% endif %}
-		{% endSingleLine %}
-		{{ field.Name | CSName }} { get; set; }
-		{% endSingleLine %}
+        public 
+        {% if field.Type == 'Ref' %}virtual {% endif %}
+        {% SingleLine NoSpace%}
+            {% if field.IsCollection == 'true' %}List<{% endif -%}
+            {% case field.Type -%}
+                {% when 'Ref' %}{{ field.RefTable | CSName  }}
+                {% else %}{{ field.Type }}
+            {% endcase -%}
+            {% if field.IsCollection == 'true' %}>{% endif %}
+        {% endSingleLine %}
+        {{ field.Name | CSName }} { get; set; }
+        {% endSingleLine %}
     {% endfor %}
     }
 }

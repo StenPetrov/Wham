@@ -195,23 +195,23 @@ function typeChanged() {
     }
 
     switch (type) {
-        case "string": 
-            document.getElementById("div_isAuth").style.display = "block"; 
+        case "string":
+            document.getElementById("div_isAuth").style.display = "block";
             document.getElementById("div_regex").style.display = "block";
             break;
         case "Ref":
             document.getElementById("div_field_name").style.display = "block";
-            document.getElementById("div_defaultValue").style.display = "none"; 
+            document.getElementById("div_defaultValue").style.display = "none";
             document.getElementById("div_UI_Type").style.display = "none";
             document.getElementById("div_refConnection").style.display = "block";
             break;
-        case "DateTime": 
+        case "DateTime":
             break;
-        case "int": 
+        case "int":
             break;
-        case "double": 
+        case "double":
             break;
-        case "bool": 
+        case "bool":
             break;
     }
     $(formsToShow).appendTo("#inputForms");
@@ -262,7 +262,7 @@ function addThisField() {
         case "string":
             // TODO validation
             rowData.regex = regex;
-            rowData.isAuth = isAuth;
+            rowData.isAuth = isAuth == "true" || isAuth === "on";
             break;
         case "Ref":
             // TODO validation
