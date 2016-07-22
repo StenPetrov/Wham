@@ -95,9 +95,9 @@
   {
     public App ()
     {
-  {% for table in appGen.DataModel -%}
+{% for table in appGen.DataModel %}
         ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
-  {% endfor %}
+{% endfor %}
         MainPage = (Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel));
     }
 
@@ -143,6 +143,7 @@ namespace {{ mobileproject | CSName }}.ViewModels{
   <ItemGroup>
     <EmbeddedResource Include="Forms\{{ table.TableName | ClassName }}Page.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
 {% endfor %}

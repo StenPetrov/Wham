@@ -14,7 +14,7 @@ namespace WhamApiTests
 {
     public static class RoslynHelper
     {
-        public static void ValidateCSFolder(string directoryPath)
+        public static void ValidateDotNetFolder(string directoryPath)
         {
             try
             {
@@ -35,6 +35,7 @@ namespace WhamApiTests
                         case ".config": ValidateConfigFile(file); break;
                         case ".csproj": ValidateCSProjFile(file, true); break;
                         case ".shproj": ValidateCSProjFile(file, false); break;
+                        case ".xaml": ValidateCSXamlFile(file); break;
                     }
                 }
             }
@@ -47,6 +48,14 @@ namespace WhamApiTests
             {
                 Assert.Fail("Failed to validate C# folder: " + directoryPath + " Error: " + x);
             }
+        }
+
+        private static void ValidateCSXamlFile(string file)
+        {
+            var xamlText = File.ReadAllText(file);
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(xamlText), "Empty xaml file: " + file);
+            var xamlDoc = XDocument.Parse(xamlText);
+            Assert.IsNotNull(xamlDoc.Root, "Invalid xaml file: " + file); 
         }
 
         public static void ValidateConfigFile(string configFilePath)

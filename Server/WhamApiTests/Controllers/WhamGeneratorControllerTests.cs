@@ -66,7 +66,7 @@ namespace WhamOnline.Controllers.Tests
             var appGen = new TestAppGenConfig();
             await AssertOKResponse(appGen);
 
-            RoslynHelper.ValidateCSFolder(m_whamGeneratorController.TaskFolder);
+            RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
         }
          
         [TestMethod()]
