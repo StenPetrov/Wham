@@ -3,8 +3,8 @@ function stripString(x) {
 }
 
 function addToTable() {
-    var tableName = document.getElementById("newTableName").value;
-    var isVisible = document.getElementById("newTableVisibility").checked;
+    var tableName = $("#newTableName").val();
+    var isVisible = $("#newTableVisibility").val();
     tableName = stripString(tableName);
     tableName = tableName.replace(" ", "_");
     console.log(tableName, isVisible);
@@ -46,14 +46,16 @@ function addToTable() {
             "onclick=\"tableSelected('" + tableName + "')\">";
         listString += tableName;
         listString += "</li>";
-        $(listString).appendTo("#tableListing");
 
         var x = document.getElementById("refConnection");
         var option = document.createElement("option");
         option.value = tableName;
         option.text = tableName;
         var sel = x.options[x.length];
+
+        $(listString).appendTo("#tableListing");
         x.add(option, sel);
+
         console.log(x);
         console.log(option);
         $("select").material_select();
@@ -63,16 +65,13 @@ function addToTable() {
     }
 
     // reset footer-modal for next table addition
-    document.getElementById("newTableName").value = "";
-    document.getElementById("newTableVisibility").checked = "on";
+    $("#newTableName").val("");
+    $("#newTableVisibility").val("on");
 }
 
 function cleanFieldListing() {
     // delete all elements currently listed in previous table
-    var root = document.getElementById("fieldListing");
-    while (root.hasChildNodes()) {
-        root.removeChild(root.childNodes[0]);
-    }
+    $("#fieldListing").empty();
 }
 
 function populateFieldListing(tableName) {
@@ -88,16 +87,17 @@ function populateFieldListing(tableName) {
 function tableSelected(tableName) {
     console.log(tableName + " was selected");
     console.log(listOfTables); // removing the disabled part of the button
-    document.getElementById("addFieldButton").className = "waves-effect waves-light btn modal-trigger";
+    $("#addFieldButton").show();
+    $("#addFieldButton").removeClass("disabled");
 
     // change table name in title of next row
-    document.getElementById("tableInDisplay").innerHTML = "Table: " + tableName;
+    $("#tableInDisplay").html("Table: " + tableName);
 
     for (var i = 0; i < listOfTables.length; i++) {
         //console.log((listOfTables[i].TableName + "_tableID"))
-        document.getElementById(listOfTables[i].TableName + "_tableID").className = "collection-item";
+        $("#"+listOfTables[i].TableName + "_tableID").addClass("collection-item");
     }
-    document.getElementById(tableName + "_tableID").className += " active";
+    $("#" + tableName + "_tableID").addClass("active");
 
     cleanFieldListing();
     populateFieldListing(tableName);
@@ -176,34 +176,34 @@ function appendFieldToList(field) // field is an object
 
 
 function typeChanged() {
-    var type = document.getElementById("fieldType").value;
+    var type = $("#fieldType").val();
     console.log("Field type changed: " + type);
 
-    document.getElementById("div_isAuth").style.display = "none";
-    document.getElementById("div_field_name").style.display = "none";
-    document.getElementById("div_defaultValue").style.display = "none";
-    document.getElementById("div_regex").style.display = "none";
-    document.getElementById("div_UI_Type").style.display = "none";
-    document.getElementById("div_refConnection").style.display = "none";
-    document.getElementById("div_field_isCollection").style.display = "none";
+    $("#div_isAuth").hide(); 
+    $("#div_field_name").hide();
+    $("#div_defaultValue").hide();
+    $("#div_regex").hide();
+    $("#div_UI_Type").hide();
+    $("#div_refConnection").hide();
+    $("#div_field_isCollection").hide();
 
     if (type && type !== "") {
-        document.getElementById("div_field_name").style.display = "block";
-        document.getElementById("div_defaultValue").style.display = "block";
-        document.getElementById("div_UI_Type").style.display = "block";
-        document.getElementById("div_field_isCollection").style.display = "block";
+        $("#div_field_name").show();
+        $("#div_defaultValue").show();
+        $("#div_UI_Type").show();
+        $("#div_field_isCollection").show();
     }
 
     switch (type) {
         case "string":
-            document.getElementById("div_isAuth").style.display = "block";
-            document.getElementById("div_regex").style.display = "block";
+            $("#div_isAuth").show();
+            $("#div_regex").show();
             break;
         case "Ref":
-            document.getElementById("div_field_name").style.display = "block";
-            document.getElementById("div_defaultValue").style.display = "none";
-            document.getElementById("div_UI_Type").style.display = "none";
-            document.getElementById("div_refConnection").style.display = "block";
+            $("#div_field_name").show();
+            $("#div_defaultValue").hide();
+            $("#div_UI_Type").hide();
+            $("#div_refConnection").show();
             break;
         case "DateTime":
             break;
@@ -213,28 +213,36 @@ function typeChanged() {
             break;
         case "bool":
             break;
-    }
-    $(formsToShow).appendTo("#inputForms");
+    } 
 }
 
 function cleanFieldInputModal() {
-    // post processing - clean up functions
-    document.getElementById("div_isAuth").style.display = "none";
-    document.getElementById("div_field_name").style.display = "none";
-    document.getElementById("div_defaultValue").style.display = "none";
-    document.getElementById("div_regex").style.display = "none";
-    document.getElementById("div_UI_Type").style.display = "none";
-    document.getElementById("div_refConnection").style.display = "none";
+    // clean options' values
+    $("#fieldType").val("");
+    $("#field_name").val("");
+    $("#isAuth").val(false);
+    $("#UI_Type").val("");
+    $("#defaultValue").val("");
+    $("#field_isCollection").val(false);
+    $("#regex").val("");
+    $("#refConnection").val("");
+    // hide all options
+    $("#div_isAuth").hide();
+    $("#div_field_name").hide();
+    $("#div_defaultValue").hide();
+    $("#div_regex").hide();
+    $("#div_UI_Type").hide();
+    $("#div_refConnection").hide();
 }
 
 function addThisField() {
-    var type = document.getElementById("fieldType").value;
-    var fieldName = document.getElementById("field_name").value;
-    var isAuth = document.getElementById("isAuth").value;
-    var uiType = document.getElementById("UI_Type").value;
-    var defaultValue = document.getElementById("defaultValue").value;
-    var isCollection = document.getElementById("field_isCollection").value;
-    var regex = document.getElementById("regex").value;
+    var type = $("#fieldType").val();
+    var fieldName = $("#field_name").val();
+    var isAuth = $("#isAuth").val();
+    var uiType = $("#UI_Type").val();
+    var defaultValue = $("#defaultValue").val();
+    var isCollection = $("#field_isCollection").val();
+    var regex = $("#regex").val();
     var refC = document.getElementById("refConnection");
     var refConnection = "";
 
@@ -282,7 +290,8 @@ function addThisField() {
             cleanFieldInputModal();
             return;
     }
-    var tableName = document.getElementById("tableInDisplay").innerHTML;
+
+    var tableName = $("#tableInDisplay").html();
     if (tableName.includes("Table:")) {
         tableName = tableName.split(" ")[1];
         console.log(tableName);
