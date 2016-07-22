@@ -55,12 +55,13 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
           private Command _NavigateTo{{ field.Name | CSName }}Command = null;
           public Command NavigateTo{{ field.Name | CSName }}Command {
               get{
-                    _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
+                    return _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
                         ?? new Command (async (studentId) => {
                             {% if field.Type == 'Ref' %}
-                            await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (({{ field.RefTable | ClassName }}ViewModel viewModel, {{ field.RefTable | ClassName }}Page page) => {
+                            await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (
+                            (viewModel, page) => {
                                 viewModel.Load(Model.{{ field.Name | CSName }});
-                            });
+                            }, animated: true);
                             {% else %}
                             // TODO: navigate to a page for a list of items
                             {% endif %}
