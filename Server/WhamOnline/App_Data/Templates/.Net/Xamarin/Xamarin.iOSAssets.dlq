@@ -71,7 +71,7 @@
     <key>CFBundleName</key>
     <string>{{ mobileproject | CSName }}</string>
     <key>CFBundleIdentifier</key>
-    <string>com.{{ appGen.Owner.Company | CSName | lowercase }}.{{ mobileproject | CSName | lowercase }}</string>
+    <string>com.{{ appGen.Owner.Company | CSName | Downcase }}.{{ mobileproject | CSName | Downcase }}</string>
     <key>CFBundleShortVersionString</key>
     <string>1.0</string>
     <key>CFBundleVersion</key>

@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Collections.Generic;
+using System.Collections.Generic; 
+using System.ComponentModel;
 using XLabs.Forms.Mvvm;
 using System.Windows.Input;
-using {{ mobileproject | CSName }}.Models;
+using {{ mobileproject | CSName }}.Models; 
+using {{ mobileproject | CSName }}.Forms.Services;
 
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{
     public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
@@ -66,12 +68,31 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         {% endif %}
     {% endfor %}
     
+        public async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id){
+            var serverObject = await ApiClient.Instance.Get{{ table.TableName | ClassName }}(id);
+            Load(serverObject);
+            return serverObject;
+        }
+        
         public void Load({{ table.TableName | ClassName }} model){
             Model = model;
             {% for field in table.Fields %}
             {% SingleLine %}
                 {% if field.Type != 'Ref' %}
-                OnPropertyChanged("{{ field.Name | CSName }}");
+                OnPropertyChanged(new PropertyChangedEventArgs("{{ field.Name | CSName }}")); 
+                {% endif %}
+            {% endSingleLine %}
+            {% endfor %}
+        }
+        
+        public async Task Save(bool saveToServer = false){
+            {% for field in table.Fields %}
+            {% SingleLine %} 
+                {% if field.IsCollection == 'true' %}
+            Model.{{ field.Name | CSName }}.Clear();
+            Model.{{ field.Name | CSName }}.AddRange({{ field.Name | CSName }});
+                {% else %} 
+            Model.{{ field.Name | CSName }} = {{ field.Name | CSName }}; 
                 {% endif %}
             {% endSingleLine %}
             {% endfor %}

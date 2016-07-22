@@ -17,7 +17,7 @@ namespace WhamOnline.Controllers
     {
         // GET: api/WhamGenerator
         public IEnumerable<string> Get()
-        {
+        { 
             return Directory.GetDirectories(GetDataPath())
                 .Select(dir => Path.GetFileName(dir));
         }

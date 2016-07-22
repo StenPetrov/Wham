@@ -95,7 +95,7 @@ function tableSelected(tableName) {
 
     for (var i = 0; i < listOfTables.length; i++) {
         //console.log((listOfTables[i].TableName + "_tableID"))
-        $("#"+listOfTables[i].TableName + "_tableID").addClass("collection-item");
+        $("#" + listOfTables[i].TableName + "_tableID").addClass("collection-item");
     }
     $("#" + tableName + "_tableID").addClass("active");
 
@@ -179,7 +179,7 @@ function typeChanged() {
     var type = $("#fieldType").val();
     console.log("Field type changed: " + type);
 
-    $("#div_isAuth").hide(); 
+    $("#div_isAuth").hide();
     $("#div_field_name").hide();
     $("#div_defaultValue").hide();
     $("#div_regex").hide();
@@ -213,7 +213,7 @@ function typeChanged() {
             break;
         case "bool":
             break;
-    } 
+    }
 }
 
 function cleanFieldInputModal() {
@@ -243,7 +243,7 @@ function addThisField() {
     var defaultValue = $("#defaultValue").val();
     var isCollection = $("#field_isCollection").val();
     var regex = $("#regex").val();
-    var refC = document.getElementById("refConnection");
+    var refC = $("#refConnection")[0];
     var refConnection = "";
 
     for (var i = 0; i < refC.options.length; i++) {
@@ -251,6 +251,12 @@ function addThisField() {
             refConnection = refC.options[i].value;
             break;
         }
+    }
+
+    if (!(fieldName) || fieldName.length === 0) {
+        Materialize.toast("No field was added, unknown type: " + type, 3000);
+        cleanFieldInputModal();
+        return;
     }
 
     var rowData = {};
@@ -286,7 +292,7 @@ function addThisField() {
             // TODO validation
             break;
         default:
-            Materialize.toast("No field was added", 4000);
+            Materialize.toast("No field was added, unknown type: " + type, 3000);
             cleanFieldInputModal();
             return;
     }

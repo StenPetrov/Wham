@@ -133,7 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\AndroidManifest.xml" />{% Folder 'Properties' %}{% File 'AndroidManifest.xml' %}<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.{{ appGen.Owner.Company | CSName | lowercase }}.{{ mobileproject | CSName | lowercase }}">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.{{ appGen.Owner.Company | CSName | Downcase }}.{{ mobileproject | CSName | Downcase }}">
     <uses-sdk android:minSdkVersion="19" />
     <application android:label="{{ mobileproject | CSName }}">
     </application>

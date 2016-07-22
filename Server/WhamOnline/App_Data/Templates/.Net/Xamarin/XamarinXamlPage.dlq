@@ -46,20 +46,20 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                     {% when 'bool' %} <Switch Grid.Row="{{ gridRow }}" IsToggled="{Binding {{ field.Name }} }" />
                     {% when 'DateTime' %} <DatePicker Grid.Row="{{ gridRow }}" Date="{Binding {{ field.Name }} }" /> <!-- change to TimePicker if needed -->
                     {% else %} << Unknown field type >>                     
-                {% endcase %}
+                {% endcase %} 
+                {% assign gridRow = gridRow | Add: '1' %}
             {% endif %}
-            {% assign gridRow = gridRow | plus:'1' %}
             {% endSingleLine %}
             {% endfor %}
             {% endTrim -%}
             
-            {% Trim %}
+            {% Trim %} 
             {% for field in table.Fields %}
             {% SingleLine %}
             {% if field.UIType != 'Hidden' and field.Type == 'Ref' %}
                  <Button Grid.Row="{{ gridRow }}" Text="{{ field.Name | CSName }} >" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
-            {% endif %}
-            {% assign gridRow = gridRow | plus:'1' %}
+                {% assign gridRow = gridRow | Add: '1' %}
+            {% endif %} 
             {% endSingleLine %}
             {% endfor %}
             {% endTrim %}

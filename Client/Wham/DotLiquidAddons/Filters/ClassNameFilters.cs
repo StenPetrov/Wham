@@ -9,10 +9,8 @@ namespace Wham
 {
     public static class ClassNameFilters
     {
-        public static readonly string[] CS_Keywords =
-            new[]
-            {
-                    "abstract",
+        public static readonly string[] CS_Keywords = {
+            "abstract",
             "as",
             "base",
             "bool",

@@ -1,13 +1,50 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks; 
+using Newtonsoft.Json;
+using {{ mobileproject | CSName }}.Models;
 
 namespace {{ mobileproject | CSName }}.Forms.Services {
-  // Database is {{ appGen.Database.Type }}
-  public partial class ApiClient {
-  
-  
-    public async Task Connect(string endpoing){
-	}
-    
-    
-  }
+    // Database is {{ appGen.Database.Type }}
+    // Call ApiClient.Instance.Connect(endpoing) to 
+    public partial class ApiClient {
+        
+        private static ApiClient _instance = null;
+        public static ApiClient Instance {
+            get{ return _instance = _instance ?? new ApiClient(); }
+        }
+        
+        private HttpClient httpClient = null;
+        
+        public bool IsConnected { get; protected set; }
+        
+        protected ApiClient() { } // singleton, no public ctor, use .Instance
+        
+        public virtual async Task Connect(string endpoint){
+            if (httpClient == null || httpClient.BaseAddress.OriginalString != endpoint)
+                httpClient = new HttpClient() { BaseAddress = new Uri(endpoint) };
+                
+            IsConnected = true;
+        }
+        
+{% for table in appGen.DataModel %}
+
+        public async Task<{{ table.TableName | ClassName }}[]> List{{ table.TableName | ClassName }}(){
+            var resultString = await httpClient.GetStringAsync("/api/{{ table.TableName | ClassName }}");
+            var res = JsonConvert.DeserializeObject<{{ table.TableName | ClassName }}[]>(resultString);
+            return res;
+        }
+        
+        public async Task<{{ table.TableName | ClassName }}> Get{{ table.TableName | ClassName }}(long id){
+            var resultString = await httpClient.GetStringAsync("/api/{{ table.TableName | ClassName }}/"+id);
+            var res = JsonConvert.DeserializeObject<{{ table.TableName | ClassName }}>(resultString);
+            return res;
+        }
+{% endfor -%}
+    }
 }

@@ -9,6 +9,7 @@ using System.Reflection;
 using System.IO;
 using System.Text.RegularExpressions;
 using DotLiquid.FileSystems;
+using Wham.DotLiquidAddons.Filters;
 
 namespace Wham
 {
@@ -143,7 +144,8 @@ namespace Wham
             Template.RegisterFilter(typeof(ClassNameFilters));
             Template.RegisterFilter(typeof(CollectionFilters));
             Template.RegisterFilter(typeof(TextFilters));
-
+            Template.RegisterFilter(typeof(ArithmeticFilters));
+             
             Template.RegisterTag<ClassEnumsTag>("ClassEnums");
             Template.RegisterTag<GuidTag>("Guid");
             Template.RegisterTag<MultilineStringEscapeTag>("MultilineStringEscape");
