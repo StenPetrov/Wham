@@ -33,8 +33,16 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         private {{ fieldType }} _{{ field.Name | CSName }} = 
         	{% if field.IsCollection == 'true' %}
                 new {{ fieldType }}();
-            {% else %} 
+            {% else %}
+                {% if field.DefaultValue != '' and field.DefaultValue != nil %}
+                    {% if field.Type == 'string' %}
+                     "{{ field.DefaultValue }}";
+                    {% else %}
+                     {{ field.DefaultValue }};
+                    {% endif %}
+                {% else %}
                 default ({{ fieldType }});
+                {% endif %}
             {% endif %}
         {% endSingleLine -%} 
         public {{ fieldType }} {{ field.Name | CSName }}  
@@ -60,7 +68,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                             {% if field.Type == 'Ref' %}
                             await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (
                             (viewModel, page) => {
-                                viewModel.Load(Model.{{ field.Name | CSName }});
+                                viewModel.Load(Model?.{{ field.Name | CSName }});
                             }, animated: true);
                             {% else %}
                             // TODO: navigate to a page for a list of items

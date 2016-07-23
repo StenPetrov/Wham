@@ -187,7 +187,9 @@
     <Content Include="fonts\roboto\Roboto-Thin.woff2" />
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinMobileSln.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.iOSProject.dlq" />
-    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinFormsProject.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinFormsProject.dlq">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.ModelsProject.dlq" />
     <Content Include="App_Data\Templates\.Net\AssemblyInfo.dlq" />
     <Content Include="App_Data\Templates\.Net\Xamarin\XamarinApiClient.dlq" />
