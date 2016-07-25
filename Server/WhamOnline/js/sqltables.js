@@ -81,7 +81,7 @@ function populateFieldListing(tableName) {
             myTable = listOfTables[i];
         }
     }
-    populateWithNewTable(myTable.fields);
+    populateWithNewTable(myTable.fields, tableName);
 }
 
 function tableSelected(tableName) {
@@ -103,22 +103,50 @@ function tableSelected(tableName) {
     populateFieldListing(tableName);
 }
 
-function populateWithNewTable(fields) // fields is an array of objects
+function populateWithNewTable(fields, tableName) // fields is an array of objects
 {
     for (var i = 0; i < fields.length; i += 1) {
         var field = fields[i];
-        appendFieldToList(field);
+        appendFieldToList(field, tableName);
     }
 }
 
-function appendFieldToList(field) // field is an object
+function deleteField(tableName, fieldName)
+{
+  console.log(tableName)
+  console.log(fieldName)
+  console.log(listOfTables)
+  var i = 0;
+  for (i = 0; i < listOfTables.length; i += 1)
+  {
+      if (listOfTables[i].TableName == tableName)
+      {
+          for (var j = 0; j < listOfTables[i].fields.length; j += 1)
+          {
+              console.log(listOfTables[i].fields[j].name )
+              if (listOfTables[i].fields[j].name == fieldName)
+              {
+                  listOfTables[i].fields.splice(j,1)
+              }
+          }
+      }
+  }
+  cleanFieldListing();
+  populateFieldListing(tableName);
+}
+
+function appendFieldToList(field, tableName) // field is an object
 {
     var listString = "";
     listString += "<li class='collection-item'>";
     listString += "<div class='row'>";
 
-    listString += "<div class='col s12'>";
+    listString += "<div class='col s11'>";
     listString += "<h5>" + field.name + "</h5>";
+    listString += "</div>";
+
+    listString += "<div class='col s1'>";
+    listString += "<i class=\"material-icons\" onclick=\"deleteField('"+tableName+"','"+field.name+"')\">delete</i>";
     listString += "</div>";
 
     switch (field.type) {
