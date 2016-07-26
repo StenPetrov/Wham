@@ -1,8 +1,12 @@
 var appJson = {};
 
 function submitClicked() {
-    appJson.AppOptions = getAppOptions();
-    appJson.Owner = getOwner();
+    var temp = getAppOptions();
+    if(temp == 0) return;
+    appJson.AppOptions = temp;
+    var temp = getOwner();
+    if(temp == 0) return;
+    appJson.Owner = temp;
     appJson.Database = getDB();
     appJson.Authentication = getAuth();
     appJson.DataModel = getDataModel();
@@ -49,9 +53,21 @@ function submitClicked() {
     });
 }
 
+function displayErrorBox(title, body)
+{
+    document.getElementById("modal_error_title").innerHTML = title;
+    document.getElementById("modal_error_body").innerHTML = body;
+    $("#modal_error").openModal();
+}
+
 function getAppOptions() {
     var AppOptions = {};
     var AppName = document.getElementById("appName").value;
+    if(AppName == "")
+    {
+        displayErrorBox("Application Name", "Name your app before proceeding further.")
+        return 0;
+    }
     AppOptions.AppName = AppName;
 
     var Platform = document.getElementById("targetPlatform").value;
@@ -68,12 +84,21 @@ function getOwner() {
 
     var firstName = document.getElementById("firstName").value;
     var lastName = document.getElementById("lastName").value;
+    if(firstName == "")
+    {
+        displayErrorBox("User Details", "Enter your name before proceeding further")
+        return 0;
+    }
     Owner.Name = firstName + " " + lastName;
 
     var Company = document.getElementById("company").value;
     Owner.Company = Company;
 
     var email = document.getElementById("email").value;
+    if(email.indexOf('@') < 0){
+        displayErrorBox("User Details", "Enter your email address correctly before proceeding further")
+        return 0;
+    }
     Owner.email = email;
 
     return Owner;
