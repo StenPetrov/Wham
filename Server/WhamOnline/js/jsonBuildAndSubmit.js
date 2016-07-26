@@ -63,9 +63,8 @@ function displayErrorBox(title, body)
 function getAppOptions() {
     var AppOptions = {};
     var AppName = document.getElementById("appName").value;
-    if(AppName == "")
-    {
-        displayErrorBox("Application Name", "Name your app before proceeding further.")
+    if(AppName == ""){
+        displayErrorBox("Application Details", "Name your app before proceeding further.")
         return 0;
     }
     AppOptions.AppName = AppName;
@@ -82,17 +81,20 @@ function getAppOptions() {
 function getOwner() {
     var Owner = {};
 
+    var Company = document.getElementById("company").value;
+    if(Company == ""){
+        displayErrorBox("Application Details", "Enter your App's Company before proceeding further")
+        return 0;
+    }
+    Owner.Company = Company;
+
     var firstName = document.getElementById("firstName").value;
     var lastName = document.getElementById("lastName").value;
-    if(firstName == "")
-    {
+    if(firstName == ""){
         displayErrorBox("User Details", "Enter your name before proceeding further")
         return 0;
     }
     Owner.Name = firstName + " " + lastName;
-
-    var Company = document.getElementById("company").value;
-    Owner.Company = Company;
 
     var email = document.getElementById("email").value;
     if(email.indexOf('@') < 0){

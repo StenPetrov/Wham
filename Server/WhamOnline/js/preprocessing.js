@@ -13,7 +13,7 @@ var optionList_theme = [
 var optionList_db = [
   ["", "No Database", 1, 0],
   ["SQL", "SQL Server", 0, 0],
-  ["DocumentDB", "DocumentDB", 0, 1] 
+  ["DocumentDB", "DocumentDB", 0, 1]
 ];
 
 var optionList_auth = [
@@ -22,15 +22,9 @@ var optionList_auth = [
   ["Social", "Social Authentication (Google, FB, Twitter)", 0, 1]
 ];
 
-var optionList_company = [
-  ["Microsoft", "Microsoft", 1, 0],
-  ["Other", "Other", 0, 0]
-];
-
-var listOfTables = []; 
+var listOfTables = [];
 
 // init all drop-downs
-generateDropdownOptions("company", optionList_company);
 generateDropdownOptions("targetPlatform", optionList_targetPlatform);
 generateDropdownOptions("theme", optionList_theme);
 generateDropdownOptions("db_type", optionList_db);
