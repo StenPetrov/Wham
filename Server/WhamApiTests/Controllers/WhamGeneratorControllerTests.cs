@@ -68,7 +68,7 @@ namespace WhamOnline.Controllers.Tests
 
             RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
         }
-         
+
         [TestMethod()]
         public async Task Generator_FlyWheelGen_Test()
         {
@@ -121,7 +121,16 @@ namespace WhamOnline.Controllers.Tests
 
         private async Task AssertErrorResponse(TestAppGenConfig appGen)
         {
-            var responseMessage = await m_whamGeneratorController.PostJsonSchema(appGen);
+            HttpResponseMessage responseMessage;
+
+            try
+            {
+                responseMessage = await m_whamGeneratorController.PostJsonSchema(appGen);
+            }
+            catch (HttpResponseException hx)
+            {
+                responseMessage = hx.Response;
+            }
 
             Assert.IsNotNull(responseMessage);
 
@@ -129,7 +138,7 @@ namespace WhamOnline.Controllers.Tests
             dynamic response = JsonConvert.DeserializeObject(responseContents);
 
             Assert.IsNotNull(response);
-            Assert.IsNotNull(response.taskId);
+            Assert.IsNotNull(response.taskId, "Expected 'taskId' field: " + responseContents);
             Assert.IsNotNull(response.errors);
 
             Assert.AreNotEqual(HttpStatusCode.OK, responseMessage.StatusCode, $"Expected an error [{responseMessage.StatusCode}]: {responseMessage.Content.ReadAsStringAsync().Result}");

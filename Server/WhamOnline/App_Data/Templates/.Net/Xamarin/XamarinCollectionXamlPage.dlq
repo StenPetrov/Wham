@@ -1,0 +1,66 @@
+﻿{% assign csFileCodeBehind = 'CollectionPage.xaml.cs' -%}
+{% assign csFileXaml = 'CollectionPage.xaml' -%}
+{% Folder 'UI' %}
+<!-- XamarinXamlPage -->
+{% File csFileCodeBehind -%}using System;
+using System.Collections.Generic; 
+using Xamarin.Forms;
+using {{ mobileproject | CSName }}.Forms.ViewModels;
+
+namespace {{ mobileproject | CSName }}.Forms.UI
+{
+    // there shouldn't be anything else in this class with proper MVVM implementation
+    public partial class CollectionPage : ContentPage
+    {
+        public CollectionPage ()
+        {
+            InitializeComponent ();
+        }
+        
+        void Handle_ItemTapped (object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        {
+            var viewModel = ((CollectionViewModel)BindingContext);
+            if (viewModel.NavigateToItemCommand.CanExecute (e.Item)) {
+                viewModel.NavigateToItemCommand.Execute (e.Item);
+            }
+        }
+    }
+}{% endFile -%}
+{% File csFileXaml -%}<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+    x:Class="{{ mobileproject | CSName }}.Forms.UI.CollectionPage">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness">
+            <OnPlatform.iOS>0, 20, 0, 0</OnPlatform.iOS>
+        </OnPlatform>
+    </ContentPage.Padding>
+    <ContentPage.Content>  
+		  <ListView ItemsSource="{Binding Items}"
+                        ItemTapped="Handle_ItemTapped">
+          </ListView>
+    </ContentPage.Content>
+</ContentPage>{% endFile -%}
+{% endFolder -%} 
+{% Folder 'ViewModels' %}
+{% File 'CollectionViewModel.cs' %}
+using System;
+using System.Threading.Tasks; 
+using Xamarin.Forms;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic; 
+using System.ComponentModel;
+using XLabs.Forms.Mvvm;
+using System.Windows.Input;
+using {{ mobileproject | CSName }}.Models; 
+using {{ mobileproject | CSName }}.Forms.Services; 
+using {{ mobileproject | CSName }}.Forms.UI;
+
+namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
+
+    public abstract partial class CollectionViewModel : ViewModel{
+        public abstract Command NavigateToItemCommand { get; set; }
+    }
+}
+{% endFile -%}{% endFolder -%}

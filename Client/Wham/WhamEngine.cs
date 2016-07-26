@@ -155,6 +155,8 @@ namespace Wham
             Template.RegisterTag<TrimTag>("Trim");
             Template.RegisterTag<SingleLineTag>("SingleLine");
             Template.RegisterTag<TraceTag>("Trace");
+            Template.RegisterTag<DebrixTag>("Debrix");
+            
 
             Template.FileSystem = fileSystem ?? (IFileSystem)(new TemplateFileSystem());
 

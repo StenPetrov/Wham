@@ -17,7 +17,7 @@ namespace WhamOnline.Controllers
     {
         // GET: api/WhamGenerator
         public IEnumerable<string> Get()
-        { 
+        {
             return Directory.GetDirectories(GetDataPath())
                 .Select(dir => Path.GetFileName(dir));
         }
@@ -55,9 +55,9 @@ namespace WhamOnline.Controllers
             Guid taskId = Guid.NewGuid();
             string errors = null;
 
-            ValidateAppConfig(appGenConfig);
+            ValidateAppConfig(taskId, appGenConfig);
             try
-            { 
+            {
                 string taskFolder = GetDataPath(taskId.ToString());
                 Directory.CreateDirectory(taskFolder);
 
@@ -109,21 +109,30 @@ namespace WhamOnline.Controllers
             }
         }
 
-        private void ValidateAppConfig(AppGenConfig appGenConfig)
+        private void ValidateAppConfig(Guid taskId, AppGenConfig appGenConfig)
         {
-            if (appGenConfig == null) ThrowValidationError("Validation error: App config required");
+            if (appGenConfig == null) ThrowValidationError(taskId, "Validation error: App config required");
             if (string.IsNullOrWhiteSpace(appGenConfig.AppOptions.AppName))
-                ThrowValidationError("Validation error: App name required");
+                ThrowValidationError(taskId, "Validation error: App name required");
             if (appGenConfig.AppOptions.AppName.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-                ThrowValidationError("Validation error: App name must be a valid file name");
+                ThrowValidationError(taskId, "Validation error: App name must be a valid file name");
+
+            appGenConfig.DataModel = appGenConfig.DataModel
+                .OrderByDescending(table => table.IsVisible
+                    ? table.Fields.Sum(f => (f.IsAuth ? 999 : 0)
+                                            + (f.Type == Constants.DataTypes.TRef ? 2 : 0)
+                                            + (f.IsCollection ? 1 : 0))
+                    : -999)
+                .ToArray();
         }
 
-        private void ThrowValidationError(string errorContent)
+        private void ThrowValidationError(Guid taskId, string errorContent)
         {
             throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.BadRequest)
             {
                 Content = new StringContent(JsonConvert.SerializeObject(new
                 {
+                    taskId = taskId.ToString(),
                     errors = errorContent,
                 }))
             });

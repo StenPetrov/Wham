@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 
 namespace WhamOnline.Models
 { 
@@ -13,7 +14,8 @@ namespace WhamOnline.Models
         [JsonProperty("TableName")]
         public string TableName { get; set; }
 
-        [JsonProperty("isVisible")]
+        [JsonProperty("isVisible", DefaultValueHandling = DefaultValueHandling.Populate)]
+        [DefaultValue(true)] 
         public bool IsVisible { get; set; }
 
         [JsonProperty("fields")]

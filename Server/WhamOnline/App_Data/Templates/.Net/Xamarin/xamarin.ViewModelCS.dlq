@@ -12,7 +12,8 @@ using {{ mobileproject | CSName }}.Models;
 using {{ mobileproject | CSName }}.Forms.Services; 
 using {{ mobileproject | CSName }}.Forms.UI;
 
-namespace {{ mobileproject | CSName }}.Forms.ViewModels{
+namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
+
     public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
     
         protected {{ table.TableName | ClassName }} Model { get; private set; } 
@@ -57,31 +58,39 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         {% endif -%}
     {% endfor -%}
          
-    {% for field in table.Fields %}
-		{% if field.Type == 'Ref' or field.IsCollection == 'true' %}
-          // Field name: {{ field.Name }} Type: {{ field.Type }}
-          private Command _NavigateTo{{ field.Name | CSName }}Command = null;
-          public Command NavigateTo{{ field.Name | CSName }}Command {
-              get{
-                    return _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
-                        ?? new Command (async (studentId) => {
+    {% for field in table.Fields -%}{% if field.Type == 'Ref' or field.IsCollection == 'true' %}
+        // Field name: {{ field.Name }} Type: {{ field.Type }}
+        private Command _NavigateTo{{ field.Name | CSName }}Command = null;
+        public Command NavigateTo{{ field.Name | CSName }}Command {
+            get{
+                return _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
+                    ?? new Command (async (prm) => {
+                        {% if field.Type == 'Ref' and field.IsCollection == 'true' %}
+                        await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
+                            (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
+                            , animated: true);
+                        {% else %}
                             {% if field.Type == 'Ref' %}
-                            await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (
-                            (viewModel, page) => {
-                                viewModel.Load(Model?.{{ field.Name | CSName }});
-                            }, animated: true);
+                        await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (
+                            (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
+                            , animated: true);
                             {% else %}
-                            // TODO: navigate to a page for a list of items
+                        // TODO: navigate to a page for a list of items
                             {% endif %}
-                        });
-              }
-              set {
-                    SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value);
-              }
-          }
-        {% endif %}
-    {% endfor %}
+                        {% endif %}
+                    });
+            }
+            set {
+                SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value);
+            }
+        }
+        {% endif %}{% endfor -%}
     
+        // this is done so that Bindings are forced to use the ViewModel fields rather than Model.FieldName, since the Model is not guaranteed to have bindable properties
+        public {{ table.TableName | ClassName }} GetModel(){
+            return Model;
+        }
+        
         public async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id){
             var serverObject = await ApiClient.Instance.Get{{ table.TableName | ClassName }}(id);
             Load(serverObject);
@@ -95,12 +104,12 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 {% if field.Type != 'Ref' %}
                 OnPropertyChanged(new PropertyChangedEventArgs("{{ field.Name | CSName }}")); 
                 {% endif %}
-            {% endSingleLine %}
+            {% endSingleLine -%}
             {% endfor %}
         }
         
         public async Task Save(bool saveToServer = false){
-            {% for field in table.Fields %} 
+            {% for field in table.Fields -%} 
             {% Trim %}
             {% if field.Type != 'Ref' %}
                 {% if field.IsCollection == 'true' %}
@@ -113,4 +122,62 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             {% endTrim %}{% endfor %}
         }
     }
+    
+     public partial class {{ table.TableName | ClassName }}CollectionViewModel : CollectionViewModel{
+     
+        public ObservableCollection<{{ table.TableName | ClassName }}> Items { get; private set; } = new ObservableCollection<{{ table.TableName | ClassName }}>();
+        
+        private Command _NavigateToItemCommand = null; 
+        /// <summary>
+        /// the parameter for this command must be the object to navigate to of type {{ table.TableName | ClassName }}ViewModel
+        /// </summary>
+        public override Command NavigateToItemCommand {
+            get{
+                return _NavigateToItemCommand = _NavigateToItemCommand
+                    ?? new Command (async (itemPrm) => {
+                        var itemViewModel = itemPrm as {{ table.TableName | ClassName }}ViewModel;
+                        if (itemViewModel!=null){
+                            await Navigation.PushModalAsync<{{ table.TableName | ClassName }}ViewModel> (
+                                (viewModel, page) => viewModel.Load(itemViewModel.GetModel())
+                                , animated: true); 
+                        } else
+                            throw new ArgumentException("{% Debrix %} Invalid command parameter type, must be {{ table.TableName | ClassName }}ViewModel.");
+                    });
+            }
+            set {
+                SetProperty (ref _NavigateToItemCommand , value);
+            }
+        }
+        
+        public async Task<IEnumerable<{{ table.TableName | ClassName }}>> LoadFromServer(){
+            var serverObjects = await ApiClient.Instance.List{{ table.TableName | ClassName }}();
+            Load(serverObjects);
+            return serverObjects;
+        }
+     
+        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models){
+            Items.Clear();
+            if (models!=null){
+                foreach (var model in models){
+                    Items.Add(model);
+                }
+            }
+        }
+         
+        public void Add({{ table.TableName | ClassName }} model){
+            Remove(model.Id);
+            Items.Add(model); 
+        }
+         
+        public void Remove(long id){
+            var existingItem = Items.FirstOrDefault(item=>item.Id ==id);
+            if (existingItem!=null)
+                Items.Remove(existingItem); 
+        } 
+        
+        public {{ table.TableName | ClassName }} Find(long id){
+            var existingItem = Items.FirstOrDefault(item=>item.Id == id);
+            return existingItem;
+        } 
+     }
 }{% endFile %}

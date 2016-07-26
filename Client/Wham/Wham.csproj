@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="DotLiquidAddons\Filters\ArithmeticFilters.cs" />
     <Compile Include="DotLiquidAddons\Filters\TextFilters.cs" />
+    <Compile Include="DotLiquidAddons\Tags\DebrixTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\SingleLineTag.cs" />
     <Compile Include="DotLiquidAddons\Tags\UnzipTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

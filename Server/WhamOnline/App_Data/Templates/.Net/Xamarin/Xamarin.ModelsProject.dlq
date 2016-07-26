@@ -39,9 +39,10 @@ namespace {{ mobileproject | CSName }}.Models
 {
     // Root class for all mobile-side model classes, extend as needed
     public partial class DataObject
-    { 
-        //Sample uses can be:
-        //public string Id { get; set; }
+    {  
+        public long Id { get; set; }
+        
+        // example use for this class:
         //public bool IsValid { get; set; }
     }
 }{% endFile -%}

@@ -34,7 +34,12 @@ namespace WhamOnline.Models
         public string Regex { get; set; }
 
         [JsonProperty("isAuth")]
-        public string IsAuth { get; set; }
-    }
+        public bool IsAuth { get; set; }
 
+        [JsonProperty("hint")]
+        public string Hint { get; set; }
+
+        [JsonProperty("label")]
+        public string Label { get; set; } 
+    } 
 }
