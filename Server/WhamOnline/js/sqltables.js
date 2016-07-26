@@ -5,13 +5,17 @@ function stripString(x) {
 function addToTable() {
     var tableName = $("#newTableName").val();
     var isVisible = $("#newTableVisibility").val();
+    var tableHeading = $("#newTableHeading").val();
+    var tableDetails = $("#newTableDetails").val();
     tableName = stripString(tableName);
     tableName = tableName.replace(" ", "_");
-    console.log(tableName, isVisible);
+    console.log(tableName, isVisible, tableHeading, tableDetails);
     if (tableName != "") {
         var table = {};
         table.TableName = tableName;
         table.isVisible = isVisible;
+        table.heading = tableHeading;
+        table.details = tableDetails;
         table.fields = [];
 
         /* TEMP - Testing data by prepopulating elements
@@ -44,7 +48,8 @@ function addToTable() {
         var listString = "<li class=\"collection-item\"" +
             "id=\"" + tableName + "_tableID\" " +
             "onclick=\"tableSelected('" + tableName + "')\">";
-        listString += tableName;
+        listString += '<b>' + tableName + '</b> <br>';
+        listString += tableHeading + ': ' + tableDetails;
         listString += "</li>";
 
         var x = document.getElementById("refConnection");
@@ -67,6 +72,8 @@ function addToTable() {
     // reset footer-modal for next table addition
     $("#newTableName").val("");
     $("#newTableVisibility").val("on");
+    $("#newTableHeading").val("");
+    $("#newTableDetails").val("");
 }
 
 function cleanFieldListing() {
@@ -95,7 +102,7 @@ function tableSelected(tableName) {
 
     for (var i = 0; i < listOfTables.length; i++) {
         //console.log((listOfTables[i].TableName + "_tableID"))
-        $("#" + listOfTables[i].TableName + "_tableID").addClass("collection-item");
+        $("#" + listOfTables[i].TableName + "_tableID").removeClass("active");
     }
     $("#" + tableName + "_tableID").addClass("active");
 
