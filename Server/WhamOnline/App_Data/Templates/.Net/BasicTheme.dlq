@@ -1,12 +1,12 @@
 ﻿{% assign appSolutionFolder = appGen.AppOptions.AppName %}  
-{% assign sharedModelProjectFileName = appGen.AppOptions.AppName | Append: 'SharedModels.shproj' %} 
-{% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | Append: 'SharedModels.projitems' %} 
+{% assign sharedModelProjectFileName = appGen.AppOptions.AppName | CSName | Append: 'SharedModels.shproj' %} 
+{% assign sharedModelProjectItemsFileName = appGen.AppOptions.AppName | CSName | Append: 'SharedModels.projitems' %} 
 
 {% capture sharedModelProjectGuid %}{% Guid %}{% endcapture %}
 
 {% Folder appSolutionFolder %}  
 {% Folder 'Server' %} 
-    {% assign serverSlnFileName = appGen.AppOptions.AppName | Append: 'Server.sln' %}
+    {% assign serverSlnFileName = appGen.AppOptions.AppName | CSName | Append: 'Server.sln' %}
     {% File serverSlnFileName %}
         {% include 'WebApiServerSln.dlq' %}
     {% endFile %}
@@ -19,7 +19,7 @@
 {% endFolder %}
 
 {% Folder 'Mobile' %} 
-    {% assign mobileSlnFileName = appGen.AppOptions.AppName | Append: 'Mobile.sln' %} 
+    {% assign mobileSlnFileName = appGen.AppOptions.AppName | CSName | Append: 'Mobile.sln' %} 
     {% File mobileSlnFileName %}
         {% include 'XamarinMobileSln.dlq' %}
     {% endFile %}

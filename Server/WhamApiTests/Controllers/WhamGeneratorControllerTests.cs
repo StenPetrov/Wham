@@ -78,6 +78,16 @@ namespace WhamOnline.Controllers.Tests
             RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
         }
 
+
+        [TestMethod()]
+        public async Task Generator_ContikiGen_Test()
+        {
+            var appGen = GetResourceConfig("ContikiGen.json");
+            await AssertOKResponse(appGen);
+
+            RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
+        }
+
         [TestMethod()]
         public async Task Generator_ValidationError_Test()
         {

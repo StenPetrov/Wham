@@ -2,19 +2,19 @@
 # Wham!App Generator
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
+{% SingleLine NoSpace %}
 {% capture mobileFormsProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileiOSProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileDroidProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileUITestsProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileModelsProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileUWPProjectGuid %}{% Guid %}{% endcapture %}
-{% assign mobileproject = appGen.AppOptions.AppName | CSName %} 
-#
+{% assign mobileproject = appGen.AppOptions.AppName | CSName %}  
 {% assign xamarinFormsProjectFile = mobileproject | Append: '.Forms.csproj' %} 
 {% assign xamariniOSProjectFile = mobileproject | Append: '.iOS.csproj' %}  
 {% assign xamarinDroidProjectFile = mobileproject | Append: '.Droid.csproj' %} 
 {% assign xamarinModelsProjectFile = mobileproject | Append: '.Models.csproj' %}
-#
+{% endSingleLine -%}
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Forms", "Forms\{{ xamarinFormsProjectFile }}", "{{ mobileFormsProjectGuid | Braces }}"
 EndProject
 {% Folder 'Forms' %}
@@ -22,7 +22,6 @@ EndProject
 {% include 'XamarinFormsProject.dlq' %}
 {% endFile %}
 {% endFolder -%}
-#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.iOS", "iOS\{{ xamariniOSProjectFile }}", "{{ mobileiOSProjectGuid | Braces }}"
 EndProject
 {% Folder 'iOS' %}
@@ -30,7 +29,6 @@ EndProject
 {% include 'Xamarin.iOSProject.dlq' %}
 {% endFile %}
 {% endFolder -%}
-#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Droid", "Droid\{{ xamarinDroidProjectFile }}", "{{ mobileDroidProjectGuid | Braces }}"
 EndProject
 {% Folder 'Droid' %}
@@ -38,9 +36,6 @@ EndProject
 {% include 'Xamarin.DroidProject.dlq' %}
 {% endFile %}
 {% endFolder -%}
-# 
-#Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.UITests", "UITests\UUUU{{ xamarinUITestProjectFile }}", "{{ mobileUITestsProjectGuid | Braces }}"
-#EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Models", "Models\{{ xamarinModelsProjectFile  }}", "{{ mobileModelsProjectGuid | Braces }}"
 EndProject
 {% Folder 'Models' %}
@@ -48,7 +43,6 @@ EndProject
 {% include 'Xamarin.ModelsProject.dlq' %}
 {% endFile %}
 {% endFolder -%}
-#
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedModels", "..\Shared\Models\{{ sharedModelProjectFileName }}", "{{ sharedModelProjectGuid | Braces }}"
 EndProject
 Global
@@ -97,18 +91,6 @@ Global
         {{ mobileDroidProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
         {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
         {{ mobileDroidProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|Any CPU.Build.0 = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|iPhone.ActiveCfg = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|iPhone.Build.0 = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-#        {{ mobileUITestsProjectGuid | Braces }}.Debug|iPhone.Build.0 = Debug|Any CPU
         {{ mobileModelsProjectGuid | Braces }}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
         {{ mobileModelsProjectGuid | Braces }}.Debug|Any CPU.Build.0 = Debug|Any CPU
         {{ mobileModelsProjectGuid | Braces }}.Release|Any CPU.ActiveCfg = Release|Any CPU

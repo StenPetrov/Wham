@@ -16,7 +16,18 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
 
     public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
     
-        protected {{ table.TableName | ClassName }} Model { get; private set; } 
+        protected {{ table.TableName | ClassName }} Model { get; private set; }
+        
+        public string ViewHeading {
+            get{
+                {% if table.Heading == '' or table.Heading == nil %}
+                return "{{ table.TableName }}";
+                {% else %}
+                return $"{{ table.Heading }}"; 
+                {% endif %}
+            }
+        }
+        
     {% for field in table.Fields %}
 		{% if field.Type != 'Ref' -%}
         // Field name: {{ field.Name }} Type: {{ field.Type }}
@@ -37,12 +48,16 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             {% else %}
                 {% if field.DefaultValue != '' and field.DefaultValue != nil %}
                     {% if field.Type == 'string' %}
-                     "{{ field.DefaultValue }}";
+                     "{{ field.DefaultValue }}"; 
                     {% else %}
                      {{ field.DefaultValue }};
                     {% endif %}
                 {% else %}
-                default ({{ fieldType }});
+                {% if field.Type == 'DateTime' %}
+                     DateTime.Now; 
+                    {% else %} 
+                    default ({{ fieldType }});
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endSingleLine -%} 
@@ -53,6 +68,12 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             } 
             {% if field.IsCollection != 'true' %}set{
                  SetProperty(ref  _{{ field.Name | CSName }}, value);
+                 {% SingleLine SingleSpace%}
+                {% assign fieldName = field.Name  | CSName %}
+                {% if table.Heading contains field.Name or table.Heading contains fieldName %}
+                 OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading")); 
+                {% endif %}
+                {% endSingleLine -%}
             }{% endif %}
         }
         {% endif -%}
@@ -66,12 +87,12 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 return _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
                     ?? new Command (async (prm) => {
                         {% if field.Type == 'Ref' and field.IsCollection == 'true' %}
-                        await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
+                        await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
                             (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
                             , animated: true);
                         {% else %}
                             {% if field.Type == 'Ref' %}
-                        await Navigation.PushModalAsync<{{ field.RefTable | ClassName }}ViewModel> (
+                        await Navigation.PushAsync<{{ field.RefTable | ClassName }}ViewModel> (
                             (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
                             , animated: true);
                             {% else %}
@@ -137,7 +158,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                     ?? new Command (async (itemPrm) => {
                         var itemViewModel = itemPrm as {{ table.TableName | ClassName }}ViewModel;
                         if (itemViewModel!=null){
-                            await Navigation.PushModalAsync<{{ table.TableName | ClassName }}ViewModel> (
+                            await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
                                 (viewModel, page) => viewModel.Load(itemViewModel.GetModel())
                                 , animated: true); 
                         } else

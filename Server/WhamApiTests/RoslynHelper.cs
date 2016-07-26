@@ -1,5 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -36,6 +38,7 @@ namespace WhamApiTests
                         case ".csproj": ValidateCSProjFile(file, true); break;
                         case ".shproj": ValidateCSProjFile(file, false); break;
                         case ".xaml": ValidateCSXamlFile(file); break;
+                        case ".sln": ValidateSolutionFile(file); break;
                     }
                 }
             }
@@ -47,6 +50,18 @@ namespace WhamApiTests
             catch (Exception x)
             {
                 Assert.Fail("Failed to validate C# folder: " + directoryPath + " Error: " + x);
+            }
+        }
+
+        private static void ValidateSolutionFile(string file)
+        {
+            try
+            {
+                CompileSolution(file, Path.Combine(Path.GetDirectoryName(file), "bin", "Debug"));
+            }
+            catch (Exception x)
+            {
+                Assert.Fail("Can't compile solution: " + file + " \r\n Error: " + x);
             }
         }
 
@@ -100,7 +115,7 @@ namespace WhamApiTests
                     Assert.IsNull(itemGroupWithText, "Project " + csProjFilePath + " has <ItemGroup> element wit text: " + itemGroupWithText);
 
                     var compileIncludes = itemGroups.SelectMany(ig => ig.Elements(ns + "Compile"))
-                        .Union(itemGroups.SelectMany(ig => ig.Elements(ns + "EmbeddedResource")))                        
+                        .Union(itemGroups.SelectMany(ig => ig.Elements(ns + "EmbeddedResource")))
                         .Where(ci => ci.Attribute("Include") != null)
                         .ToList();
 
@@ -114,7 +129,7 @@ namespace WhamApiTests
                             .ToList();
 
                         Assert.IsFalse(notFoundItems.Any(), $"Project {csProjFilePath} is missing file(s): " + string.Join("\r\n", notFoundItems));
-                    } 
+                    }
                 }
             }
             catch (Exception x)
@@ -164,6 +179,48 @@ namespace WhamApiTests
             {
                 return await stream.ReadToEndAsync();
             }
+        }
+
+        private static bool CompileSolution(string solutionUrl, string outputDir)
+        {
+            bool success = true;
+
+            MSBuildWorkspace workspace = MSBuildWorkspace.Create();
+            Solution solution = workspace.OpenSolutionAsync(solutionUrl).Result;
+            ProjectDependencyGraph projectGraph = solution.GetProjectDependencyGraph();
+            Dictionary<string, Stream> assemblies = new Dictionary<string, Stream>();
+
+            foreach (ProjectId projectId in projectGraph.GetTopologicallySortedProjects())
+            {
+                Compilation projectCompilation = solution.GetProject(projectId).GetCompilationAsync().Result;
+                if (null != projectCompilation && !string.IsNullOrEmpty(projectCompilation.AssemblyName))
+                {
+                    using (var stream = new MemoryStream())
+                    {
+                        EmitResult result = projectCompilation.Emit(stream);
+                        if (result.Success)
+                        {
+                            string fileName = string.Format("{0}.dll", projectCompilation.AssemblyName);
+
+                            using (FileStream file = File.Create(outputDir + '\\' + fileName))
+                            {
+                                stream.Seek(0, SeekOrigin.Begin);
+                                stream.CopyTo(file);
+                            }
+                        }
+                        else
+                        {
+                            success = false;
+                        }
+                    }
+                }
+                else
+                {
+                    success = false;
+                }
+            }
+
+            return success;
         }
     }
 }

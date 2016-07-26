@@ -19,7 +19,8 @@ namespace {{ mobileproject | CSName }}.Forms.UI
 {% File csFileXaml -%}<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-    x:Class="{{ mobileproject | CSName }}.Forms.UI.{{ table.TableName | ClassName }}Page">
+    x:Class="{{ mobileproject | CSName }}.Forms.UI.{{ table.TableName | ClassName }}Page"
+    Title="{Binding ViewHeading}">
     <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
             <OnPlatform.iOS>0, 20, 0, 0</OnPlatform.iOS>
@@ -41,9 +42,9 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                 {% SingleLine %}
                 {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref'%}
                     {% case field.Type %}
-                        {% when 'string' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Name }}" />
-                        {% when 'int' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Name }}" Keyboard="Numeric" />
-                        {% when 'double' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Name }}" Keyboard="Numeric" />
+                        {% when 'string' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" />
+                        {% when 'int' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" />
+                        {% when 'double' %} <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" />
                         {% when 'bool' %} <Switch Grid.Row="{{ gridRow }}" IsToggled="{Binding {{ field.Name  | CSName }} }" />
                         {% when 'DateTime' %} <DatePicker Grid.Row="{{ gridRow }}" Date="{Binding {{ field.Name | CSName  }} }" /> <!-- change to TimePicker if needed -->
                         {% else %} << Unknown field type >>                     
@@ -58,7 +59,12 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                 {% for field in table.Fields %}
                 {% SingleLine %}
                 {% if field.UIType != 'Hidden' and field.Type == 'Ref' %}
-                     <Button Grid.Row="{{ gridRow }}" Text="{{ field.Name | CSName }} >" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
+                     <Button Grid.Row="{{ gridRow }}" Text="{% SingleLine NoSpace %}
+                     {% if field.Label == '' or field.Label == nil %}
+                     {{ field.Name | CSName }} >
+                     {% else %}
+                     {{ field.Label }}
+                     {% endif %}{% endSingleLine %}" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
                     {% assign gridRow = gridRow | Add: '1' %}
                 {% endif %} 
                 {% endSingleLine %}

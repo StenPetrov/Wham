@@ -99,8 +99,8 @@
 {% for table in appGen.DataModel %}
         ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
         ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
-{% endfor %}
-        MainPage = (Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel));
+{% endfor -%}
+        MainPage = new NavigationPage((Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel)));
     }
 
     protected override void OnStart ()

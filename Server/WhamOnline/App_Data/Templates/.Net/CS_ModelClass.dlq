@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace {{ appGen.AppOptions.AppName | ClassName }}.Models{
+namespace {{ appGen.AppOptions.AppName | CSName  }}.Models{
     public partial class {{ table.TableName | CSName }}{
     {% for field in table.Fields %}
         [JsonProperty("{{ field.Name | JSName}}")]
