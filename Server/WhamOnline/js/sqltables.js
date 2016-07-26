@@ -149,6 +149,10 @@ function appendFieldToList(field, tableName) // field is an object
     listString += "<i class=\"material-icons\" onclick=\"deleteField('"+tableName+"','"+field.name+"')\">delete</i>";
     listString += "</div>";
 
+    listString += "<div class='col s12 m6 l3'>";
+    listString += "Label: " + field.label;
+    listString += "</div>";
+
     switch (field.type) {
         case "string":
             listString += "<div class='col s12 m6 l3'>";
@@ -162,6 +166,9 @@ function appendFieldToList(field, tableName) // field is an object
             listString += "</div>";
             listString += "<div class='col s12 m6 l3'>";
             listString += "isAuth: " + field.isAuth;
+            listString += "</div>";
+            listString += "<div class='col s12 m6 l3'>";
+            listString += "UI Type: " + field.hint;
             listString += "</div>";
             break;
 
@@ -181,10 +188,17 @@ function appendFieldToList(field, tableName) // field is an object
             listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
             listString += "</div>";
+            listString += "<div class='col s12 m6 l3'>";
+            listString += "UI Type: " + field.hint;
+            listString += "</div>";
+            break;
 
         case "double":
             listString += "<div class='col s12 m6 l3'>";
             listString += "UI Type: " + field.uiType;
+            listString += "</div>";
+            listString += "<div class='col s12 m6 l3'>";
+            listString += "UI Type: " + field.hint;
             listString += "</div>";
             break;
 
@@ -214,18 +228,22 @@ function typeChanged() {
     $("#div_UI_Type").hide();
     $("#div_refConnection").hide();
     $("#div_field_isCollection").hide();
+    $("#div_hint").hide();
+    $("#div_label").hide();
 
     if (type && type !== "") {
         $("#div_field_name").show();
         $("#div_defaultValue").show();
         $("#div_UI_Type").show();
         $("#div_field_isCollection").show();
+        $("#div_label").show();
     }
 
     switch (type) {
         case "string":
             $("#div_isAuth").show();
             $("#div_regex").show();
+            $("#div_hint").show();
             break;
         case "Ref":
             $("#div_field_name").show();
@@ -236,8 +254,10 @@ function typeChanged() {
         case "DateTime":
             break;
         case "int":
+            $("#div_hint").show();
             break;
         case "double":
+            $("#div_hint").show();
             break;
         case "bool":
             break;
@@ -254,6 +274,8 @@ function cleanFieldInputModal() {
     $("#field_isCollection").val(false);
     $("#regex").val("");
     $("#refConnection").val("");
+    $("#hint").val("");
+    $("#label").val("");
     // hide all options
     $("#div_isAuth").hide();
     $("#div_field_name").hide();
@@ -261,6 +283,8 @@ function cleanFieldInputModal() {
     $("#div_regex").hide();
     $("#div_UI_Type").hide();
     $("#div_refConnection").hide();
+    $("#div_hint").hide();
+    $("#div_label").hide();
 }
 
 function addThisField() {
@@ -273,6 +297,8 @@ function addThisField() {
     var regex = $("#regex").val();
     var refC = $("#refConnection")[0];
     var refConnection = "";
+    var hint = $("#hint").val();
+    var label = $("#label").val();
 
     for (var i = 0; i < refC.options.length; i++) {
         if (refC.options[i].selected == true) {
@@ -294,6 +320,7 @@ function addThisField() {
     rowData.uiType = uiType;
     rowData.defaultValue = defaultValue;
     rowData.isCollection = isCollection;
+    rowData.label = label;
     delete rowData.isAuth;
     delete rowData.refTable;
     // this switch is over Constants.DataTypes in the API Models folder
@@ -303,6 +330,7 @@ function addThisField() {
             break;
         case "string":
             // TODO validation
+            rowData.hint = hint;
             rowData.regex = regex;
             rowData.isAuth = isAuth == "true" || isAuth === "on";
             break;
@@ -315,9 +343,11 @@ function addThisField() {
             break;
         case "int":
             // TODO validation
+            rowData.hint = hint;
             break;
         case "double":
             // TODO validation
+            rowData.hint = hint;
             break;
         default:
             Materialize.toast("No field was added, unknown type: " + type, 3000);
