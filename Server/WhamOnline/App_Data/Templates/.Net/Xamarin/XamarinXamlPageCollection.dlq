@@ -43,6 +43,76 @@ namespace {{ mobileproject | CSName }}.Forms.UI
 </ContentPage>{% endFile -%}
 {% endFolder -%} 
 {% Folder 'ViewModels' %}
+{% File 'BaseViewModel.cs' %}
+using System;
+using System.Threading.Tasks; 
+using Xamarin.Forms;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Collections.Generic; 
+using System.ComponentModel;
+using XLabs.Forms.Mvvm;
+using System.Windows.Input;
+using {{ mobileproject | CSName }}.Models; 
+using {{ mobileproject | CSName }}.Forms.Services; 
+using {{ mobileproject | CSName }}.Forms.UI;
+
+namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
+
+    public abstract partial class BaseViewModel<TModel>: ViewModel
+    {
+        private bool _IsSaved = false;
+        public bool IsSaved 
+        { 
+            get{
+                return _IsSaved; 
+            } 
+            protected set{
+                 SetProperty(ref  _IsSaved, value);
+            }
+        }
+        
+        private bool _IsChanged = false;
+        public bool IsChanged 
+        { 
+            get{
+                return _IsChanged; 
+            } 
+            protected set{
+                 SetProperty(ref  _IsChanged, value);
+            }
+        }
+        
+        protected TModel Model { get; private set; }
+        
+        public abstract string ViewHeading { get;}
+        
+        
+        // this is done so that Bindings are forced to use the ViewModel fields rather than Model.FieldName, since the Model is not guaranteed to have bindable properties
+        public TModel GetModel(){
+            return Model;
+        }
+        
+        public abstract Task<TModel> LoadFromServer(long id);
+        
+        public virtual void Load(TModel model){
+            Model = model;
+            IsChanged = false;
+            IsSaved = false;
+        }
+        
+        public virtual void Reload(){
+            if (Model!=null)
+                Load(Model);
+        }
+        
+        public virtual async Task Save(bool saveToServer = false){
+            IsSaved = true;
+            IsChanged = false;
+        }
+    }
+}
+{% endFile %}
 {% File 'CollectionViewModel.cs' %}
 using System;
 using System.Threading.Tasks; 

@@ -214,7 +214,7 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\xamarin.ViewModelCS.dlq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinCollectionXamlPage.dlq" />
+    <Content Include="App_Data\Templates\.Net\Xamarin\XamarinXamlPageCollection.dlq" />
     <None Include="WhamOnline - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup />

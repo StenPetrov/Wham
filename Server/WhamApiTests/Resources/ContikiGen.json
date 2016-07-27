@@ -1,119 +1,119 @@
 ﻿{
-    "AppOptions": {
-        "AppName": "Contiki Gen",
-        "Platform": ".Net",
-        "Theme": "Basic"
-    },
-    "Owner": {
-        "Company": "StenPetrov",
-        "Name": "Sten Petrov",
-        "email": "sten.petrov@gmail.com"
-    },
-    "Database": {
-        "Type": "SQL",
-        "ConnectionString": ""
-    },
-    "Authentication": {
-        "Type": "",
-        "ClientId": ""
-    },
-    "DataModel": [
+  "AppOptions": {
+    "AppName": "Contiki Gen",
+    "Platform": ".Net",
+    "Theme": "Basic"
+  },
+  "Owner": {
+    "Company": "StenPetrov",
+    "Name": "Sten Petrov",
+    "email": "sten.petrov@gmail.com"
+  },
+  "Database": {
+    "Type": "SQL",
+    "ConnectionString": ""
+  },
+  "Authentication": {
+    "Type": "",
+    "ClientId": ""
+  },
+  "DataModel": [
+    {
+      "TableName": "Customers",
+      "isVisible": "true",
+      "heading": "{Name}",
+      "details": "",
+      "fields": [
         {
-            "TableName": "Customers",
-            "isVisible": "true",
-            "heading": "{Name}",
-            "details": "",
-            "fields": [
-                {
-                    "type": "string",
-                    "name": "Name",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "Name:",
-                    "hint": "First and Last or Full Name",
-                    "regex": "",
-                    "isAuth": true
-                },
-                {
-                    "type": "DateTime",
-                    "name": "Birthday",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "Birthday"
-                },
-                {
-                    "type": "Ref",
-                    "name": "HomeAddress",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "Home Address",
-                    "refTable": "Address"
-                },
-                {
-                    "type": "Ref",
-                    "name": "ShippingAddresses",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "true",
-                    "label": "Shipping Addresses",
-                    "refTable": "Address"
-                }
-            ]
+          "type": "string",
+          "name": "Name",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "Name:",
+          "hint": "First and Last or Full Name",
+          "regex": "",
+          "isAuth": true
         },
         {
-            "TableName": "Address",
-            "isVisible": "true",
-            "heading": "{Street}-{Zip}",
-            "details": "",
-            "fields": [
-                {
-                    "type": "string",
-                    "name": "Street",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "",
-                    "hint": "",
-                    "regex": "",
-                    "isAuth": false
-                },
-              {
-                "type": "string",
-                "name": "City",
-                "uiType": null,
-                "defaultValue": "",
-                "isCollection": "false",
-                "label": "",
-                "hint": "",
-                "regex": "",
-                "isAuth": false
-              },
-                {
-                    "type": "string",
-                    "name": "State",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "",
-                    "hint": "",
-                    "regex": "",
-                    "isAuth": false
-                },
-                {
-                    "type": "string",
-                    "name": "Zip",
-                    "uiType": null,
-                    "defaultValue": "",
-                    "isCollection": "false",
-                    "label": "",
-                    "hint": "",
-                    "regex": "",
-                    "isAuth": false
-                }
-            ]
+          "type": "DateTime",
+          "name": "Birthday",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "Birthday"
+        },
+        {
+          "type": "Ref",
+          "name": "Home Address",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "Home Address: ",
+          "refTable": "Address"
+        },
+        {
+          "type": "Ref",
+          "name": "ShippingAddresses",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "true",
+          "label": "Shipping Addresses",
+          "refTable": "Address"
         }
-    ]
+      ]
+    },
+    {
+      "TableName": "Address",
+      "isVisible": "true",
+      "heading": "{Street}, {City}, {ZipCode}",
+      "details": "",
+      "fields": [
+        {
+          "type": "string",
+          "name": "Street",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "",
+          "hint": "",
+          "regex": "",
+          "isAuth": false
+        },
+        {
+          "type": "string",
+          "name": "City",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "",
+          "hint": "",
+          "regex": "",
+          "isAuth": false
+        },
+        {
+          "type": "string",
+          "name": "State",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "",
+          "hint": "",
+          "regex": "",
+          "isAuth": false
+        },
+        {
+          "type": "string",
+          "name": "Zip Code",
+          "uiType": null,
+          "defaultValue": "",
+          "isCollection": "false",
+          "label": "",
+          "hint": "",
+          "regex": "",
+          "isAuth": false
+        }
+      ]
+    }
+  ]
 }

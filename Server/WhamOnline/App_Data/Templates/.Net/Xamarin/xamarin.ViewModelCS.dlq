@@ -14,11 +14,9 @@ using {{ mobileproject | CSName }}.Forms.UI;
 
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
 
-    public partial class {{ table.TableName | ClassName }}ViewModel : ViewModel{
-    
-        protected {{ table.TableName | ClassName }} Model { get; private set; }
-        
-        public string ViewHeading {
+    public partial class {{ table.TableName | ClassName }}ViewModel : BaseViewModel<{{ table.TableName | ClassName }}>{
+     
+        public override string ViewHeading {
             get{
                 {% if table.Heading == '' or table.Heading == nil %}
                 return "{{ table.TableName }}";
@@ -26,7 +24,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 return $"{{ table.Heading }}"; 
                 {% endif %}
             }
-        }
+        } 
         
     {% for field in table.Fields %}
 		{% if field.Type != 'Ref' -%}
@@ -102,24 +100,22 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                     });
             }
             set {
-                SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value);
+                 if (SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value)){
+                    IsChanged = true;
+                 }
             }
         }
         {% endif %}{% endfor -%}
-    
-        // this is done so that Bindings are forced to use the ViewModel fields rather than Model.FieldName, since the Model is not guaranteed to have bindable properties
-        public {{ table.TableName | ClassName }} GetModel(){
-            return Model;
-        }
-        
-        public async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id){
+     
+        public override async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id){
             var serverObject = await ApiClient.Instance.Get{{ table.TableName | ClassName }}(id);
             Load(serverObject);
             return serverObject;
         }
         
-        public void Load({{ table.TableName | ClassName }} model){
-            Model = model;
+        public override void Load({{ table.TableName | ClassName }} model){
+            base.Load(model);
+            
             {% for field in table.Fields %}
             {% SingleLine %}
                 {% if field.Type != 'Ref' %}
@@ -129,7 +125,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             {% endfor %}
         }
         
-        public async Task Save(bool saveToServer = false){
+        public override async Task Save(bool saveToServer = false){
             {% for field in table.Fields -%} 
             {% Trim %}
             {% if field.Type != 'Ref' %}

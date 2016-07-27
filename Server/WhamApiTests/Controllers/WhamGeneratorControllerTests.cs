@@ -77,8 +77,7 @@ namespace WhamOnline.Controllers.Tests
 
             RoslynHelper.ValidateDotNetFolder(m_whamGeneratorController.TaskFolder);
         }
-
-
+        
         [TestMethod()]
         public async Task Generator_ContikiGen_Test()
         {

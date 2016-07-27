@@ -121,6 +121,7 @@
 }{% endFile %}
   </ItemGroup>
     <ItemGroup>
+    <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\CollectionViewModel.cs" />  
     <Compile Include="UI\CollectionPage.xaml.cs">
       <DependentUpon>CollectionPage.xaml</DependentUpon>
@@ -129,7 +130,7 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    {% include 'XamarinCollectionXamlPage.dlq' -%} 
+    {% include 'XamarinXamlPageCollection.dlq' -%} 
   </ItemGroup>
   {% for table in appGen.DataModel -%}
   {% assign csFileViewModel = table.TableName | ClassName | Append: 'ViewModel.cs' -%}
