@@ -65,13 +65,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 return _{{ field.Name | CSName }}; 
             } 
             {% if field.IsCollection != 'true' %}set{
-                 SetProperty(ref  _{{ field.Name | CSName }}, value);
-                 {% SingleLine SingleSpace%}
-                {% assign fieldName = field.Name  | CSName %}
-                {% if table.Heading contains field.Name or table.Heading contains fieldName %}
-                 OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading")); 
-                {% endif %}
-                {% endSingleLine -%}
+                if (SetProperty(ref  _{{ field.Name | CSName }}, value)){
+                    {% SingleLine SingleSpace%}
+                    {% assign fieldName = field.Name  | CSName %}
+                    {% if table.Heading contains field.Name or table.Heading contains fieldName %}
+                         OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading"));  
+                    {% endif %}
+                    {% endSingleLine -%}
+                    IsChanged = true;
+                }
             }{% endif %}
         }
         {% endif -%}
@@ -84,25 +86,36 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             get{
                 return _NavigateTo{{ field.Name | CSName }}Command = _NavigateTo{{ field.Name | CSName }}Command
                     ?? new Command (async (prm) => {
-                        {% if field.Type == 'Ref' and field.IsCollection == 'true' %}
-                        await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
-                            (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
-                            , animated: true);
-                        {% else %}
-                            {% if field.Type == 'Ref' %}
-                        await Navigation.PushAsync<{{ field.RefTable | ClassName }}ViewModel> (
-                            (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
-                            , animated: true);
+                        try{
+                            {% if field.Type == 'Ref' and field.IsCollection == 'true' %}
+                            await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
+                                (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
+                                , animated: true);
                             {% else %}
-                        // TODO: navigate to a page for a list of items
+                                {% if field.Type == 'Ref' %}
+                                var navRef = Model?.{{ field.Name | CSName }} ?? new {{ field.RefTable | ClassName }}(); 
+                            await Navigation.PushAsync<{{ field.RefTable | ClassName }}ViewModel> (
+                                (viewModel, page) => {
+                                    viewModel.Load(navRef);
+                                    viewModel.StatusChangingCallback = (oSave, saved) => {
+                                        viewModel.StatusChangingCallback = null;
+                                        if (saved && Model != null){
+                                            Model.{{ field.Name | CSName }} = oSave;
+                                        }
+                                    };
+                                }, animated: true);
+                                {% else %}
+                            // TODO: navigate to a page for a list of items
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
+                        } catch (Exception x){
+                            // async commands throw exceptions into the ether, all exceptions must be handled
+                            System.Diagnostics.Debug.WriteLine("{% Debrix %} Error in NavigateTo{{ field.Name | CSName }}Command: " + x);
+                        }
                     });
             }
             set {
-                 if (SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value)){
-                    IsChanged = true;
-                 }
+                SetProperty (ref this._NavigateTo{{ field.Name | CSName }}Command , value);
             }
         }
         {% endif %}{% endfor -%}
@@ -126,6 +139,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
         
         public override async Task Save(bool saveToServer = false){
+            Model = Model ?? new {{ table.TableName | ClassName }}();
             {% for field in table.Fields -%} 
             {% Trim %}
             {% if field.Type != 'Ref' %}
@@ -140,25 +154,62 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
     }
     
-     public partial class {{ table.TableName | ClassName }}CollectionViewModel : CollectionViewModel{
+    public partial class {{ table.TableName | ClassName }}CollectionViewModel : CollectionViewModel{
      
+        protected IEnumerable<{{ table.TableName | ClassName }}> ParentCollection {get; private set;}
+         
+        private bool _CanEdit = false;
+        public bool CanEdit 
+        { 
+            get{
+                return _CanEdit; 
+            } 
+            protected set{
+                AddItemCommand.ChangeCanExecute ();
+                RemoveItemCommand.ChangeCanExecute();
+                SetProperty(ref  _CanEdit, value);
+            }
+        }
+        
+        
         public ObservableCollection<{{ table.TableName | ClassName }}> Items { get; private set; } = new ObservableCollection<{{ table.TableName | ClassName }}>();
         
         private Command _NavigateToItemCommand = null; 
         /// <summary>
-        /// the parameter for this command must be the object to navigate to of type {{ table.TableName | ClassName }}ViewModel
+        /// The parameter for this command's .Execute must be the object to navigate to of type {{ table.TableName | ClassName }}ViewModel 
+        /// or an object to add of type {{ table.TableName | ClassName }}.
         /// </summary>
         public override Command NavigateToItemCommand {
             get{
                 return _NavigateToItemCommand = _NavigateToItemCommand
                     ?? new Command (async (itemPrm) => {
-                        var itemViewModel = itemPrm as {{ table.TableName | ClassName }}ViewModel;
-                        if (itemViewModel!=null){
-                            await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
-                                (viewModel, page) => viewModel.Load(itemViewModel.GetModel())
-                                , animated: true); 
-                        } else
-                            throw new ArgumentException("{% Debrix %} Invalid command parameter type, must be {{ table.TableName | ClassName }}ViewModel.");
+                        try {
+                            var itemViewModel = itemPrm as {{ table.TableName | ClassName }}ViewModel;
+                            var itemToAdd = itemPrm as {{ table.TableName | ClassName }};
+                            if (itemViewModel!=null)
+                            {
+                                await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
+                                    (viewModel, page) => viewModel.Load(itemViewModel.GetModel())
+                                    , animated: true); 
+                            } else if (itemToAdd != null) 
+                            {
+                                 await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
+                                    (viewModel, page) => {
+                                        viewModel.Load(itemToAdd);
+                                        viewModel.IsPagePoppedAfterEditing = true;
+                                        viewModel.IsEditing = true;
+                                        viewModel.StatusChangingCallback = (oAdd, saved)=>{
+                                            viewModel.StatusChangingCallback = null;
+                                            if (saved)
+                                                Add(oAdd);
+                                        };
+                                    }, animated: true); 
+                            } else 
+                                throw new ArgumentException("{% Debrix %} Invalid command parameter type, must be {{ table.TableName | ClassName }}ViewModel.");
+                        } catch (Exception x){
+                            // async commands throw exceptions into the ether, all exceptions must be handled
+                            System.Diagnostics.Debug.WriteLine("{% Debrix %} Error in NavigateTo{{ field.Name | CSName }}Command: " + x);
+                        }
                     });
             }
             set {
@@ -166,14 +217,68 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         }
         
+        private Command _AddItemCommand = null;
+        public override Command AddItemCommand {
+            get{
+                return _AddItemCommand = _AddItemCommand
+                    ?? new Command (async (prm) => {
+                        try
+                        {  
+                            var newItem = new {{ table.TableName | ClassName }}();
+                            if (NavigateToItemCommand.CanExecute(newItem))
+                            {
+                                NavigateToItemCommand.Execute(newItem);
+                            } else 
+                                System.Diagnostics.Debug.WriteLine("{% Debrix %} AddItemCommand not allowed to show a new item");
+                        } catch (Exception x){
+                            // async commands throw exceptions into the ether, all exceptions must be handled
+                            System.Diagnostics.Debug.WriteLine("{% Debrix %} Error in AddItemCommand: " + x);
+                        }
+                    }, (prm) => CanEdit);
+            }
+            set {
+                SetProperty (ref _AddItemCommand , value);
+            }
+        }
+         
+        private Command _RemoveItemCommand = null;
+        public override Command RemoveItemCommand {
+            get{
+                return _RemoveItemCommand = _RemoveItemCommand
+                    ?? new Command (async (itemPrm) => {
+                        try
+                        {   
+                            var itemRemoveViewModel = itemPrm as {{ table.TableName | ClassName }}ViewModel;
+                            var itemToRemove = itemPrm as {{ table.TableName | ClassName }};
+                            
+                            if (itemRemoveViewModel != null && itemRemoveViewModel.GetModel() != null){
+                                Remove(itemRemoveViewModel.GetModel().Id);
+                            } else if (itemToRemove != null){
+                                 Remove(itemToRemove.Id);
+                            } else 
+                                System.Diagnostics.Debug.WriteLine("{% Debrix %} RemoveItemCommand needs an item to remove, got: " + itemPrm);
+                        } catch (Exception x){
+                            // async commands throw exceptions into the ether, all exceptions must be handled
+                            System.Diagnostics.Debug.WriteLine("{% Debrix %} Error in AddItemCommand: " + x);
+                        }
+                    }, (prm) => CanEdit);
+            }
+            set {
+                SetProperty (ref _RemoveItemCommand , value);
+            }
+        }
+        
+        
         public async Task<IEnumerable<{{ table.TableName | ClassName }}>> LoadFromServer(){
             var serverObjects = await ApiClient.Instance.List{{ table.TableName | ClassName }}();
             Load(serverObjects);
             return serverObjects;
         }
      
-        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models){
-            Items.Clear();
+        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models){ 
+            Items.Clear(); 
+            ParentCollection = models;
+            CanEdit = ParentCollection is IList<{{ table.TableName | ClassName }}>;
             if (models!=null){
                 foreach (var model in models){
                     Items.Add(model);
@@ -182,19 +287,30 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
          
         public void Add({{ table.TableName | ClassName }} model){
-            Remove(model.Id);
-            Items.Add(model); 
+            if (CanEdit){
+                Remove(model.Id);
+                Items.Add(model); 
+                ((IList<{{ table.TableName | ClassName }}>)ParentCollection).Add(model);
+            }
         }
          
         public void Remove(long id){
-            var existingItem = Items.FirstOrDefault(item=>item.Id ==id);
-            if (existingItem!=null)
-                Items.Remove(existingItem); 
+             if (CanEdit){
+                {{ table.TableName | ClassName }} existingItem = null;
+                do{
+                    existingItem = Items.FirstOrDefault(item=>item.Id ==id);
+                    if (existingItem != null) {
+                        Items.Remove (existingItem);
+                        ((IList<{{ table.TableName | ClassName }}>)ParentCollection).Remove (existingItem);
+                    }
+                } while (existingItem!=null); 
+            }
         } 
         
         public {{ table.TableName | ClassName }} Find(long id){
             var existingItem = Items.FirstOrDefault(item=>item.Id == id);
             return existingItem;
         } 
-     }
-}{% endFile %}
+    }
+}
+{% endFile %}

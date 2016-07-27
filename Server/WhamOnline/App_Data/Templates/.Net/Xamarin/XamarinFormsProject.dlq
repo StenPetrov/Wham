@@ -96,11 +96,22 @@
   {
     public App ()
     {
+        try{
 {% for table in appGen.DataModel %}
-        ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
-        ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
+            ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
+            ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
 {% endfor -%}
-        MainPage = new NavigationPage((Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel)));
+            MainPage = new NavigationPage((Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel)));
+        } catch (Exception x) {
+            var xamlInner = x.InnerException as Xamarin.Forms.Xaml.XamlParseException; 
+            if (xamlInner!=null){
+                System.Diagnostics.Debug.WriteLine ("{% Debrix %} Fatal Error in XAML for {{ appGen.DataModel[0].TableName | ClassName }}Page: " + xamlInner);
+            } else {
+                System.Diagnostics.Debug.WriteLine ("{% Debrix %} Unable to start application: " + x);
+            }
+            
+            throw;
+        }
     }
 
     protected override void OnStart ()

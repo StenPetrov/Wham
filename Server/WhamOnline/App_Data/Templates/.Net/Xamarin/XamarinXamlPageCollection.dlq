@@ -30,6 +30,9 @@ namespace {{ mobileproject | CSName }}.Forms.UI
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="{{ mobileproject | CSName }}.Forms.UI.CollectionPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{Binding AddCommandLabel}" Command="{Binding AddItemCommand}"/> <!-- see Icon="edit.png" and Priority="1" for ordering multiple items -->
+    </ContentPage.ToolbarItems>
     <ContentPage.Padding>
         <OnPlatform x:TypeArguments="Thickness">
             <OnPlatform.iOS>0, 20, 0, 0</OnPlatform.iOS>
@@ -61,6 +64,75 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
 
     public abstract partial class BaseViewModel<TModel>: ViewModel
     {
+        public const string EditLabel = "Edit"; // TODO: use I18N capable setup 
+        public const string SaveLabel = "Save?"; 
+        public const string CancelLabel = "Cancel"; 
+          
+        private string _EditCommandLabel = EditLabel;
+        
+        // set to null for default value based on IsEditing and IsChanged
+        public virtual string EditCommandLabel 
+        { 
+            get{
+                return _EditCommandLabel; 
+            } 
+            protected set{
+                if (value==null){
+                    if (IsEditing){
+                        if (IsChanged){
+                            value = SaveLabel;
+                        } else {
+                            value = CancelLabel;
+                        }
+                    } else {
+                        value = EditLabel;
+                    }
+                }
+                
+                SetProperty(ref  _EditCommandLabel, value);
+            }
+        } 
+        
+        private bool _IsPagePoppedAfterEditing = false;
+        // set to true to close the page after editing;
+        public bool IsPagePoppedAfterEditing 
+        { 
+            get{
+                return _IsPagePoppedAfterEditing; 
+            }
+            set{
+                 SetProperty(ref  _IsPagePoppedAfterEditing, value);
+            }
+        }
+        
+        private bool _IsEditing = false;
+        public bool IsEditing 
+        { 
+            get{
+                return _IsEditing; 
+            }
+            set{
+                 SetProperty(ref  _IsEditing, value);
+                 EditCommandLabel = null;
+                 OnPropertyChanged(new PropertyChangedEventArgs("IsNotEditing"));
+            }
+        }
+        
+        // This is to avoid having to use converters in bindings, use IsEditing to change. Don't replicate this hack if you have other needs for converters
+        public bool IsNotEditing { get { return !_IsEditing; } }
+        
+        private bool _IsChanged = false;
+        public bool IsChanged 
+        { 
+            get{
+                return _IsChanged; 
+            } 
+            protected set{
+                EditCommandLabel = null;
+                SetProperty(ref  _IsChanged, value);
+            }
+        } 
+        
         private bool _IsSaved = false;
         public bool IsSaved 
         { 
@@ -72,21 +144,59 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         }
         
-        private bool _IsChanged = false;
-        public bool IsChanged 
-        { 
-            get{
-                return _IsChanged; 
-            } 
-            protected set{
-                 SetProperty(ref  _IsChanged, value);
-            }
-        }
-        
-        protected TModel Model { get; private set; }
+        protected TModel Model { get; set; }
         
         public abstract string ViewHeading { get;}
-        
+         
+        private Command _EditItemCommand = null;
+        public virtual Command EditItemCommand {
+            get{
+                return _EditItemCommand = _EditItemCommand
+                    ?? new Command (async (prm) => {
+                        try{
+                            if (!IsEditing){
+                                IsEditing = true;
+                            } else {
+                                if (!IsChanged){
+                                    IsEditing = false;
+                                    Reload(); // to make sure we didn't leave edits behind and all the UI is refreshed
+                                } else { 
+                                    var actionPage = App.Current.MainPage;
+                                    if (actionPage.Navigation != null)
+                                        actionPage = actionPage.Navigation.NavigationStack.Last ();
+
+                                    var action = await actionPage.DisplayActionSheet ("Save your edits?", "Discard", null, "Save", "Cancel");
+                                    switch (action){
+                                        case "Discard":
+                                            IsEditing = false;
+                                            Reload();
+                                            IsSaved = false;
+                                            if (IsPagePoppedAfterEditing)
+                                                await Navigation.PopAsync (true);
+                                            break;
+                                        case "Save":
+                                            await Save();
+                                            IsEditing = false;
+                                            IsSaved = true;
+                                            if (IsPagePoppedAfterEditing)
+                                               await Navigation.PopAsync (true);
+                                            break;
+                                        case "Cancel":  // continue editing
+                                            break;
+                                        default:
+                                            throw new ArgumentException("{% Debrix %} Unknown action: " + action);
+                                    }
+                                }
+                            }
+                        } catch (Exception x){
+                            // async commands throw exceptions into the ether, all exceptions must be handled
+                            System.Diagnostics.Debug.WriteLine("{% Debrix %} Error in EditItemCommand: " + x);
+                        }
+                    });
+            }
+        }
+          
+        public Action<TModel, bool> StatusChangingCallback { get; set; }   
         
         // this is done so that Bindings are forced to use the ViewModel fields rather than Model.FieldName, since the Model is not guaranteed to have bindable properties
         public TModel GetModel(){
@@ -96,6 +206,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         public abstract Task<TModel> LoadFromServer(long id);
         
         public virtual void Load(TModel model){
+            StatusChangingCallback?.Invoke(model, false);
             Model = model;
             IsChanged = false;
             IsSaved = false;
@@ -109,6 +220,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         public virtual async Task Save(bool saveToServer = false){
             IsSaved = true;
             IsChanged = false;
+            StatusChangingCallback?.Invoke(Model, true);
         }
     }
 }
@@ -129,8 +241,32 @@ using {{ mobileproject | CSName }}.Forms.UI;
 
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
 
-    public abstract partial class CollectionViewModel : ViewModel{
-        public abstract Command NavigateToItemCommand { get; set; }
+    public abstract partial class CollectionViewModel : ViewModel{ 
+        private string _AddCommandLabel = "Add"; 
+        public virtual string AddCommandLabel 
+        { 
+            get{
+                return _AddCommandLabel; 
+            } 
+            protected set{ 
+                SetProperty(ref  _AddCommandLabel, value);
+            }
+        } 
+        
+        private string _RemoveCommandLabel = "Remove"; 
+        public virtual string RemoveCommandLabel 
+        { 
+            get{
+                return _RemoveCommandLabel; 
+            } 
+            protected set{ 
+                SetProperty(ref  _RemoveCommandLabel, value);
+            }
+        } 
+        
+        public abstract Command NavigateToItemCommand { get; set; } 
+        public abstract Command AddItemCommand { get; set; }
+        public abstract Command RemoveItemCommand { get; set; }
     }
 }
 {% endFile -%}{% endFolder -%}
