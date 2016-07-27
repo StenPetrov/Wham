@@ -88,6 +88,9 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                     ?? new Command (async (prm) => {
                         try{
                             {% if field.Type == 'Ref' and field.IsCollection == 'true' %}
+                            if (Model!=null && Model.{{ field.Name | CSName }} == null){
+                                Model.{{ field.Name | CSName }} = new List<{{ field.RefTable | ClassName }}>();
+                            }
                             await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
                                 (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
                                 , animated: true);

@@ -88,6 +88,7 @@
   using {{ mobileproject | CSName }}.Forms.UI;
   using {{ mobileproject | CSName }}.Forms.ViewModels;
   using {{ mobileproject | CSName }}.Forms.Services;
+  using {{ mobileproject | CSName }}.Models;
   
 
   namespace {{ mobileproject | CSName }}
@@ -101,7 +102,12 @@
             ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
             ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
 {% endfor -%}
-            MainPage = new NavigationPage((Page)ViewFactory.CreatePage (typeof ({{ appGen.DataModel[0].TableName | ClassName }}ViewModel)));
+            //TODO: with Auth the main page will be a modal Login page and the root model will be loaded from there
+            var mainInnerPage = ViewFactory.CreatePage<{{ appGen.DataModel[0].TableName | ClassName }}ViewModel, Page> ((viewModel, page) => {
+                    viewModel.Load (new {{ appGen.DataModel[0].TableName | ClassName }}());
+                }, new object [0]) as Page;
+
+            MainPage = new NavigationPage (mainInnerPage); 
         } catch (Exception x) {
             var xamlInner = x.InnerException as Xamarin.Forms.Xaml.XamlParseException; 
             if (xamlInner!=null){
