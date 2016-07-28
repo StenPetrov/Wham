@@ -218,6 +218,8 @@
     <Content Include="App_Data\Templates\.Net\Xamarin\Xamarin.SharedServicesProject.dlq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Azarin - FTP.pubxml" />
+    <None Include="Azarin - Web Deploy.pubxml" />
     <None Include="Azarin.pubxml" />
   </ItemGroup>
   <ItemGroup />
