@@ -1,0 +1,73 @@
+﻿{% File xamarinSharedServicesProjectFile %}{% Trim %}
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{{ mobileSharedServicesProjectGuid | Braces }}</ProjectGuid>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props" />
+  <Import Project="{{ xamarinSharedServicesProjectItemsFile }}" Label="Shared" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets" />
+</Project>{% endTrim %}{% endFile %}
+
+{% File xamarinSharedServicesProjectItemsFile %}{% Trim %}
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>{{ mobileSharedServicesProjectGuid | Braces }}</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>{{ mobileproject | CSName }}.SharedServices</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)FileService.cs" />
+  </ItemGroup>
+</Project>{% endTrim %}{% endFile %}
+
+
+{% File 'FileService.cs' %}
+using System;
+using {{ mobileproject | CSName }}.Forms.Services;
+using Newtonsoft.Json;
+using System.IO;
+
+namespace {{ mobileproject | CSName }}.SharedServices
+{
+    public class FileService : IFileService
+    {
+        public string PublicFolder { get; protected set; }
+
+        public string PrivateFolder { get; protected set; }
+
+        public FileService ()
+        {
+            PublicFolder = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
+            PrivateFolder = Environment.GetFolderPath (Environment.SpecialFolder.LocalApplicationData);
+        }
+
+        public T Load<T> (string fileName, bool isPrivate = true) where T : class, new()
+        {
+            if (!Path.IsPathRooted (fileName))
+                fileName = Path.Combine (isPrivate ? PrivateFolder : PublicFolder, fileName);
+
+            return JsonConvert.DeserializeObject<T> (File.ReadAllText (fileName));
+        }
+
+        public void Save<T> (T saveObject, string fileName, bool isPrivate = true) where T : class, new()
+        {
+            if (!Path.IsPathRooted (fileName))
+                fileName = Path.Combine (isPrivate ? PrivateFolder : PublicFolder, fileName);
+
+            if (File.Exists (fileName) && saveObject == null) {
+                File.Delete (fileName);
+            } else {
+                File.WriteAllText (fileName, JsonConvert.SerializeObject (saveObject));
+            }
+        }
+    }
+}
+{% endFile %}

@@ -9,11 +9,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 {% capture mobileUITestsProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileModelsProjectGuid %}{% Guid %}{% endcapture %}
 {% capture mobileUWPProjectGuid %}{% Guid %}{% endcapture %}
+{% capture mobileSharedServicesProjectGuid %}{% Guid %}{% endcapture %}
 {% assign mobileproject = appGen.AppOptions.AppName | CSName %}  
 {% assign xamarinFormsProjectFile = mobileproject | Append: '.Forms.csproj' %} 
 {% assign xamariniOSProjectFile = mobileproject | Append: '.iOS.csproj' %}  
 {% assign xamarinDroidProjectFile = mobileproject | Append: '.Droid.csproj' %} 
-{% assign xamarinModelsProjectFile = mobileproject | Append: '.Models.csproj' %}
+{% assign xamarinModelsProjectFile = mobileproject | Append: '.Models.csproj' %} 
+{% assign xamarinSharedServicesProjectFile = mobileproject | Append: '.SharedServices.shproj' %}
+{% assign xamarinSharedServicesProjectItemsFile = mobileproject | Append: '.SharedServices.projitems' %}
 {% endSingleLine -%}
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "{{ mobileproject }}.Forms", "Forms\{{ xamarinFormsProjectFile }}", "{{ mobileFormsProjectGuid | Braces }}"
 EndProject
@@ -44,7 +47,13 @@ EndProject
 {% endFile %}
 {% endFolder -%}
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SharedModels", "..\Shared\Models\{{ sharedModelProjectFileName }}", "{{ sharedModelProjectGuid | Braces }}"
+EndProject 
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "{{ mobileproject }}.SharedServices", "SharedServices\{{ xamarinSharedServicesProjectFile }}", "{{ mobileSharedServicesProjectGuid | Braces }}"
 EndProject
+{% Folder 'SharedServices' %} 
+{% include 'Xamarin.SharedServicesProject.dlq' %} 
+{% endFolder -%}
+
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
         Debug|Any CPU = Debug|Any CPU

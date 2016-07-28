@@ -94,12 +94,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                             await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
                                 (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
                                 , animated: true);
-                            {% else %}
+                            {% else -%}
                                 {% if field.Type == 'Ref' %}
-                                var navRef = Model?.{{ field.Name | CSName }} ?? new {{ field.RefTable | ClassName }}(); 
+                            var navRef = Model?.{{ field.Name | CSName }} ?? new {{ field.RefTable | ClassName }}();
+                            bool isNew = Model?.{{ field.Name | CSName }} != navRef;
+                            
                             await Navigation.PushAsync<{{ field.RefTable | ClassName }}ViewModel> (
                                 (viewModel, page) => {
                                     viewModel.Load(navRef);
+                                    viewModel.IsEditing = isNew;
                                     viewModel.StatusChangingCallback = (oSave, saved) => {
                                         viewModel.StatusChangingCallback = null;
                                         if (saved && Model != null){
@@ -130,15 +133,22 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
         
         public override void Load({{ table.TableName | ClassName }} model){
-            base.Load(model);
+        
+            base.Load(model); 
             
-            {% for field in table.Fields %}
+            {% for field in table.Fields -%}
             {% SingleLine %}
                 {% if field.Type != 'Ref' %}
-                OnPropertyChanged(new PropertyChangedEventArgs("{{ field.Name | CSName }}")); 
+                    {% if field.IsCollection == 'true' %}
+            //TODO: copy collections and refCollections to Model
+            // model.{{ field.Name | CSName }}.AddRange(Model.{{ field.Name | CSName }}.Except({{ field.Name | CSName }}));
+            // model.{{ field.Name | CSName }}.Remove(x=>!{{ field.Name | CSName }}.Contains(x));
+                     {% else %} 
+            {{ field.Name | CSName }} = model.{{ field.Name | CSName }}; 
+                    {% endif %} 
                 {% endif %}
-            {% endSingleLine -%}
-            {% endfor %}
+            {% endSingleLine %}
+            {% endfor %} 
         }
         
         public override async Task Save(bool saveToServer = false){
@@ -147,13 +157,16 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             {% Trim %}
             {% if field.Type != 'Ref' %}
                 {% if field.IsCollection == 'true' %}
+            Model.{{ field.Name | CSName }} = Model.{{ field.Name | CSName }} ?? new List<{{ field.Type }}>();
             Model.{{ field.Name | CSName }}.Clear();
             Model.{{ field.Name | CSName }}.AddRange({{ field.Name | CSName }});
+            Model.{{ field.Name | CSName }}.RemoveAll (c => !{{ field.Name | CSName }}.Contains (c));
                 {% else %} 
             Model.{{ field.Name | CSName }} = {{ field.Name | CSName }}; 
                 {% endif %} 
             {% endif %}
             {% endTrim %}{% endfor %}
+            await base.Save();
         }
     }
     

@@ -59,6 +59,21 @@
     {% Folder 'Services' -%}
     {% File 'ApiClient.cs' %}{% include 'XamarinApiClient.dlq' %}{% endFile %}
     {% endFolder %}{% endif %}
+    <Compile Include="Services\IFileService.cs" />
+    {% Folder 'Services' -%}
+    {% File 'IFileService.cs' %}using System;
+
+namespace {{ mobileproject | CSName }}.Forms.Services
+{
+    // a sample service
+    public interface IFileService
+    {
+        void Save<T> (T saveObject, string fileName, bool isPrivate = true) where T : class, new();
+        T Load<T> (string fileName, bool isPrivate = true) where T : class, new();
+    }
+}
+    {% endFile -%}
+    {% endFolder -%}
   </ItemGroup>
   <ItemGroup>
       <EmbeddedResource Include="App.xaml">
@@ -80,35 +95,72 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
 {% File 'App.xaml.cs' -%}
-  using System;
-  using System.Collections.Generic;
-  using Xamarin.Forms;
-  using XLabs.Forms.Mvvm;
-  using {{ mobileproject | CSName }}.Forms;
-  using {{ mobileproject | CSName }}.Forms.UI;
-  using {{ mobileproject | CSName }}.Forms.ViewModels;
-  using {{ mobileproject | CSName }}.Forms.Services;
-  using {{ mobileproject | CSName }}.Models;
+using System;
+using System.Collections.Generic;
+using Xamarin.Forms;
+using XLabs.Forms.Mvvm;
+using XLabs.Ioc;
+
+using {{ mobileproject | CSName }}.Forms;
+using {{ mobileproject | CSName }}.Forms.UI;
+using {{ mobileproject | CSName }}.Forms.ViewModels;
+using {{ mobileproject | CSName }}.Forms.Services;
+using {{ mobileproject | CSName }}.Models;
   
 
-  namespace {{ mobileproject | CSName }}
-  {
+namespace {{ mobileproject | CSName }}
+{
   public partial class App : Application
   {
     public App ()
     {
-        try{
+        try{ 
 {% for table in appGen.DataModel %}
             ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
             ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
 {% endfor -%}
-            //TODO: with Auth the main page will be a modal Login page and the root model will be loaded from there
-            var mainInnerPage = ViewFactory.CreatePage<{{ appGen.DataModel[0].TableName | ClassName }}ViewModel, Page> ((viewModel, page) => {
-                    viewModel.Load (new {{ appGen.DataModel[0].TableName | ClassName }}());
-                }, new object [0]) as Page;
 
+{% assign mainPageName = appGen.DataModel[0].TableName | ClassName %}
+            //TODO: with Auth the main page will be a modal Login page and the root model will be loaded from there
+          
+            // sample service use
+            var fileService = Resolver.Resolve<IFileService> ();
+            bool isNew = true;
+            {{ mainPageName  }} mainItem = null;
+            
+            try{
+                mainItem = fileService?.Load<Customer> ("{{ mainPageName  }}.json");
+            } catch (Exception loadException){
+                // a mobile app should make best effort to start, anything but fatal errors should be logged and ignored
+                // messages output with Debug.WriteLine are visible not only in the debugger but also by attaching monitoring to the device
+                System.Diagnostics.Debug.WriteLine ("{% Debrix %} Unable to load app data: " + loadException);
+            }
+            
+            if (mainItem != null) {
+                isNew = false;
+            } else {
+                mainItem = new {{ mainPageName  }} ();
+            }
+
+            var mainInnerPage = ViewFactory.CreatePage<{{ mainPageName }}ViewModel, Page> ((viewModel, page) => {
+                viewModel.Load (mainItem);
+                viewModel.IsEditing = isNew;
+                viewModel.StatusChangingCallback = ({{ mainPageName  }} cSave, bool isSaving) => {
+                    if (isSaving) { 
+                        try{
+                            fileService?.Save (cSave, "{{ mainPageName  }}.json");
+                        } catch (Exception loadException){
+                            System.Diagnostics.Debug.WriteLine ("{% Debrix %} Unable to save app data: " + loadException);
+                        }
+                    }
+                };
+            }, new object [0]) as Page;
+                
             MainPage = new NavigationPage (mainInnerPage); 
         } catch (Exception x) {
+            // since these are fatal errors the app will have to crash.
+            // it's still a good idea to try and output a meaningful log message before crashing
+            // if a monitoring service is used all exceptions should be logged there too, even if known and ignored
             var xamlInner = x.InnerException as Xamarin.Forms.Xaml.XamlParseException; 
             if (xamlInner!=null){
                 System.Diagnostics.Debug.WriteLine ("{% Debrix %} Fatal Error in XAML for {{ appGen.DataModel[0].TableName | ClassName }}Page: " + xamlInner);

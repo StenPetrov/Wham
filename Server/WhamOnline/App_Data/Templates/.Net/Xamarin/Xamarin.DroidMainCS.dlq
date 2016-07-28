@@ -35,6 +35,8 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using {{ mobileproject | CSName }}.Forms;
+using {{ mobileproject | CSName }}.SharedServices;
+using {{ mobileproject | CSName }}.Forms.Services;
 
 namespace {{ mobileproject | CSName }}.Droid
 {
@@ -54,9 +56,10 @@ namespace {{ mobileproject | CSName }}.Droid
 
             // Resolver initialized here, you can add your own services too
             XLabs.Ioc.Resolver.SetResolver (
-                new XLabs.Ioc.SimpleContainer ()
+              new XLabs.Ioc.SimpleContainer ()
                 .Register<XLabs.Platform.Services.Media.IMediaPicker, XLabs.Platform.Services.Media.MediaPicker> ()
-                .GetResolver ());
+                .Register<IFileService, FileService>()
+              .GetResolver ());
 
             // App constructor must set App.Main
             LoadApplication (new App ());

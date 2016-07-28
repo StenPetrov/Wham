@@ -29,7 +29,8 @@
           "defaultValue": "",
           "isCollection": "false",
           "regex": "",
-          "isAuth": "false"
+          "isAuth": "false",
+          "hint":  "First and Last Name"
         },
         {
           "type": "bool",
@@ -65,13 +66,15 @@
           "type": "Ref",
           "name": "HomeAddress",
           "refTable": "Address",
-          "isCollection": "false"
+          "isCollection": "false",
+          "label":  "Home Address"
         },
         {
           "type": "Ref",
           "name": "OtherAddresses",
           "refTable": "Address",
-          "isCollection": "true"
+          "isCollection": "true",
+          "label": "Other Addresses"
         }
       ]
     },
@@ -86,7 +89,9 @@
           "defaultValue": "",
           "isCollection": "false",
           "regex": "",
-          "isAuth": "false"
+          "isAuth": "false",
+          "label": "Street and Number",
+          "hint": "123 Street"
         },
         {
           "type": "string",
@@ -95,7 +100,9 @@
           "defaultValue": "",
           "isCollection": "false",
           "regex": "",
-          "isAuth": "false"
+          "isAuth": "false",
+          "label": "City",
+          "hint": "Redmond"
         },
         {
           "type": "string",
@@ -104,7 +111,9 @@
           "defaultValue": "",
           "isCollection": "false",
           "regex": "",
-          "isAuth": "false"
+          "isAuth": "false",
+          "label": "State",
+          "hint": "Washington"
         },
         {
           "type": "string",
@@ -113,7 +122,9 @@
           "defaultValue": "",
           "isCollection": "false",
           "regex": "",
-          "isAuth": "false"
+          "isAuth": "false",
+          "label": "Zip",
+          "hint": "99999"
         }
       ]
     }

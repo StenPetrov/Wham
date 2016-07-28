@@ -196,6 +196,8 @@ using System.Linq;
 using Foundation;
 using UIKit;
 using {{ mobileproject | CSName }}.Forms;
+using {{ mobileproject | CSName }}.SharedServices;
+using {{ mobileproject | CSName }}.Forms.Services;
 
 namespace {{ mobileproject | CSName }}.iOS
 {
@@ -216,10 +218,10 @@ namespace {{ mobileproject | CSName }}.iOS
  
             // you can register various services here
             XLabs.Ioc.Resolver.SetResolver (
-                new XLabs.Ioc.SimpleContainer ()
+               new XLabs.Ioc.SimpleContainer ()
                 .Register<XLabs.Platform.Services.Media.IMediaPicker,XLabs.Platform.Services.Media.MediaPicker>()
-                // .Register<IServiceInterface, ImplementationClass>()
-                .GetResolver ());
+                .Register<IFileService, FileService>()
+              .GetResolver ());
 
             LoadApplication (new App ()); // this depends on App.MainPage to be set
 
@@ -236,8 +238,9 @@ namespace {{ mobileproject | CSName }}.iOS
     <ProjectReference Include="..\Models\{{ xamarinModelsProjectFile }}">
       <Project>{{ mobileModelsProjectGuid | Braces }}</Project>
       <Name>{{ mobileproject | CSName }}.Models</Name>
-    </ProjectReference>
+    </ProjectReference> 
   </ItemGroup>
+  <Import Project="..\SharedServices\{{ xamarinSharedServicesProjectItemsFile }}" Label="Shared" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.2.0.31\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.2.0.31\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />

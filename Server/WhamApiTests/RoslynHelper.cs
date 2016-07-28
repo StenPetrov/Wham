@@ -20,7 +20,8 @@ namespace WhamApiTests
         {
             try
             {
-                foreach (string file in Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories))
+                var dotNetFolderFiles = Directory.GetFiles(directoryPath, "*.*", SearchOption.AllDirectories);
+                foreach (string file in dotNetFolderFiles)
                 {
                     string ext = Path.GetExtension(file).ToLower();
 
@@ -38,8 +39,12 @@ namespace WhamApiTests
                         case ".csproj": ValidateCSProjFile(file, true); break;
                         case ".shproj": ValidateCSProjFile(file, false); break;
                         case ".xaml": ValidateCSXamlFile(file); break;
-                        case ".sln": ValidateSolutionFile(file); break;
                     }
+                }
+
+                foreach (string slnFile in dotNetFolderFiles.Where(f => Path.GetExtension(f).ToLower() == ".sln"))
+                {
+                    ValidateSolutionFile(slnFile);
                 }
             }
             catch (AssertFailedException ax)
