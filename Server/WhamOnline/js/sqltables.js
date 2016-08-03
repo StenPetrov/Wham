@@ -4,7 +4,7 @@ function stripString(x) {
 
 function addToTable() {
     var tableName = $("#newTableName").val();
-    var isVisible = $("#newTableVisibility").val();
+    var isVisible = $("#newTableVisibility").val()=="on";
     var tableHeading = $("#newTableHeading").val();
     var tableDetails = $("#newTableDetails").val();
     tableName = stripString(tableName);
@@ -297,10 +297,10 @@ function cleanFieldInputModal() {
 function addThisField() {
     var type = $("#fieldType").val();
     var fieldName = $("#field_name").val();
-    var isAuth = $("#isAuth").val();
+    var isAuth = $("#isAuth").val() == "on";
     var uiType = $("#UI_Type").val();
     var defaultValue = $("#defaultValue").val();
-    var isCollection = $("#field_isCollection").val();
+    var isCollection = $("#field_isCollection").val() == "on";
     var regex = $("#regex").val();
     var refC = $("#refConnection")[0];
     var refConnection = "";
