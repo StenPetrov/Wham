@@ -42,10 +42,10 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                 {% Trim %}
                 {% assign gridRow = 1 %}
                 {% for field in table.Fields %}
-                <!-- Field: {{ field.Name }} Type:{{ field.Type }} Collection:{{ field.IsCollection }} UI: {{ field.UIType }} -->
-                <Label Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" IsVisible="{Binding IsNotEditing}"/>
+                <!-- Field: {{ field.Name }} Type:{{ field.Type }} Collection:{{ field.IsCollection }} UI: {{ field.UIType }} -->               
+                {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}
+                <Label Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" IsVisible="{Binding IsNotEditing}"/>              
                 {% SingleLine %}
-                {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref'%}
                     {% case field.Type %}
                         {% when 'string' %} 
                             <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsVisible="{Binding IsEditing}"/>
@@ -60,9 +60,9 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                         {% else %} << Unknown field type >>                     
                     {% endcase %}  
                     {% assign gridRow = gridRow | Add: '1' %}
-                {% endif %}
-                {% endSingleLine %}
-                {% endfor %}
+                {% endSingleLine -%}
+                {% endif -%}
+                {% endfor -%}
                 {% endTrim -%}
                 
                 {% Trim %} 

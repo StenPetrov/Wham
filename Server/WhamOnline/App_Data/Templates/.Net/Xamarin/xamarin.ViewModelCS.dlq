@@ -26,6 +26,16 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         } 
         
+        public override string ViewDetails {
+            get{
+                {% if table.Details == '' or table.Details == nil %}
+                return null;
+                {% else %}
+                return $"{{ table.Details }}"; 
+                {% endif %}
+            }
+        } 
+        
     {% for field in table.Fields %}
 		{% if field.Type != 'Ref' -%}
         // Field name: {{ field.Name }} Type: {{ field.Type }}

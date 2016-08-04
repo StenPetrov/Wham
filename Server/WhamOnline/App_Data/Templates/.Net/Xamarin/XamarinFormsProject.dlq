@@ -129,7 +129,7 @@ namespace {{ mobileproject | CSName }}
             {{ mainPageName  }} mainItem = null;
             
             try{
-                mainItem = fileService?.Load<Customer> ("{{ mainPageName  }}.json");
+                mainItem = fileService?.Load<{{ mainPageName  }}> ("{{ mainPageName  }}.json");
             } catch (Exception loadException){
                 // a mobile app should make best effort to start, anything but fatal errors should be logged and ignored
                 // messages output with Debug.WriteLine are visible not only in the debugger but also by attaching monitoring to the device

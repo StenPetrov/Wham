@@ -17,11 +17,22 @@ namespace {{ mobileproject | CSName }}.Forms.UI
             InitializeComponent ();
         }
         
+        bool isBeingTapped = false;
         void Handle_ItemTapped (object sender, Xamarin.Forms.ItemTappedEventArgs e)
-        {
-            var viewModel = ((CollectionViewModel)BindingContext);
-            if (viewModel.NavigateToItemCommand.CanExecute (e.Item)) {
-                viewModel.NavigateToItemCommand.Execute (e.Item);
+        {  
+            if (!isBeingTapped){
+                try
+                { 
+                    isBeingTapped = true; // for completeness this can be done behind a lock. 
+                    var viewModel = ((CollectionViewModel)BindingContext);
+                    if (viewModel.NavigateToItemCommand.CanExecute (e.Item)) {
+                        viewModel.NavigateToItemCommand.Execute (e.Item); 
+                    } 
+                } catch (Exception x){
+                    System.Diagnostics.Debug.WriteLine ("{% Debrix %} Unable to tap: " + x);
+                } finally {
+                    isBeingTapped = false;
+                }
             }
         }
     }
@@ -40,7 +51,13 @@ namespace {{ mobileproject | CSName }}.Forms.UI
     </ContentPage.Padding>
     <ContentPage.Content>  
 		  <ListView ItemsSource="{Binding Items}"
-                        ItemTapped="Handle_ItemTapped">
+                    ItemTapped="Handle_ItemTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding ViewHeading}" Detail="{Binding ViewDetails}"/>
+                   <!-- <ImageCell ImageSource="{Binding ViewImage}" Text="{Binding ViewHeading}" Detail="{Binding ViewDetails}"/> -->
+                </DataTemplate>
+            </ListView.ItemTemplate>
           </ListView>
     </ContentPage.Content>
 </ContentPage>{% endFile -%}
@@ -62,8 +79,20 @@ using {{ mobileproject | CSName }}.Forms.UI;
 
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
 
-    public abstract partial class BaseViewModel<TModel>: ViewModel
-    {
+    public abstract partial class RootViewModel: ViewModel
+    { 
+        public RootViewModel OwnerViewModel { get; protected set; }
+        
+        protected Action<object, bool> ChildStatusChanging { get; set; }
+        
+        protected OnChildStatusChanging(object child, bool isSaving){
+            ChildStatusChanging?.Invoke(child, isSaving);
+            OwnerViewModel?.OnChildStatusChanging(model, isSaving); // propagate to root
+        }
+    }
+    
+    public abstract partial class BaseViewModel<TModel>: RootViewModel
+    { 
         public const string EditLabel = "Edit"; // TODO: use I18N capable setup 
         public const string SaveLabel = "Save?"; 
         public const string CancelLabel = "Cancel"; 
@@ -92,7 +121,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 SetProperty(ref  _EditCommandLabel, value);
             }
         } 
-        
+                 
         private bool _IsPagePoppedAfterEditing = false;
         // set to true to close the page after editing;
         public bool IsPagePoppedAfterEditing 
@@ -143,10 +172,13 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                  SetProperty(ref  _IsSaved, value);
             }
         }
-        
         protected TModel Model { get; set; }
         
         public abstract string ViewHeading { get;}
+        
+        public abstract string ViewDetails { get;}
+        
+        public virtual ImageSource ViewImage { get; protected set; }
          
         private Command _EditItemCommand = null;
         public virtual Command EditItemCommand {
@@ -195,18 +227,23 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                     });
             }
         }
-          
-        public Action<TModel, bool> StatusChangingCallback { get; set; }   
-        
+           
         // this is done so that Bindings are forced to use the ViewModel fields rather than Model.FieldName, since the Model is not guaranteed to have bindable properties
         public TModel GetModel(){
             return Model;
         }
         
+        public Action<TModel, bool> StatusChangingCallback { get; set; }   
+         
+        protected OnStatusChangingCallback(TModel model, bool isSaving){ 
+            StatusChangingCallback?.Invoke(model, isSaving); 
+            OwnerViewModel?.OnChildStatusChanging(model, isSaving); // propagate the event to parent
+        }
+        
         public abstract Task<TModel> LoadFromServer(long id);
         
         public virtual void Load(TModel model){
-            StatusChangingCallback?.Invoke(model, false);
+            OnStatusChangingCallback(model, false);
             Model = model;
             IsChanged = false;
             IsSaved = false;
@@ -220,7 +257,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         public virtual async Task Save(bool saveToServer = false){
             IsSaved = true;
             IsChanged = false;
-            StatusChangingCallback?.Invoke(Model, true);
+            OnStatusChangingCallback.Invoke(Model, true);
         }
     }
 }
