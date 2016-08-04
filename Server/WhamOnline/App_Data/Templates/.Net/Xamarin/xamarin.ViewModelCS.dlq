@@ -293,8 +293,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 SetProperty (ref _RemoveItemCommand , value);
             }
         }
-        
-        
+         
         public async Task<IEnumerable<{{ table.TableName | ClassName }}>> LoadFromServer(){
             var serverObjects = await ApiClient.Instance.List{{ table.TableName | ClassName }}();
             Load(serverObjects);

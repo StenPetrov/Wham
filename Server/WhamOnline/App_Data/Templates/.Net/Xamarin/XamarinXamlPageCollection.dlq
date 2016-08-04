@@ -54,7 +54,11 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                     ItemTapped="Handle_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding ViewHeading}" Detail="{Binding ViewDetails}"/>
+                    <TextCell Text="{Binding ViewHeading}" Detail="{Binding ViewDetails}">
+                        <TextCell.ContextActions>
+                            <MenuItem Text="Remove" IsDestructive="True" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding .}"/>
+                        </TextCell.ContextActions> 
+                    </TextCell>
                    <!-- <ImageCell ImageSource="{Binding ViewImage}" Text="{Binding ViewHeading}" Detail="{Binding ViewDetails}"/> -->
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -83,11 +87,11 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
     { 
         public RootViewModel OwnerViewModel { get; protected set; }
         
-        protected Action<object, bool> ChildStatusChanging { get; set; }
+        protected Action<RootViewModel, bool> ChildStatusChanging { get; set; }
         
-        protected OnChildStatusChanging(object child, bool isSaving){
+        public void OnChildStatusChanging(RootViewModel child, bool isSaving){
             ChildStatusChanging?.Invoke(child, isSaving);
-            OwnerViewModel?.OnChildStatusChanging(model, isSaving); // propagate to root
+            OwnerViewModel?.OnChildStatusChanging(this, isSaving); // propagate to root
         }
     }
     
@@ -235,15 +239,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         
         public Action<TModel, bool> StatusChangingCallback { get; set; }   
          
-        protected OnStatusChangingCallback(TModel model, bool isSaving){ 
+        protected virtual void OnStatusChanging(TModel model, bool isSaving){ 
             StatusChangingCallback?.Invoke(model, isSaving); 
-            OwnerViewModel?.OnChildStatusChanging(model, isSaving); // propagate the event to parent
+            OwnerViewModel?.OnChildStatusChanging(this, isSaving); // propagate the event to parent
         }
         
         public abstract Task<TModel> LoadFromServer(long id);
         
         public virtual void Load(TModel model){
-            OnStatusChangingCallback(model, false);
+            OnStatusChanging(model, false);
             Model = model;
             IsChanged = false;
             IsSaved = false;
@@ -257,7 +261,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         public virtual async Task Save(bool saveToServer = false){
             IsSaved = true;
             IsChanged = false;
-            OnStatusChangingCallback.Invoke(Model, true);
+            OnStatusChanging(Model, true);
         }
     }
 }
