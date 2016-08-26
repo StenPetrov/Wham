@@ -84,8 +84,11 @@ namespace {{ mobileproject | CSName }}.Forms.Services
               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               x:Class="{{ mobileproject | CSName }}.App">
   <Application.Resources>
-    <ResourceDictionary>
-      <!-- define styles, data templates and other App-wide resources here -->
+    <ResourceDictionary> 
+        <Style x:Key="ItemLabelStyle" TargetType="Label">
+            <Setter Property="TextColor" Value="Gray"/>
+            <Setter Property="FontSize" Value="8"/>
+        </Style> 
     </ResourceDictionary>
   </Application.Resources>
 </Application>{% endFile %}

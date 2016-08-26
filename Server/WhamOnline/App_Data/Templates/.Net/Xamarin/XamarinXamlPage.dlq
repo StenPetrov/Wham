@@ -30,56 +30,71 @@ namespace {{ mobileproject | CSName }}.Forms.UI
         </OnPlatform>
     </ContentPage.Padding>
     <ContentPage.Content>  
-		<ScrollView Orientation="Vertical">
-            <Grid>
-                <Grid.RowDefinitions> 
+        <ScrollView Orientation="Vertical">
+            <Grid Padding="4,0,0,4">
+                <Grid.RowDefinitions>
+                    {% AlignLines %}
                     <RowDefinition Height="auto" />
-                    {% for field in table.Fields -%}
-                    <RowDefinition Height="42" />
-    {% endfor %}
+                    
+                    {% for field in table.Fields %}
+                        <RowDefinition Height="auto" />
+                    {% endfor %}
+                    
                     <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-                {% Trim %}
+                    {% endAlignLines %}
+                </Grid.RowDefinitions> 
                 {% assign gridRow = 1 %}
+                {% AlignLines ~=4 %}
                 {% for field in table.Fields %}
-                <!-- Field: {{ field.Name }} Type:{{ field.Type }} Collection:{{ field.IsCollection }} UI: {{ field.UIType }} -->               
-                {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}
-                <Label Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" IsVisible="{Binding IsNotEditing}"/>              
-                {% SingleLine %}
-                    {% case field.Type %}
-                        {% when 'string' %} 
-                            <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsVisible="{Binding IsEditing}"/>
-                        {% when 'int' %} 
-                            <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsVisible="{Binding IsEditing}"/>
-                        {% when 'double' %} 
-                            <Entry Grid.Row="{{ gridRow }}" Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsVisible="{Binding IsEditing}"/>
-                        {% when 'bool' %} 
-                            <Switch Grid.Row="{{ gridRow }}" IsToggled="{Binding {{ field.Name  | CSName }} }" IsVisible="{Binding IsEditing}"/>
-                        {% when 'DateTime' %} 
-                            <DatePicker Grid.Row="{{ gridRow }}" Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}"/> <!-- change to TimePicker if needed -->
-                        {% else %} << Unknown field type >>                     
-                    {% endcase %}  
-                    {% assign gridRow = gridRow | Add: '1' %}
-                {% endSingleLine -%}
+                <!-- Field: {{ field.Name }}, Label: {{ field.Label }}, Type:{{ field.Type }}, Collection:{{ field.IsCollection }}, UI: {{ field.UIType }}; {{ field.UIType }}; {{ field.IsAuth }}; {{ field.Type }}-->               
+                {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}  
+                {% assign ofst = nil %}
+                {% capture gridRowAttribute %} Grid.Row="{{ gridRow }}"{% endcapture %}
+              
+              {% if field.Label != '' and field.Label != nil %} 
+              
+                {% assign ofst = '~' %}
+                <StackLayout{{ gridRowAttribute }} Orientation="Vertical" Spacing="2">
+                {{ofst}}<Label Text="{{ field.Label }}" Style="{DynamicResource ItemLabelStyle}" />
+                {% assign gridRowAttribute = nil %}    
+                {% endif %}      
+                
+                {% case field.Type %}
+                    {% when 'string' %}                              
+                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="{Binding IsEditing}"/>
+                    {% when 'int' %} 
+                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                    {% when 'double' %} 
+                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                    {% when 'bool' %}
+                {{ofst}}<Switch{{ gridRowAttribute }} IsToggled="{Binding {{ field.Name  | CSName }} }" IsEnabled="{Binding IsEditing}"/>
+                    {% when 'DateTime' %} 
+                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="false" IsVisible="{Binding IsNotEditing}"/>                       
+                {{ofst}}<DatePicker {{ gridRowAttribute }} Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}"/> <!-- change to TimePicker if needed -->
+                    {% else %} << Unknown field type: {{ field.Type }} for field {{ field.Name }} >>                     
+                {% endcase %}  
+                
+                {% if ofst != nil %}</StackLayout>{% endif %}
+                
+                {% assign gridRow = gridRow | Add: '1' %} 
                 {% endif -%}
                 {% endfor -%}
-                {% endTrim -%}
+                {% endAlignLines %} 
                 
-                {% Trim %} 
-                {% for field in table.Fields %}
-                {% SingleLine %}
+                <!-- navigation buttons if any -->
+                {% AlignLines %}
+                {% for field in table.Fields %} 
                 {% if field.UIType != 'Hidden' and field.Type == 'Ref' %}
-                     <Button Grid.Row="{{ gridRow }}" IsEnabled="{Binding IsNotEditing}" Text="{% SingleLine NoSpace %}
+                <Button Grid.Row="{{ gridRow }}" Text="{% SingleLine NoSpace %}
                      {% if field.Label == '' or field.Label == nil %}
                      {{ field.Name | CSName }} >
                      {% else %}
                      {{ field.Label }}
                      {% endif %}{% endSingleLine %}" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
                     {% assign gridRow = gridRow | Add: '1' %}
-                {% endif %} 
-                {% endSingleLine %}
+                {% endif %}  
                 {% endfor %}
-                {% endTrim %}
+                {% endAlignLines %}
             </Grid>
         </ScrollView>
     </ContentPage.Content>

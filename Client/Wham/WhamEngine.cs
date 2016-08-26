@@ -145,7 +145,7 @@ namespace Wham
             Template.RegisterFilter(typeof(CollectionFilters));
             Template.RegisterFilter(typeof(TextFilters));
             Template.RegisterFilter(typeof(ArithmeticFilters));
-             
+
             Template.RegisterTag<ClassEnumsTag>("ClassEnums");
             Template.RegisterTag<GuidTag>("Guid");
             Template.RegisterTag<MultilineStringEscapeTag>("MultilineStringEscape");
@@ -154,9 +154,10 @@ namespace Wham
             Template.RegisterTag<UnzipTag>("Unzip");
             Template.RegisterTag<TrimTag>("Trim");
             Template.RegisterTag<SingleLineTag>("SingleLine");
+            Template.RegisterTag<AlignedLines>("AlignLines");
             Template.RegisterTag<TraceTag>("Trace");
             Template.RegisterTag<DebrixTag>("Debrix");
-            
+
 
             Template.FileSystem = fileSystem ?? (IFileSystem)(new TemplateFileSystem());
 
