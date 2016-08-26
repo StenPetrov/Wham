@@ -47,37 +47,36 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                 {% AlignLines ~=4 %}
                 {% for field in table.Fields %}
                 <!-- Field: {{ field.Name }}, Label: {{ field.Label }}, Type:{{ field.Type }}, Collection:{{ field.IsCollection }}, UI: {{ field.UIType }}; {{ field.UIType }}; {{ field.IsAuth }}; {{ field.Type }}-->               
-                {% if field.UIType != 'Hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}  
-                {% assign ofst = nil %}
-                {% capture gridRowAttribute %} Grid.Row="{{ gridRow }}"{% endcapture %}
-              
-              {% if field.Label != '' and field.Label != nil %} 
-              
-                {% assign ofst = '~' %}
-                <StackLayout{{ gridRowAttribute }} Orientation="Vertical" Spacing="2">
-                {{ofst}}<Label Text="{{ field.Label }}" Style="{DynamicResource ItemLabelStyle}" />
-                {% assign gridRowAttribute = nil %}    
-                {% endif %}      
-                
-                {% case field.Type %}
-                    {% when 'string' %}                              
-                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="{Binding IsEditing}"/>
-                    {% when 'int' %} 
-                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
-                    {% when 'double' %} 
-                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
-                    {% when 'bool' %}
-                {{ofst}}<Switch{{ gridRowAttribute }} IsToggled="{Binding {{ field.Name  | CSName }} }" IsEnabled="{Binding IsEditing}"/>
-                    {% when 'DateTime' %} 
-                {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="false" IsVisible="{Binding IsNotEditing}"/>                       
-                {{ofst}}<DatePicker {{ gridRowAttribute }} Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}"/> <!-- change to TimePicker if needed -->
-                    {% else %} << Unknown field type: {{ field.Type }} for field {{ field.Name }} >>                     
-                {% endcase %}  
-                
-                {% if ofst != nil %}</StackLayout>{% endif %}
-                
-                {% assign gridRow = gridRow | Add: '1' %} 
-                {% endif -%}
+                {% if field.UIType != 'hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}  
+                    {% assign ofst = nil %}
+                    {% capture gridRowAttribute %} Grid.Row="{{ gridRow }}"{% endcapture %}
+                  
+                    {% if field.Label != '' and field.Label != nil %}  
+                        {% assign ofst = '~' %}
+                        <StackLayout{{ gridRowAttribute }} Orientation="Vertical" Spacing="2">
+                        {{ofst}}<Label Text="{{ field.Label }}" Style="{DynamicResource ItemLabelStyle}" />
+                        {% assign gridRowAttribute = nil %}    
+                    {% endif %}      
+                    
+                    {% case field.Type %}
+                        {% when 'string' %}                              
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="{Binding IsEditing}"/>
+                        {% when 'int' %} 
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                        {% when 'double' %} 
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                        {% when 'bool' %}
+                    {{ofst}}<Switch{{ gridRowAttribute }} IsToggled="{Binding {{ field.Name  | CSName }} }" IsEnabled="{Binding IsEditing}"/>
+                        {% when 'DateTime' %} 
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="false" IsVisible="{Binding IsNotEditing}"/>                       
+                    {{ofst}}<DatePicker {{ gridRowAttribute }} Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}"/> <!-- change to TimePicker if needed -->
+                        {% else %} << Unknown field type: {{ field.Type }} for field {{ field.Name }} >>                     
+                    {% endcase %}  
+                    
+                    {% if ofst != nil %}</StackLayout>{% endif %}
+                    
+                    {% assign gridRow = gridRow | Add: '1' %} 
+                    {% endif -%}
                 {% endfor -%}
                 {% endAlignLines %} 
                 
@@ -85,9 +84,9 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                 {% AlignLines %}
                 {% for field in table.Fields %} 
                 {% if field.UIType != 'Hidden' and field.Type == 'Ref' %}
-                <Button Grid.Row="{{ gridRow }}" Text="{% SingleLine NoSpace %}
+                <Button Grid.Row="{{ gridRow }}" Text="{% SingleLine %}
                      {% if field.Label == '' or field.Label == nil %}
-                     {{ field.Name | CSName }} >
+                     {{ field.Name }} >
                      {% else %}
                      {{ field.Label }}
                      {% endif %}{% endSingleLine %}" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   

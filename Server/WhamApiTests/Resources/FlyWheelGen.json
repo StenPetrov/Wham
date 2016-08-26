@@ -30,7 +30,8 @@
           "isCollection": "false",
           "regex": "",
           "isAuth": "false",
-          "hint":  "First and Last Name"
+          "hint": "First and Last Name",
+          "label": "Name"
         },
         {
           "type": "bool",
@@ -42,6 +43,7 @@
         {
           "type": "DateTime",
           "name": "Birthday",
+          "label": "Birthday",
           "uiType": "textbox",
           "defaultValue": "",
           "isCollection": "false"
@@ -55,7 +57,8 @@
         },
         {
           "type": "string",
-          "name": "CapturedPokemons",
+          "name": "BooksRead",
+          "label": "Books Read",
           "uiType": "textbox",
           "defaultValue": "",
           "isCollection": "true",
@@ -65,23 +68,36 @@
         {
           "type": "Ref",
           "name": "HomeAddress",
+          "label": "Home/Primary Address",
           "refTable": "Address",
-          "isCollection": "false",
-          "label":  "Home Address"
+          "isCollection": "false", 
         },
         {
           "type": "Ref",
           "name": "OtherAddresses",
+          "label": "Other Addresses",
           "refTable": "Address",
-          "isCollection": "true",
-          "label": "Other Addresses"
+          "isCollection": "true"
         }
       ]
     },
     {
       "TableName": "Address",
+      "heading": "{Nickname}",
+      "details": "{Street}, {City}, {Zip}",
       "isVisible": true,
       "fields": [
+        {
+          "type": "string",
+          "name": "Nickname",
+          "uiType": "textbox",
+          "defaultValue": "",
+          "isCollection": "false",
+          "regex": "",
+          "isAuth": "false",
+          "label": "Address Nickname",
+          "hint": "Preferred name for this address"
+        },
         {
           "type": "string",
           "name": "Street",

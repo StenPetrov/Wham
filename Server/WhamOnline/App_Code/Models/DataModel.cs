@@ -14,6 +14,12 @@ namespace WhamOnline.Models
         [JsonProperty("TableName")]
         public string TableName { get; set; }
 
+        [JsonProperty("heading")]
+        public string Heading { get; set; } 
+
+        [JsonProperty("details")]
+        public string Details { get; set; }
+
         [JsonProperty("isVisible", DefaultValueHandling = DefaultValueHandling.Populate)]
         [DefaultValue(true)] 
         public bool IsVisible { get; set; }

@@ -15,7 +15,8 @@ using {{ mobileproject | CSName }}.Forms.UI;
 namespace {{ mobileproject | CSName }}.Forms.ViewModels{ 
 
     public partial class {{ table.TableName | ClassName }}ViewModel : BaseViewModel<{{ table.TableName | ClassName }}>{
-     
+    
+        // NOTE: When a related property is changed call `OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading"));` so the UI gets updated
         public override string ViewHeading {
             get{
                 {% if table.Heading == '' or table.Heading == nil %}
@@ -26,6 +27,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         } 
         
+        // NOTE: When a related property is changed call `OnPropertyChanged(new PropertyChangedEventArgs("ViewDetails"));` so the UI gets updated 
         public override string ViewDetails {
             get{
                 {% if table.Details == '' or table.Details == nil %}
@@ -73,16 +75,20 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         { 
             get{
                 return _{{ field.Name | CSName }}; 
-            } 
+            }  
             {% if field.IsCollection != 'true' %}set{
-                if (SetProperty(ref  _{{ field.Name | CSName }}, value)){
-                    {% SingleLine SingleSpace%}
+                if (SetProperty(ref  _{{ field.Name | CSName }}, value))
+                {
+                    {% AlignLines %}
+                    IsChanged = true;
                     {% assign fieldName = field.Name  | CSName %}
                     {% if table.Heading contains field.Name or table.Heading contains fieldName %}
-                         OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading"));  
+                         OnPropertyChanged(new PropertyChangedEventArgs("ViewHeading"));   
                     {% endif %}
-                    {% endSingleLine -%}
-                    IsChanged = true;
+                    {% if table.Details contains field.Name or table.Details contains fieldName %} 
+                        OnPropertyChanged(new PropertyChangedEventArgs("ViewDetails"));                                          
+                    {% endif %}
+                    {% endAlignLines -%}                   
                 }
             }{% endif %}
         }
@@ -136,18 +142,19 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
         {% endif %}{% endfor -%}
      
-        public override async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id){
+        public override async Task<{{ table.TableName | ClassName }}> LoadFromServer(long id)
+        {
             var serverObject = await ApiClient.Instance.Get{{ table.TableName | ClassName }}(id);
             Load(serverObject);
             return serverObject;
         }
         
-        public override void Load({{ table.TableName | ClassName }} model){
-        
+        public override void Load({{ table.TableName | ClassName }} model)
+        { 
+            {% AlignLines %}
             base.Load(model); 
             
-            {% for field in table.Fields -%}
-            {% SingleLine %}
+            {% for field in table.Fields -%} 
                 {% if field.Type != 'Ref' %}
                     {% if field.IsCollection == 'true' %}
             //TODO: copy collections and refCollections to Model
@@ -157,11 +164,13 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             {{ field.Name | CSName }} = model.{{ field.Name | CSName }}; 
                     {% endif %} 
                 {% endif %}
-            {% endSingleLine %}
+            
             {% endfor %} 
+            {% endAlignLines %}
         }
         
-        public override async Task Save(bool saveToServer = false){
+        public override async Task Save(bool saveToServer = false)
+        {
             Model = Model ?? new {{ table.TableName | ClassName }}();
             {% for field in table.Fields -%} 
             {% Trim %}
@@ -176,11 +185,12 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                 {% endif %} 
             {% endif %}
             {% endTrim %}{% endfor %}
-            await base.Save();
+            await base.Save(saveToServer);
         }
     }
     
-    public partial class {{ table.TableName | ClassName }}CollectionViewModel : CollectionViewModel{
+    public partial class {{ table.TableName | ClassName }}CollectionViewModel : CollectionViewModel
+    {
      
         protected IEnumerable<{{ table.TableName | ClassName }}> ParentCollection {get; private set;}
          
@@ -294,13 +304,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         }
          
-        public async Task<IEnumerable<{{ table.TableName | ClassName }}>> LoadFromServer(){
+        public async Task<IEnumerable<{{ table.TableName | ClassName }}>> LoadFromServer()
+        {
             var serverObjects = await ApiClient.Instance.List{{ table.TableName | ClassName }}();
             Load(serverObjects);
             return serverObjects;
         }
      
-        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models){ 
+        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models)
+        { 
             Items.Clear(); 
             ParentCollection = models;
             CanEdit = ParentCollection is IList<{{ table.TableName | ClassName }}>;
@@ -311,7 +323,8 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         }
          
-        public void Add({{ table.TableName | ClassName }} model){
+        public void Add({{ table.TableName | ClassName }} model)
+        {
             if (CanEdit){
                 Remove(model.Id);
                 Items.Add(model); 
@@ -319,8 +332,10 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         }
          
-        public void Remove(long id){
-             if (CanEdit){
+        public void Remove(long id)
+        {
+             if (CanEdit)
+             {
                 {{ table.TableName | ClassName }} existingItem = null;
                 do{
                     existingItem = Items.FirstOrDefault(item=>item.Id ==id);
@@ -332,7 +347,8 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             }
         } 
         
-        public {{ table.TableName | ClassName }} Find(long id){
+        public {{ table.TableName | ClassName }} Find(long id)
+        {
             var existingItem = Items.FirstOrDefault(item=>item.Id == id);
             return existingItem;
         } 

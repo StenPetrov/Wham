@@ -54,18 +54,31 @@ namespace {{ mobileproject | CSName }}.SharedServices
             if (!Path.IsPathRooted (fileName))
                 fileName = Path.Combine (isPrivate ? PrivateFolder : PublicFolder, fileName);
 
+            System.Diagnostics.Debug.WriteLine ("{% Debrix %} Loading file: " + fileName);
             return JsonConvert.DeserializeObject<T> (File.ReadAllText (fileName));
         }
 
-        public void Save<T> (T saveObject, string fileName, bool isPrivate = true) where T : class, new()
+ 
+        public void Save<T>(T saveObject, string fileName, bool isPrivate = true) where T : class, new()
         {
-            if (!Path.IsPathRooted (fileName))
-                fileName = Path.Combine (isPrivate ? PrivateFolder : PublicFolder, fileName);
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName), "{% Debrix %} File name not specified");
 
-            if (File.Exists (fileName) && saveObject == null) {
-                File.Delete (fileName);
-            } else {
-                File.WriteAllText (fileName, JsonConvert.SerializeObject (saveObject));
+            if (!Path.IsPathRooted(fileName))
+                fileName = Path.Combine(isPrivate ? PrivateFolder : PublicFolder, fileName);
+
+            if (File.Exists(fileName) && saveObject == null)
+            {
+                System.Diagnostics.Debug.WriteLine ("{% Debrix %} Deleting file: " + fileName);
+                File.Delete(fileName);
+            }
+            else
+            {
+                if (!Directory.Exists(Path.GetDirectoryName(fileName)))
+                    Directory.CreateDirectory(Path.GetDirectoryName(fileName));
+
+                System.Diagnostics.Debug.WriteLine ("{% Debrix %} Writing file: " + fileName);
+                File.WriteAllText(fileName, JsonConvert.SerializeObject(saveObject)); 
             }
         }
     }
