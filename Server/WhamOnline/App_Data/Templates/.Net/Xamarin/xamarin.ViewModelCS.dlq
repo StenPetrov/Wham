@@ -95,6 +95,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         {% endif -%}
     {% endfor -%}
          
+         public {{ table.TableName | ClassName }}ViewModel()
+         {
+         }
+         
+         public {{ table.TableName | ClassName }}ViewModel({{ table.TableName | ClassName }} model, RootViewModel ownerViewModel = null) : this()
+         {
+            Load(model, ownerViewModel);
+         }
+         
     {% for field in table.Fields -%}{% if field.Type == 'Ref' or field.IsCollection == 'true' %}
         // Field name: {{ field.Name }} Type: {{ field.Type }}
         private Command _NavigateTo{{ field.Name | CSName }}Command = null;
@@ -108,7 +117,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                                 Model.{{ field.Name | CSName }} = new List<{{ field.RefTable | ClassName }}>();
                             }
                             await Navigation.PushAsync<{{ field.RefTable | ClassName }}CollectionViewModel> (
-                                (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }})
+                                (viewModel, page) => viewModel.Load(Model?.{{ field.Name | CSName }}, this)
                                 , animated: true);
                             {% else -%}
                                 {% if field.Type == 'Ref' %}
@@ -149,10 +158,10 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             return serverObject;
         }
         
-        public override void Load({{ table.TableName | ClassName }} model)
+        public override void Load({{ table.TableName | ClassName }} model, RootViewModel ownerViewModel = null)
         { 
             {% AlignLines %}
-            base.Load(model); 
+            base.Load(model, ownerViewModel); 
             
             {% for field in table.Fields -%} 
                 {% if field.Type != 'Ref' %}
@@ -193,6 +202,8 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
     {
      
         protected IEnumerable<{{ table.TableName | ClassName }}> ParentCollection {get; private set;}
+        
+        public RootViewModel OwnerViewModel { get; protected set; }
          
         private bool _CanEdit = false;
         public bool CanEdit 
@@ -208,7 +219,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         }
         
         
-        public ObservableCollection<{{ table.TableName | ClassName }}> Items { get; private set; } = new ObservableCollection<{{ table.TableName | ClassName }}>();
+        public ObservableCollection<{{ table.TableName | ClassName }}ViewModel> Items { get; private set; } = new ObservableCollection<{{ table.TableName | ClassName }}ViewModel>();
         
         private Command _NavigateToItemCommand = null; 
         /// <summary>
@@ -225,13 +236,13 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
                             if (itemViewModel!=null)
                             {
                                 await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
-                                    (viewModel, page) => viewModel.Load(itemViewModel.GetModel())
+                                    (viewModel, page) => viewModel.Load(itemViewModel.GetModel(), OwnerViewModel)
                                     , animated: true); 
                             } else if (itemToAdd != null) 
                             {
                                  await Navigation.PushAsync<{{ table.TableName | ClassName }}ViewModel> (
                                     (viewModel, page) => {
-                                        viewModel.Load(itemToAdd);
+                                        viewModel.Load(itemToAdd, OwnerViewModel);
                                         viewModel.IsPagePoppedAfterEditing = true;
                                         viewModel.IsEditing = true;
                                         viewModel.StatusChangingCallback = (oAdd, saved)=>{
@@ -311,14 +322,15 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
             return serverObjects;
         }
      
-        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models)
+        public void Load(IEnumerable<{{ table.TableName | ClassName }}> models, RootViewModel ownerViewModel = null)
         { 
             Items.Clear(); 
             ParentCollection = models;
+            OwnerViewModel = ownerViewModel;
             CanEdit = ParentCollection is IList<{{ table.TableName | ClassName }}>;
             if (models!=null){
                 foreach (var model in models){
-                    Items.Add(model);
+                    Items.Add(new {{ table.TableName | ClassName }}ViewModel(model, ownerViewModel));
                 }
             }
         }
@@ -326,9 +338,16 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         public void Add({{ table.TableName | ClassName }} model)
         {
             if (CanEdit){
-                Remove(model.Id);
-                Items.Add(model); 
-                ((IList<{{ table.TableName | ClassName }}>)ParentCollection).Add(model);
+                Add(new {{ table.TableName | ClassName }}ViewModel(model)); 
+            }
+        }
+        
+        public void Add({{ table.TableName | ClassName }}ViewModel viewModel)
+        {
+            if (CanEdit){
+                Remove(viewModel.Id);
+                Items.Add(viewModel); 
+                (ParentCollection as IList<{{ table.TableName | ClassName }}>)?.Add(viewModel.GetModel());
             }
         }
          
@@ -336,18 +355,18 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         {
              if (CanEdit)
              {
-                {{ table.TableName | ClassName }} existingItem = null;
+                {{ table.TableName | ClassName }}ViewModel existingItem = null;
                 do{
                     existingItem = Items.FirstOrDefault(item=>item.Id ==id);
                     if (existingItem != null) {
                         Items.Remove (existingItem);
-                        ((IList<{{ table.TableName | ClassName }}>)ParentCollection).Remove (existingItem);
+                        (ParentCollection as IList<{{ table.TableName | ClassName }}>)?.Remove (existingItem.GetModel());
                     }
                 } while (existingItem!=null); 
             }
         } 
         
-        public {{ table.TableName | ClassName }} Find(long id)
+        public {{ table.TableName | ClassName }}ViewModel Find(long id)
         {
             var existingItem = Items.FirstOrDefault(item=>item.Id == id);
             return existingItem;

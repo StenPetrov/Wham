@@ -31,7 +31,7 @@ namespace {{ mobileproject | CSName }}.Forms.UI
     </ContentPage.Padding>
     <ContentPage.Content>  
         <ScrollView Orientation="Vertical">
-            <Grid Padding="4,0,0,4">
+            <Grid Padding="4,0,4,0">
                 <Grid.RowDefinitions>
                     {% AlignLines %}
                     <RowDefinition Height="auto" />
@@ -44,8 +44,8 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                     {% endAlignLines %}
                 </Grid.RowDefinitions> 
                 {% assign gridRow = 1 %}
-                {% AlignLines ~=4 %}
                 {% for field in table.Fields %}
+                {% AlignLines ~=4 %}
                 <!-- Field: {{ field.Name }}, Label: {{ field.Label }}, Type:{{ field.Type }}, Collection:{{ field.IsCollection }}, UI: {{ field.UIType }}; {{ field.UIType }}; {{ field.IsAuth }}; {{ field.Type }}-->               
                 {% if field.UIType != 'hidden' and field.IsAuth != 'true' and field.Type != 'Ref' %}  
                     {% assign ofst = nil %}
@@ -53,23 +53,23 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                   
                     {% if field.Label != '' and field.Label != nil %}  
                         {% assign ofst = '~' %}
-                        <StackLayout{{ gridRowAttribute }} Orientation="Vertical" Spacing="2">
+                        <StackLayout{{ gridRowAttribute }} Orientation="Vertical" Style="{DynamicResource ItemLabelAndEntryStyle}" >
                         {{ofst}}<Label Text="{{ field.Label }}" Style="{DynamicResource ItemLabelStyle}" />
                         {% assign gridRowAttribute = nil %}    
-                    {% endif %}      
+                    {% endif %}
                     
                     {% case field.Type %}
                         {% when 'string' %}                              
-                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="{Binding IsEditing}"/>
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="{Binding IsEditing}" Style="{DynamicResource ItemEntryStyle}"/>
                         {% when 'int' %} 
-                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}" Style="{DynamicResource ItemEntryStyle}"/>
                         {% when 'double' %} 
-                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}"/>
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }"  Placeholder="{{ field.Hint }}" Keyboard="Numeric" IsEnabled="{Binding IsEditing}" Style="{DynamicResource ItemEntryStyle}"/>
                         {% when 'bool' %}
-                    {{ofst}}<Switch{{ gridRowAttribute }} IsToggled="{Binding {{ field.Name  | CSName }} }" IsEnabled="{Binding IsEditing}"/>
+                    {{ofst}}<Switch{{ gridRowAttribute }} IsToggled="{Binding {{ field.Name  | CSName }} }" IsEnabled="{Binding IsEditing}" Style="{DynamicResource ItemSwitchStyle}"/>
                         {% when 'DateTime' %} 
-                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="false" IsVisible="{Binding IsNotEditing}"/>                       
-                    {{ofst}}<DatePicker {{ gridRowAttribute }} Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}"/> <!-- change to TimePicker if needed -->
+                    {{ofst}}<Entry{{ gridRowAttribute }} Text="{Binding {{ field.Name  | CSName }} }" Placeholder="{{ field.Hint }}" IsEnabled="false" IsVisible="{Binding IsNotEditing}" Style="{DynamicResource ItemEntryStyle}"/>                       
+                    {{ofst}}<DatePicker {{ gridRowAttribute }} Date="{Binding {{ field.Name | CSName  }} }" IsVisible="{Binding IsEditing}" Style="{DynamicResource ItemDatePickerStyle}"/> <!-- change to TimePicker if needed -->
                         {% else %} << Unknown field type: {{ field.Type }} for field {{ field.Name }} >>                     
                     {% endcase %}  
                     
@@ -77,8 +77,8 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                     
                     {% assign gridRow = gridRow | Add: '1' %} 
                     {% endif -%}
-                {% endfor -%}
                 {% endAlignLines %} 
+                {% endfor -%}
                 
                 <!-- navigation buttons if any -->
                 {% AlignLines %}
@@ -89,7 +89,7 @@ namespace {{ mobileproject | CSName }}.Forms.UI
                      {{ field.Name }} >
                      {% else %}
                      {{ field.Label }}
-                     {% endif %}{% endSingleLine %}" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" />                   
+                     {% endif %}{% endSingleLine %}" Command="{Binding NavigateTo{{ field.Name | CSName }}Command}" Style="{DynamicResource NavButtonStyle}" />                   
                     {% assign gridRow = gridRow | Add: '1' %}
                 {% endif %}  
                 {% endfor %}

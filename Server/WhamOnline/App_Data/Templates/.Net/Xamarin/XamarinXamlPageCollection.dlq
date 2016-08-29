@@ -85,6 +85,8 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
 
     public abstract partial class RootViewModel: ViewModel
     { 
+        public long Id { get; protected set; }
+        
         public RootViewModel OwnerViewModel { get; protected set; }
         
         protected Action<RootViewModel, bool> ChildStatusChanging { get; set; }
@@ -96,6 +98,7 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
     }
     
     public abstract partial class BaseViewModel<TModel>: RootViewModel
+        where TModel: DataObject
     { 
         public const string EditLabel = "Edit"; // TODO: use I18N capable setup 
         public const string SaveLabel = "Save?"; 
@@ -246,8 +249,10 @@ namespace {{ mobileproject | CSName }}.Forms.ViewModels{
         
         public abstract Task<TModel> LoadFromServer(long id);
         
-        public virtual void Load(TModel model){
+        public virtual void Load(TModel model, RootViewModel ownerViewModel = null){
             OnStatusChanging(model, false);
+            OwnerViewModel = ownerViewModel;
+            Id = model.Id;
             Model = model;
             IsChanged = false;
             IsSaved = false;

@@ -84,10 +84,30 @@ namespace {{ mobileproject | CSName }}.Forms.Services
               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               x:Class="{{ mobileproject | CSName }}.App">
   <Application.Resources>
-    <ResourceDictionary> 
+    <ResourceDictionary>  
+        <Style x:Key="ItemLabelAndEntryStyle" TargetType="StackLayout"> 
+            <Setter Property="Spacing" Value="2" />
+            <Setter Property="Padding" Value="0,2,0,0" />
+        </Style> 
         <Style x:Key="ItemLabelStyle" TargetType="Label">
-            <Setter Property="TextColor" Value="Gray"/>
-            <Setter Property="FontSize" Value="8"/>
+            <Setter Property="Opacity" Value="0.8" />
+            <Setter Property="FontSize" Value="8" />
+        </Style>
+        <Style x:Key="ItemEntryStyle" TargetType="Entry">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style x:Key="ItemSwitchStyle" TargetType="Switch"> 
+        </Style>
+        <Style x:Key="ItemDatePickerStyle" TargetType="DatePicker"> 
+        </Style>
+        <Style x:Key="ItemTimePickerStyle" TargetType="TimePicker"> 
+        </Style>
+        
+        <Style x:Key="NavButtonStyle" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="#F0F0F0" />
+            <Setter Property="BorderColor" Value="#00F090" />
+            <Setter Property="BorderWidth" Value="1" />
+            <Setter Property="BorderRadius" Value="5" />
         </Style> 
     </ResourceDictionary>
   </Application.Resources>
@@ -117,7 +137,10 @@ namespace {{ mobileproject | CSName }}
   {
     public App ()
     {
-        try{ 
+        try
+        { 
+            InitializeComponent ();
+
 {% for table in appGen.DataModel %}
             ViewFactory.Register<{{ table.TableName | ClassName }}Page, {{ table.TableName | ClassName }}ViewModel>();
             ViewFactory.Register<CollectionPage, {{ table.TableName | ClassName }}CollectionViewModel>();
@@ -139,7 +162,8 @@ namespace {{ mobileproject | CSName }}
                 System.Diagnostics.Debug.WriteLine ("{% Debrix %} Unable to load app data: " + loadException);
             }
             
-            if (mainItem != null) {
+            if (mainItem != null)
+            {
                 isNew = false;
             } else {
                 mainItem = new {{ mainPageName  }} ();
